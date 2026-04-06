@@ -1,0 +1,23 @@
+# Vivado build outputs
+splitinfer/fpga/output/
+splitinfer/fpga/ip/mig_project/
+splitinfer/fpga/ip/managed_ip_project/
+splitinfer/fpga/ip/mig_7series_0/mig_7series_0/
+splitinfer/fpga/ip/mig_7series_0/mig_7series_0.dcp
+*.jou
+*.log
+*.str
+*.pb
+*.wdb
+*.bit
+*.dcp
+hs_err_*
+xsim.dir/
+.Xil/
+webtalk*
+
+# Vivado board files (installed separately)
+splitinfer/fpga/ip/check_mig.tcl
+
+# Claude settings
+.claude/
