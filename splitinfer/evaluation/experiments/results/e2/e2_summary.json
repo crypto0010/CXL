@@ -1,0 +1,317 @@
+{
+  "experiment": "E2_performance_comparison",
+  "models": [
+    "dlrm",
+    "yolov8n",
+    "mobilebert"
+  ],
+  "batches": [
+    1,
+    64,
+    256
+  ],
+  "warmup": 3,
+  "runs": 10,
+  "note": "Data merged from two sweep invocations:\n  - DLRM {1, 64, 256}: initial sweep with warmup=3 runs=10 (~2h wall time)\n  - yolov8n b1 + mobilebert b1: targeted re-run after DLRM sweep was\n    interrupted due to excessive SplitInfer wall time on larger models.\nSplitInfer timed out on yolov8n and mobilebert at batch=1 because the\nMAC controller + USB round-trip per layer exceeds the 10 min per-call\nceiling for these model architectures (100+ conv or transformer layers).",
+  "results": [
+    {
+      "model": "dlrm",
+      "batch": 1,
+      "model_size_mb": 14,
+      "b1_fp32": {
+        "status": "ok",
+        "median_ms": 0.5,
+        "mean_ms": 0.51,
+        "throughput": 1930.4,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6338
+            }
+          },
+          "energy_J": 0.6
+        }
+      },
+      "b2_int8": {
+        "status": "ok",
+        "median_ms": 0.26,
+        "throughput": 3660.0,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6914
+            }
+          },
+          "energy_J": 26.3
+        }
+      },
+      "splitinfer": {
+        "status": "ok",
+        "median_ms": 595.84,
+        "throughput": 0.3,
+        "iterations": 10,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 5700
+            }
+          },
+          "energy_J": 185.8
+        }
+      }
+    },
+    {
+      "model": "dlrm",
+      "batch": 64,
+      "model_size_mb": 14,
+      "b1_fp32": {
+        "status": "ok",
+        "median_ms": 4.26,
+        "throughput": 240.8,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6418
+            }
+          },
+          "energy_J": 1.3
+        }
+      },
+      "b2_int8": {
+        "status": "ok",
+        "median_ms": 1.6,
+        "throughput": 621.6,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6946
+            }
+          },
+          "energy_J": 26.4
+        }
+      },
+      "splitinfer": {
+        "status": "ok",
+        "median_ms": 180460.59,
+        "throughput": 0.0055,
+        "iterations": 10,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 5677
+            }
+          },
+          "energy_J": 9097.0
+        }
+      }
+    },
+    {
+      "model": "dlrm",
+      "batch": 256,
+      "model_size_mb": 14,
+      "b1_fp32": {
+        "status": "ok",
+        "median_ms": 11.71,
+        "throughput": 80.4,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6833
+            }
+          },
+          "energy_J": 2.0
+        }
+      },
+      "b2_int8": {
+        "status": "ok",
+        "median_ms": 4.64,
+        "throughput": 195.2,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6896
+            }
+          },
+          "energy_J": 26.2
+        }
+      },
+      "splitinfer": {
+        "status": "ok",
+        "median_ms": 180456.04,
+        "throughput": 0.0055,
+        "iterations": 10,
+        "power": {
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 5495
+            }
+          },
+          "energy_J": 8829.3
+        }
+      }
+    },
+    {
+      "model": "yolov8n",
+      "batch": 1,
+      "model_size_mb": 12,
+      "b1_fp32": {
+        "status": "ok",
+        "mean_ms": 134.037,
+        "median_ms": 133.7702,
+        "p99_ms": 135.0544,
+        "throughput": 7.4606,
+        "duration_s": 3.3620223039979464,
+        "power": {
+          "samples": 11,
+          "duration_s": 1.3605182190003688,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 8076.818181818182,
+              "median_mw": 8358,
+              "max_mw": 9190,
+              "min_mw": 6547,
+              "samples": 11
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 2874,
+              "median_mw": 3124,
+              "max_mw": 3909,
+              "min_mw": 1465,
+              "samples": 11
+            },
+            "VDD_SOC": {
+              "mean_mw": 1757.5454545454545,
+              "median_mw": 1782,
+              "max_mw": 1782,
+              "min_mw": 1706,
+              "samples": 11
+            }
+          },
+          "energy_J": 8.097650000000002
+        }
+      },
+      "b2_int8": {
+        "status": "failed",
+        "exit_code": 1,
+        "duration_s": 6.566854028998932,
+        "power": {
+          "samples": 40,
+          "duration_s": 4.564728085999377,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6887.275,
+              "median_mw": 6944.0,
+              "max_mw": 7051,
+              "min_mw": 6378,
+              "samples": 40
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 1715.8,
+              "median_mw": 1782.0,
+              "max_mw": 1898,
+              "min_mw": 1307,
+              "samples": 40
+            },
+            "VDD_SOC": {
+              "mean_mw": 1745.65,
+              "median_mw": 1745.0,
+              "max_mw": 1785,
+              "min_mw": 1703,
+              "samples": 40
+            }
+          },
+          "energy_J": 26.88699999999999
+        }
+      },
+      "splitinfer": {
+        "status": "warmup_timeout",
+        "duration_s": 0.0,
+        "iterations": 0,
+        "warmup_timeouts": 1
+      }
+    },
+    {
+      "model": "mobilebert",
+      "batch": 1,
+      "model_size_mb": 93,
+      "b1_fp32": {
+        "status": "ok",
+        "mean_ms": 87.4142,
+        "median_ms": 86.679,
+        "p99_ms": 90.0747,
+        "throughput": 11.4398,
+        "duration_s": 3.609186930996657,
+        "power": {
+          "samples": 14,
+          "duration_s": 1.6076223920026678,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 7621.285714285715,
+              "median_mw": 7201.5,
+              "max_mw": 9032,
+              "min_mw": 6457,
+              "samples": 14
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 2335.8571428571427,
+              "median_mw": 1881.0,
+              "max_mw": 3672,
+              "min_mw": 1344,
+              "samples": 14
+            },
+            "VDD_SOC": {
+              "mean_mw": 1785.857142857143,
+              "median_mw": 1783.5,
+              "max_mw": 1822,
+              "min_mw": 1743,
+              "samples": 14
+            }
+          },
+          "energy_J": 9.91515
+        }
+      },
+      "b2_int8": {
+        "status": "ok",
+        "mean_ms": 54.5414,
+        "median_ms": 53.9857,
+        "p99_ms": 56.1054,
+        "throughput": 18.3347,
+        "duration_s": 12.001667974000156,
+        "power": {
+          "samples": 88,
+          "duration_s": 9.999910510006885,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 7062.045454545455,
+              "median_mw": 7023.0,
+              "max_mw": 8240,
+              "min_mw": 6219,
+              "samples": 88
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 1870,
+              "median_mw": 1822.0,
+              "max_mw": 2966,
+              "min_mw": 1228,
+              "samples": 88
+            },
+            "VDD_SOC": {
+              "mean_mw": 1752.3636363636363,
+              "median_mw": 1745.0,
+              "max_mw": 1825,
+              "min_mw": 1703,
+              "samples": 88
+            }
+          },
+          "energy_J": 61.48190000000003
+        }
+      },
+      "splitinfer": {
+        "status": "warmup_timeout",
+        "duration_s": 0.0,
+        "iterations": 0,
+        "warmup_timeouts": 1
+      }
+    }
+  ]
+}
