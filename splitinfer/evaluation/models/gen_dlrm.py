@@ -29,11 +29,13 @@ def build_dlrm(out_path: str,
                num_tables: int = 26,
                table_rows: int = 1000,
                table_cols: int = 64,
-               dense_dim:  int = 128) -> None:
+               dense_dim:  int = 128,
+               batch_size: int = 1) -> None:
     NUM_TABLES = num_tables
     TABLE_ROWS = table_rows
     TABLE_COLS = table_cols
     DENSE_DIM  = dense_dim
+    BATCH      = batch_size
 
     nodes        = []
     initializers = []
@@ -92,13 +94,15 @@ def build_dlrm(out_path: str,
             prev = "output"
 
     # Graph inputs / outputs
-    graph_inputs = [helper.make_tensor_value_info("dense_input", TensorProto.FLOAT, [1, DENSE_DIM])]
+    # First dim is the batch size; gather indices are 1D of length BATCH so
+    # each call processes BATCH samples through the embedding tables.
+    graph_inputs = [helper.make_tensor_value_info("dense_input", TensorProto.FLOAT, [BATCH, DENSE_DIM])]
     for i in range(NUM_TABLES):
         graph_inputs.append(
-            helper.make_tensor_value_info(f"emb_idx_{i}", TensorProto.INT64, [1])
+            helper.make_tensor_value_info(f"emb_idx_{i}", TensorProto.INT64, [BATCH])
         )
 
-    graph_outputs = [helper.make_tensor_value_info("output", TensorProto.FLOAT, [1, 1])]
+    graph_outputs = [helper.make_tensor_value_info("output", TensorProto.FLOAT, [BATCH, 1])]
 
     graph = helper.make_graph(nodes, "dlrm_synthetic", graph_inputs, graph_outputs,
                               initializer=initializers)
@@ -109,7 +113,7 @@ def build_dlrm(out_path: str,
 
     size_mb = os.path.getsize(out_path) / (1024 * 1024)
     print(f"  Saved: {out_path}  ({size_mb:.1f} MB)")
-    print(f"  Tables: {NUM_TABLES} x {TABLE_ROWS}x{TABLE_COLS}  |  MLP: {mlp_dims}")
+    print(f"  Tables: {NUM_TABLES} x {TABLE_ROWS}x{TABLE_COLS}  |  MLP: {mlp_dims}  |  batch={BATCH}")
 
 
 if __name__ == "__main__":
@@ -124,9 +128,12 @@ if __name__ == "__main__":
                         help="Embedding dimension (default: 64)")
     parser.add_argument("--dense-dim", type=int, default=128,
                         help="Dense feature input dimension (default: 128)")
+    parser.add_argument("--batch", type=int, default=1,
+                        help="Static batch size baked into the model (default: 1)")
     args = parser.parse_args()
     build_dlrm(args.output,
                num_tables=args.tables,
                table_rows=args.rows,
                table_cols=args.cols,
-               dense_dim=args.dense_dim)
+               dense_dim=args.dense_dim,
+               batch_size=args.batch)
