@@ -176,6 +176,54 @@ int main() {
     CHECK(stats3.inference_count == 0u);
     CHECK(stats3.bytes_transferred == 0);
 
+    // ── Prefetch accounting (Task #14) ────────────────────────────────────────
+    //
+    // The test manifest has exactly 1 GPU→FPGA transfer (after conv1).
+    // With prefetch ENABLED (default), each pass should record:
+    //   prefetch_attempts += 1
+    //   prefetch_hits     += 1
+    //   prefetch_hit_rate  = 100%
+    //
+    // With prefetch DISABLED, the same transfer is still issued and counted
+    // as an attempt, but recorded as a miss:
+    //   prefetch_attempts += 1
+    //   prefetch_hits     += 0
+    //   prefetch_hit_rate  = 0%
+    //
+    // We can't directly compare wall-clock latencies in a unit test (mocks
+    // don't sleep), but we can verify the counter logic is correct.
+
+    pipeline.get_telemetry().reset();
+    CHECK(pipeline.is_prefetch_enabled() == true);  // default
+    pipeline.run();
+    auto stats_pre_on = pipeline.get_telemetry().get_stats();
+    CHECK(stats_pre_on.prefetch_attempts == 1u);
+    CHECK(stats_pre_on.prefetch_hits     == 1u);
+    CHECK(stats_pre_on.prefetch_hit_rate == 1.0);
+
+    pipeline.set_prefetch_enabled(false);
+    CHECK(pipeline.is_prefetch_enabled() == false);
+    pipeline.get_telemetry().reset();
+    pipeline.run();
+    auto stats_pre_off = pipeline.get_telemetry().get_stats();
+    CHECK(stats_pre_off.prefetch_attempts == 1u);
+    CHECK(stats_pre_off.prefetch_hits     == 0u);
+    CHECK(stats_pre_off.prefetch_hit_rate == 0.0);
+
+    // ── New per-bucket time accounting (Task #17) ─────────────────────────────
+    // The new TelemetryStats fields gpu_time_ms, fpga_time_ms, transfer_time_ms,
+    // sync_time_ms should all be non-negative and finite.  Mocks return
+    // immediately so all values should be very small (microseconds at most).
+
+    pipeline.set_prefetch_enabled(true);  // restore default for any future runs
+    pipeline.get_telemetry().reset();
+    pipeline.run();
+    auto stats_breakdown = pipeline.get_telemetry().get_stats();
+    CHECK(stats_breakdown.gpu_time_ms      >= 0.0);
+    CHECK(stats_breakdown.fpga_time_ms     >= 0.0);
+    CHECK(stats_breakdown.transfer_time_ms >= 0.0);
+    CHECK(stats_breakdown.sync_time_ms     >= 0.0);
+
     std::printf("test_pipeline: %d passed, %d failed\n", pass_count, fail_count);
     return fail_count == 0 ? 0 : 1;
 }

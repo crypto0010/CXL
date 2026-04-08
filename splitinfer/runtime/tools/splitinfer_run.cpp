@@ -99,9 +99,18 @@ static void print_telemetry(const splitinfer::TelemetryStats& s) {
     std::printf("  Min latency         : %.3f ms\n",
                 s.min_latency_ms < 1e18 ? s.min_latency_ms : 0.0);
     std::printf("  Max latency         : %.3f ms\n", s.max_latency_ms);
-    std::printf("  GPU time            : %.3f ms\n", s.gpu_time_ms);
-    std::printf("  FPGA time           : %.3f ms\n", s.fpga_time_ms);
+    std::printf("  GPU compute time    : %.3f ms\n", s.gpu_time_ms);
+    std::printf("  FPGA compute time   : %.3f ms\n", s.fpga_time_ms);
+    std::printf("  Transfer time       : %.3f ms\n", s.transfer_time_ms);
+    std::printf("  Sync time           : %.3f ms\n", s.sync_time_ms);
     std::printf("  Bytes transferred   : %lld B\n", (long long)s.bytes_transferred);
+    std::printf("  Prefetch attempts   : %llu\n", (unsigned long long)s.prefetch_attempts);
+    std::printf("  Prefetch hits       : %llu\n", (unsigned long long)s.prefetch_hits);
+    if (s.prefetch_attempts > 0) {
+        std::printf("  Prefetch hit rate   : %.1f%%\n", s.prefetch_hit_rate * 100.0);
+    } else {
+        std::printf("  Prefetch hit rate   : n/a (no transfers in this manifest)\n");
+    }
 }
 
 /// Apply SPLITINFER_NO_NMC: force all FPGA layers to GPU.
@@ -145,15 +154,20 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Check ablation environment variables.
+    // ── Ablation environment variables (E4 experiment) ──────────────────────
+    // Read these BEFORE constructing the pipeline so we can pass the flags
+    // through.  All three are honored:
+    //   SPLITINFER_NO_NMC      — rewrite manifest to move FPGA layers to GPU
+    //   SPLITINFER_NO_PREFETCH — disable double-buffered prefetch
+    //   SPLITINFER_NO_PIPELINE — alias for NO_PREFETCH (spec uses both names)
     if (std::getenv("SPLITINFER_NO_NMC")) {
         apply_ablation_no_nmc(manifest);
     }
-    if (std::getenv("SPLITINFER_NO_PREFETCH")) {
-        std::printf("  [ablation] NO_PREFETCH: noted (prefetch not yet implemented)\n");
-    }
-    if (std::getenv("SPLITINFER_NO_PIPELINE")) {
-        std::printf("  [ablation] NO_PIPELINE: noted (double-buffering not yet implemented)\n");
+    bool prefetch_disabled =
+        (std::getenv("SPLITINFER_NO_PREFETCH") != nullptr) ||
+        (std::getenv("SPLITINFER_NO_PIPELINE") != nullptr);
+    if (prefetch_disabled) {
+        std::printf("  [ablation] prefetch DISABLED via SPLITINFER_NO_PREFETCH/PIPELINE\n");
     }
 
     print_summary(manifest);
@@ -166,8 +180,10 @@ int main(int argc, char* argv[]) {
         splitinfer::FpgaExecutor fpga;
 
         splitinfer::Pipeline pipeline(manifest, gpu, fpga);
+        if (prefetch_disabled) pipeline.set_prefetch_enabled(false);
 
-        std::printf("\nRunning inference...\n");
+        std::printf("\nRunning inference (prefetch=%s)...\n",
+                    pipeline.is_prefetch_enabled() ? "ON" : "OFF");
         ok = pipeline.run();
 
         print_telemetry(pipeline.get_telemetry().get_stats());
@@ -177,6 +193,7 @@ int main(int argc, char* argv[]) {
         StubFpgaExecutor fpga;
 
         splitinfer::Pipeline pipeline(manifest, gpu, fpga);
+        if (prefetch_disabled) pipeline.set_prefetch_enabled(false);
         ok = pipeline.run();
 
         print_telemetry(pipeline.get_telemetry().get_stats());
