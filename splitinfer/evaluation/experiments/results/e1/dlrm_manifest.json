@@ -1,0 +1,562 @@
+{
+  "version": "1.0",
+  "layers": [
+    {
+      "name": "gather_0",
+      "op_type": "Gather",
+      "device": "fpga",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_0",
+        "emb_idx_0"
+      ],
+      "outputs": [
+        "emb_out_0"
+      ]
+    },
+    {
+      "name": "gather_1",
+      "op_type": "Gather",
+      "device": "fpga",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_1",
+        "emb_idx_1"
+      ],
+      "outputs": [
+        "emb_out_1"
+      ]
+    },
+    {
+      "name": "gather_2",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_2",
+        "emb_idx_2"
+      ],
+      "outputs": [
+        "emb_out_2"
+      ]
+    },
+    {
+      "name": "gather_3",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_3",
+        "emb_idx_3"
+      ],
+      "outputs": [
+        "emb_out_3"
+      ]
+    },
+    {
+      "name": "gather_4",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_4",
+        "emb_idx_4"
+      ],
+      "outputs": [
+        "emb_out_4"
+      ]
+    },
+    {
+      "name": "gather_5",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_5",
+        "emb_idx_5"
+      ],
+      "outputs": [
+        "emb_out_5"
+      ]
+    },
+    {
+      "name": "gather_6",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_6",
+        "emb_idx_6"
+      ],
+      "outputs": [
+        "emb_out_6"
+      ]
+    },
+    {
+      "name": "gather_7",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_7",
+        "emb_idx_7"
+      ],
+      "outputs": [
+        "emb_out_7"
+      ]
+    },
+    {
+      "name": "gather_8",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_8",
+        "emb_idx_8"
+      ],
+      "outputs": [
+        "emb_out_8"
+      ]
+    },
+    {
+      "name": "gather_9",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_9",
+        "emb_idx_9"
+      ],
+      "outputs": [
+        "emb_out_9"
+      ]
+    },
+    {
+      "name": "gather_10",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_10",
+        "emb_idx_10"
+      ],
+      "outputs": [
+        "emb_out_10"
+      ]
+    },
+    {
+      "name": "gather_11",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_11",
+        "emb_idx_11"
+      ],
+      "outputs": [
+        "emb_out_11"
+      ]
+    },
+    {
+      "name": "gather_12",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_12",
+        "emb_idx_12"
+      ],
+      "outputs": [
+        "emb_out_12"
+      ]
+    },
+    {
+      "name": "gather_13",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_13",
+        "emb_idx_13"
+      ],
+      "outputs": [
+        "emb_out_13"
+      ]
+    },
+    {
+      "name": "gather_14",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_14",
+        "emb_idx_14"
+      ],
+      "outputs": [
+        "emb_out_14"
+      ]
+    },
+    {
+      "name": "gather_15",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_15",
+        "emb_idx_15"
+      ],
+      "outputs": [
+        "emb_out_15"
+      ]
+    },
+    {
+      "name": "gather_16",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_16",
+        "emb_idx_16"
+      ],
+      "outputs": [
+        "emb_out_16"
+      ]
+    },
+    {
+      "name": "gather_17",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_17",
+        "emb_idx_17"
+      ],
+      "outputs": [
+        "emb_out_17"
+      ]
+    },
+    {
+      "name": "gather_18",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_18",
+        "emb_idx_18"
+      ],
+      "outputs": [
+        "emb_out_18"
+      ]
+    },
+    {
+      "name": "gather_19",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_19",
+        "emb_idx_19"
+      ],
+      "outputs": [
+        "emb_out_19"
+      ]
+    },
+    {
+      "name": "gather_20",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_20",
+        "emb_idx_20"
+      ],
+      "outputs": [
+        "emb_out_20"
+      ]
+    },
+    {
+      "name": "gather_21",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_21",
+        "emb_idx_21"
+      ],
+      "outputs": [
+        "emb_out_21"
+      ]
+    },
+    {
+      "name": "gather_22",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_22",
+        "emb_idx_22"
+      ],
+      "outputs": [
+        "emb_out_22"
+      ]
+    },
+    {
+      "name": "gather_23",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_23",
+        "emb_idx_23"
+      ],
+      "outputs": [
+        "emb_out_23"
+      ]
+    },
+    {
+      "name": "gather_24",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_24",
+        "emb_idx_24"
+      ],
+      "outputs": [
+        "emb_out_24"
+      ]
+    },
+    {
+      "name": "gather_25",
+      "op_type": "Gather",
+      "device": "gpu",
+      "weight_bytes": 51200000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_table_25",
+        "emb_idx_25"
+      ],
+      "outputs": [
+        "emb_out_25"
+      ]
+    },
+    {
+      "name": "concat_all",
+      "op_type": "Concat",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "emb_out_0",
+        "emb_out_1",
+        "emb_out_2",
+        "emb_out_3",
+        "emb_out_4",
+        "emb_out_5",
+        "emb_out_6",
+        "emb_out_7",
+        "emb_out_8",
+        "emb_out_9",
+        "emb_out_10",
+        "emb_out_11",
+        "emb_out_12",
+        "emb_out_13",
+        "emb_out_14",
+        "emb_out_15",
+        "emb_out_16",
+        "emb_out_17",
+        "emb_out_18",
+        "emb_out_19",
+        "emb_out_20",
+        "emb_out_21",
+        "emb_out_22",
+        "emb_out_23",
+        "emb_out_24",
+        "emb_out_25",
+        "dense_input"
+      ],
+      "outputs": [
+        "concat_out"
+      ]
+    },
+    {
+      "name": "mlp_matmul0",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 7340032,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "concat_out",
+        "mlp_w0"
+      ],
+      "outputs": [
+        "mlp_mm0"
+      ]
+    },
+    {
+      "name": "mlp_add_op0",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 4096,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_mm0",
+        "mlp_b0"
+      ],
+      "outputs": [
+        "mlp_add0"
+      ]
+    },
+    {
+      "name": "mlp_relu0",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_add0"
+      ],
+      "outputs": [
+        "mlp_relu0"
+      ]
+    },
+    {
+      "name": "mlp_matmul1",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 1048576,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_relu0",
+        "mlp_w1"
+      ],
+      "outputs": [
+        "mlp_mm1"
+      ]
+    },
+    {
+      "name": "mlp_add_op1",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 1024,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_mm1",
+        "mlp_b1"
+      ],
+      "outputs": [
+        "mlp_add1"
+      ]
+    },
+    {
+      "name": "mlp_relu1",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_add1"
+      ],
+      "outputs": [
+        "mlp_relu1"
+      ]
+    },
+    {
+      "name": "mlp_matmul2",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 1024,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_relu1",
+        "mlp_w2"
+      ],
+      "outputs": [
+        "mlp_mm2"
+      ]
+    },
+    {
+      "name": "mlp_add_op2",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 4,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_mm2",
+        "mlp_b2"
+      ],
+      "outputs": [
+        "mlp_add2"
+      ]
+    },
+    {
+      "name": "output_id",
+      "op_type": "Identity",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mlp_add2"
+      ],
+      "outputs": [
+        "output"
+      ]
+    }
+  ],
+  "transfers": [
+    {
+      "after_layer": "gather_1",
+      "before_layer": "gather_2",
+      "from_device": "fpga",
+      "to_device": "gpu",
+      "tensor_names": [
+        "emb_out_1"
+      ],
+      "tensor_bytes": 0
+    },
+    {
+      "after_layer": "gather_25",
+      "before_layer": "concat_all",
+      "from_device": "gpu",
+      "to_device": "fpga",
+      "tensor_names": [
+        "emb_out_25"
+      ],
+      "tensor_bytes": 0
+    }
+  ],
+  "summary": {
+    "total_layers": 36,
+    "gpu_layers": 24,
+    "fpga_layers": 12,
+    "estimated_latency_ms": 80.73467076923093,
+    "gpu_memory_bytes": 1228800000,
+    "fpga_memory_bytes": 110794756,
+    "num_transfers": 2
+  }
+}

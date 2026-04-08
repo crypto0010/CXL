@@ -51,5 +51,11 @@ splitinfer/evaluation/models/*.pt
 splitinfer/evaluation/models/yolov8*.pt
 hub/
 
+# Large generated models (>100 MB) — exceed GitHub file size limit.
+# Regenerate via:
+#   python3 splitinfer/evaluation/models/gen_dlrm.py \
+#     splitinfer/evaluation/models/generated/dlrm_scaled.onnx --rows 200000
+splitinfer/evaluation/models/generated/dlrm_scaled.onnx
+
 # Claude settings
 .claude/

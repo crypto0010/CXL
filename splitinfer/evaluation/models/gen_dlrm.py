@@ -1,26 +1,39 @@
 #!/usr/bin/env python3
 """Generate a synthetic DLRM-style ONNX model.
 
-Usage: gen_dlrm.py <output_path>
+Usage:
+  gen_dlrm.py <output_path>                       # default: small (~14 MB)
+  gen_dlrm.py <output_path> --rows 200000         # scaled (~1.3 GB)
+  gen_dlrm.py <output_path> --tables 26 --rows 100000 --cols 64
 
 Architecture:
-  26 embedding tables x 1000 rows x 64-dim (Gather)
+  N embedding tables x R rows x C-dim (Gather)
   Dense input: 128 features
-  Top MLP: (26*64 + 128) -> 1024 -> 256 -> 1
+  Top MLP: (N*C + 128) -> 1024 -> 256 -> 1
+
+The "small" default (26 x 1000 x 64 = 14 MB) is for smoke tests.
+The "scaled" preset (26 x 200000 x 64 = 1.3 GB) is for E1's
+capability-unlock story — a model where the embedding tables alone
+strain the Jetson Orin Nano's GPU memory (8 GB LPDDR5 shared).
 """
 
 import sys
 import os
+import argparse
 import numpy as np
 import onnx
 from onnx import helper, TensorProto, numpy_helper
 
 
-def build_dlrm(out_path: str) -> None:
-    NUM_TABLES = 26
-    TABLE_ROWS = 1000
-    TABLE_COLS = 64
-    DENSE_DIM  = 128
+def build_dlrm(out_path: str,
+               num_tables: int = 26,
+               table_rows: int = 1000,
+               table_cols: int = 64,
+               dense_dim:  int = 128) -> None:
+    NUM_TABLES = num_tables
+    TABLE_ROWS = table_rows
+    TABLE_COLS = table_cols
+    DENSE_DIM  = dense_dim
 
     nodes        = []
     initializers = []
@@ -100,7 +113,20 @@ def build_dlrm(out_path: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <output_path>", file=sys.stderr)
-        sys.exit(1)
-    build_dlrm(sys.argv[1])
+    parser = argparse.ArgumentParser(description="Generate synthetic DLRM ONNX model.")
+    parser.add_argument("output", help="Path to write the .onnx file")
+    parser.add_argument("--tables", type=int, default=26,
+                        help="Number of embedding tables (default: 26)")
+    parser.add_argument("--rows", type=int, default=1000,
+                        help="Rows per embedding table (default: 1000; "
+                             "use 200000 for the scaled E1 model)")
+    parser.add_argument("--cols", type=int, default=64,
+                        help="Embedding dimension (default: 64)")
+    parser.add_argument("--dense-dim", type=int, default=128,
+                        help="Dense feature input dimension (default: 128)")
+    args = parser.parse_args()
+    build_dlrm(args.output,
+               num_tables=args.tables,
+               table_rows=args.rows,
+               table_cols=args.cols,
+               dense_dim=args.dense_dim)

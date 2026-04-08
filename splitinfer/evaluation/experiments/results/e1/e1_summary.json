@@ -1,0 +1,19 @@
+{
+  "experiment": "E1_capability_unlock",
+  "model": "scaled DLRM",
+  "model_size_mb": 1278,
+  "results": {
+    "B1_fp32_jetson": {
+      "status": "completed",
+      "mean_latency_ms": 0.416
+    },
+    "B2_int8_jetson": {
+      "status": "completed",
+      "mean_latency_ms": 0.233
+    },
+    "splitinfer_real": {
+      "status": "completed",
+      "total_latency_ms": 213.563
+    }
+  }
+}
