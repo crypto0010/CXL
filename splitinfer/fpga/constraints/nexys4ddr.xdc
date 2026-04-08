@@ -9,8 +9,11 @@ create_clock -period 10.000 -name sys_clk [get_ports sys_clk]
 
 ## CDC constraints: declare sys_clk and MIG-derived clocks as asynchronous.
 ## All crossings use handshake synchronizers or async FIFOs in RTL.
-set_clock_groups -asynchronous -group [get_clocks sys_clk] \
-    -group [get_clocks -quiet -include_generated_clocks -of_objects [get_pins -quiet -hierarchical -filter {NAME =~ *u_mig*plle2_i/CLKFBOUT}]]
+set_clock_groups -asynchronous \
+    -group [get_clocks sys_clk] \
+    -group [get_clocks -include_generated_clocks \
+              -of_objects [get_pins -hierarchical -filter {NAME =~ *u_ddr2_infrastructure/plle2_i/CLKOUT*}]]
+set_false_path -to [get_pins -quiet -hierarchical -filter {NAME =~ *gray_sync1_reg*/D}]
 
 ## False paths for CDC synchronizer inputs (2FF chains)
 set_false_path -to [get_pins -quiet -hierarchical -filter {NAME =~ *_sync_reg[0]/D}]

@@ -575,11 +575,31 @@ module top #(
 
     /* ------------------------------------------------------------------ */
     /* LED status outputs                                                  */
+    /*                                                                     */
+    /* LED[0] — DDR2 calibration done (steady when MIG is up)              */
+    /* LED[1] — RX byte activity (pulse-stretched 24-bit counter so any    */
+    /*          incoming UART byte produces a ~167 ms visible flash)       */
+    /* LED[2] — EdgeCoh barrier acknowledged (briefly pulses on SYNC_BARR) */
+    /* LED[3] — Heartbeat (always on if design is running)                 */
     /* ------------------------------------------------------------------ */
 
-    assign led[0] = calib_sync[1];       /* DDR2 calibration done (2FF)    */
-    assign led[1] = nmc_start;           /* NMC operation in progress      */
-    assign led[2] = barrier_ack;         /* EdgeCoh barrier acknowledged   */
-    assign led[3] = 1'b1;               /* Heartbeat — design is running   */
+    /* Pulse-stretch usb_rx_valid into a visible LED flash.                */
+    /* On any rx_valid, reload counter to all-ones; otherwise decrement.   */
+    /* At 100 MHz, 24-bit counter ≈ 167 ms — clearly visible to the eye.   */
+    reg [23:0] rx_pulse_cnt;
+    always @(posedge sys_clk_bufg or negedge sys_rst_n) begin
+        if (!sys_rst_n) begin
+            rx_pulse_cnt <= 24'd0;
+        end else if (usb_rx_valid) begin
+            rx_pulse_cnt <= 24'hFFFFFF;
+        end else if (rx_pulse_cnt != 0) begin
+            rx_pulse_cnt <= rx_pulse_cnt - 1'b1;
+        end
+    end
+
+    assign led[0] = calib_sync[1];           /* DDR2 calibration done       */
+    assign led[1] = (rx_pulse_cnt != 0);     /* UART byte received (stretched) */
+    assign led[2] = barrier_ack;             /* EdgeCoh barrier acknowledged */
+    assign led[3] = 1'b1;                    /* Heartbeat                   */
 
 endmodule

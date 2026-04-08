@@ -3,7 +3,13 @@
 
 module usb_interface #(
     parameter CLK_FREQ  = 100_000_000,
-    parameter BAUD_RATE = 921_600      /* FT2232HQ supports up to 12 Mbaud; 921600 is reliable and fast */
+    /* Lowered from 921600 → 115200 for robust framing margin.
+     * At 115200: CLKS_PER_BIT = 100MHz / 115200 = 868.05, truncated to 868.
+     * Actual rate = 100MHz / 868 = 115207 baud, error = 0.006% (rock solid).
+     * The previous 921600 setting had ~0.5% per-bit error, cumulative ~5% over
+     * 10 bits, which is right at the UART tolerance edge and was flaky in
+     * hardware testing on the Nexys 4 DDR (LED[2] never pulsed during T19). */
+    parameter BAUD_RATE = 115_200
 )(
     input  wire       clk,
     input  wire       rst_n,
