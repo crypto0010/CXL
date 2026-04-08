@@ -40,13 +40,16 @@ struct EngineContext {
     nvinfer1::IRuntime*          runtime = nullptr;
     nvinfer1::ICudaEngine*       engine  = nullptr;
     nvinfer1::IExecutionContext* context = nullptr;
+    cudaStream_t                 stream  = nullptr;  /* per-engine CUDA stream */
 
     /* TensorRT 10.x removed the explicit destroy() methods that TRT 8.x used.
-     * Objects are now destroyed via plain `delete` (standard C++ ownership). */
+     * Objects are now destroyed via plain `delete` (standard C++ ownership).
+     * The CUDA stream is destroyed via cudaStreamDestroy. */
     ~EngineContext() {
         delete context;
         delete engine;
         delete runtime;
+        if (stream) cudaStreamDestroy(stream);
     }
 };
 
@@ -106,6 +109,17 @@ bool GpuExecutor::load_engine(const std::string& layer_name,
         return false;
     }
 
+    /* Create a dedicated CUDA stream for this engine.  Using a non-default
+     * stream avoids the implicit cudaStreamSynchronize that TRT inserts when
+     * stream 0 is used, and lets multiple engines run concurrently on the
+     * GPU's hardware queues for higher throughput. */
+    cudaError_t cerr = cudaStreamCreateWithFlags(&ctx->stream, cudaStreamNonBlocking);
+    if (cerr != cudaSuccess) {
+        std::fprintf(stderr, "GpuExecutor: cudaStreamCreate failed for '%s': %s\n",
+                     layer_name.c_str(), cudaGetErrorString(cerr));
+        return false;
+    }
+
     impl_->engines[layer_name] = std::move(ctx);
     std::fprintf(stdout, "GpuExecutor: loaded engine for layer '%s' from '%s'\n",
                  layer_name.c_str(), engine_path.c_str());
@@ -154,9 +168,12 @@ bool GpuExecutor::execute(const std::string& layer_name,
         return false;
     }
 
-    err = cudaMemcpy(d_input, input, input_bytes, cudaMemcpyHostToDevice);
+    /* Use the per-engine CUDA stream for async H2D + execute + D2H so that
+     * multiple engines can run concurrently on the GPU's hardware queues. */
+    err = cudaMemcpyAsync(d_input, input, input_bytes,
+                          cudaMemcpyHostToDevice, ctx->stream);
     if (err != cudaSuccess) {
-        std::fprintf(stderr, "GpuExecutor: cudaMemcpy H2D failed: %s\n",
+        std::fprintf(stderr, "GpuExecutor: cudaMemcpyAsync H2D failed: %s\n",
                      cudaGetErrorString(err));
         cudaFree(d_input);
         cudaFree(d_output);
@@ -166,7 +183,7 @@ bool GpuExecutor::execute(const std::string& layer_name,
     // TensorRT 10.x: use the named-tensor API instead of the index-based
     // binding API.  Iterate IO tensors by name, find the input and output
     // by their TensorIOMode, and bind device pointers.  Then call enqueueV3
-    // (executeV2 still works but is deprecated in TRT 10).
+    // on the per-engine stream (avoids the default-stream sync penalty).
     int nb = ctx->engine->getNbIOTensors();
     bool bound_input = false, bound_output = false;
     for (int i = 0; i < nb; ++i) {
@@ -189,12 +206,7 @@ bool GpuExecutor::execute(const std::string& layer_name,
         return false;
     }
 
-    // enqueueV3 needs a CUDA stream; we use the default stream (0) for synchronous behavior.
-    bool ok = ctx->context->enqueueV3(0);
-    if (ok) {
-        // enqueueV3 is async on the stream — synchronize before reading output.
-        cudaStreamSynchronize(0);
-    }
+    bool ok = ctx->context->enqueueV3(ctx->stream);
     if (!ok) {
         std::fprintf(stderr, "GpuExecutor: TensorRT executeV2 failed for layer '%s'\n",
                      layer_name.c_str());
@@ -203,12 +215,25 @@ bool GpuExecutor::execute(const std::string& layer_name,
         return false;
     }
 
-    err = cudaMemcpy(output, d_output, output_bytes, cudaMemcpyDeviceToHost);
+    /* Async D2H on the per-engine stream, then synchronize once at the end
+     * so the caller sees a fully-completed result on return. */
+    err = cudaMemcpyAsync(output, d_output, output_bytes,
+                          cudaMemcpyDeviceToHost, ctx->stream);
+    if (err != cudaSuccess) {
+        std::fprintf(stderr, "GpuExecutor: cudaMemcpyAsync D2H failed: %s\n",
+                     cudaGetErrorString(err));
+        cudaFree(d_input);
+        cudaFree(d_output);
+        return false;
+    }
+
+    /* Wait for H2D + execute + D2H to complete on this engine's stream. */
+    err = cudaStreamSynchronize(ctx->stream);
     cudaFree(d_input);
     cudaFree(d_output);
 
     if (err != cudaSuccess) {
-        std::fprintf(stderr, "GpuExecutor: cudaMemcpy D2H failed: %s\n",
+        std::fprintf(stderr, "GpuExecutor: cudaStreamSynchronize failed: %s\n",
                      cudaGetErrorString(err));
         return false;
     }
