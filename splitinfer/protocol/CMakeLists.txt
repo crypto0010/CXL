@@ -23,4 +23,16 @@ if(BUILD_TESTS)
     # Built with BUILD_TESTS=ON but NOT registered with ctest (hardware required).
     add_executable(test_loopback tests/test_loopback.c)
     target_link_libraries(test_loopback edgecoh)
+
+    # T21: MAC controller hardware validation (NMC INT8 FC engine).
+    # Sends NMC_EXEC with nmc_op=NMC_INT8_FC and verifies the FPGA's
+    # mac_controller FSM completes and returns an ACK.
+    add_executable(test_mac_loopback tests/test_mac_loopback.c)
+    target_link_libraries(test_mac_loopback edgecoh)
+
+    # T22: elementwise engine hardware validation (NMC ELEMENTWISE).
+    # Sends NMC_EXEC with nmc_op=NMC_ELEMENTWISE and verifies the FPGA's
+    # eltwise_controller FSM completes and returns an ACK.
+    add_executable(test_elementwise_loopback tests/test_elementwise_loopback.c)
+    target_link_libraries(test_elementwise_loopback edgecoh)
 endif()
