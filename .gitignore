@@ -46,5 +46,10 @@ __pycache__/
 *.swp
 *~
 
+# Pretrained checkpoints downloaded by ultralytics / huggingface
+splitinfer/evaluation/models/*.pt
+splitinfer/evaluation/models/yolov8*.pt
+hub/
+
 # Claude settings
 .claude/
