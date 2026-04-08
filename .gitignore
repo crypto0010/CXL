@@ -4,12 +4,19 @@ splitinfer/fpga/ip/mig_project/
 splitinfer/fpga/ip/managed_ip_project/
 splitinfer/fpga/ip/mig_7series_0/mig_7series_0/
 splitinfer/fpga/ip/mig_7series_0/mig_7series_0.dcp
+splitinfer/fpga/.gen/
+splitinfer/fpga/.srcs/
+splitinfer/fpga/.Xil/
+splitinfer/fpga/clockInfo.txt
+splitinfer/fpga/dfx_runtime.txt
+splitinfer/fpga/tight_setup_hold_pins.txt
 *.jou
 *.log
 *.str
 *.pb
 *.wdb
 *.bit
+*.bin
 *.dcp
 hs_err_*
 xsim.dir/
@@ -18,6 +25,26 @@ webtalk*
 
 # Vivado board files (installed separately)
 splitinfer/fpga/ip/check_mig.tcl
+
+# CMake / C++ build artifacts
+splitinfer/build/
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Python cache and bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
 
 # Claude settings
 .claude/
