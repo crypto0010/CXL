@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 
 namespace splitinfer {
@@ -38,6 +39,28 @@ public:
     /// @param fpga_addr Destination address in FPGA memory space.
     /// @return true on success.
     virtual bool transfer_to_fpga(const void* src, size_t len, uint32_t fpga_addr) = 0;
+};
+
+/// Concrete FPGA executor using EdgeCoh protocol over USB.
+class FpgaExecutor : public FpgaExecutorBase {
+public:
+    FpgaExecutor();
+    ~FpgaExecutor() override;
+
+    /// Open USB transport to the Nexys 4 DDR board.
+    bool open(uint16_t vid = 0x0403, uint16_t pid = 0x6010);
+    /// Close USB transport.
+    void close();
+    bool is_open() const;
+
+    bool execute(const std::string& layer_name, uint32_t nmc_op,
+                 const void* input, size_t input_bytes,
+                 void* output, size_t output_bytes) override;
+    bool transfer_to_host(uint32_t fpga_addr, size_t len, void* dst) override;
+    bool transfer_to_fpga(const void* src, size_t len, uint32_t fpga_addr) override;
+private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 } // namespace splitinfer

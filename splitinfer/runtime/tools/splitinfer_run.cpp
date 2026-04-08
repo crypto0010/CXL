@@ -1,12 +1,15 @@
 /* splitinfer/runtime/tools/splitinfer_run.cpp
  * CLI entry point for SplitInfer.
  *
- * Usage: splitinfer_run <manifest.json>
+ * Usage: splitinfer_run <manifest.json> [--real]
  *
- * Loads the partition manifest, runs one inference pass with stub
- * (no-op) GPU and FPGA executors, and prints timing telemetry.
- * Intended for smoke-testing the runtime before real TensorRT /
- * EdgeCoh executors are integrated.
+ * By default uses stub (no-op) executors for smoke testing.
+ * With --real, instantiates real GpuExecutor and FpgaExecutor.
+ *
+ * Ablation environment variables (for E4 experiment):
+ *   SPLITINFER_NO_NMC=1       Force all FPGA layers to GPU
+ *   SPLITINFER_NO_PREFETCH=1  Disable prefetch (not yet implemented)
+ *   SPLITINFER_NO_PIPELINE=1  Disable pipelining (not yet implemented)
  */
 
 #include "splitinfer/manifest.h"
@@ -17,6 +20,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 
 // ─── Stub executors (no-op) ───────────────────────────────────────────────────
@@ -100,15 +104,40 @@ static void print_telemetry(const splitinfer::TelemetryStats& s) {
     std::printf("  Bytes transferred   : %lld B\n", (long long)s.bytes_transferred);
 }
 
+/// Apply SPLITINFER_NO_NMC: force all FPGA layers to GPU.
+static void apply_ablation_no_nmc(splitinfer::Manifest& m) {
+    int moved = 0;
+    for (auto& layer : m.layers) {
+        if (layer.device == splitinfer::Device::FPGA) {
+            layer.device = splitinfer::Device::GPU;
+            moved++;
+        }
+    }
+    // Clear transfers since everything is on GPU now.
+    m.transfers.clear();
+    m.summary.gpu_layers += moved;
+    m.summary.fpga_layers = 0;
+    m.summary.num_transfers = 0;
+    std::printf("  [ablation] NO_NMC: moved %d layers from FPGA to GPU\n", moved);
+}
+
 // ─── main ─────────────────────────────────────────────────────────────────────
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::fprintf(stderr, "Usage: %s <manifest.json>\n", argv[0]);
+        std::fprintf(stderr, "Usage: %s <manifest.json> [--real]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
     const std::string path = argv[1];
+    bool use_real = false;
+
+    for (int i = 2; i < argc; ++i) {
+        if (std::strcmp(argv[i], "--real") == 0) {
+            use_real = true;
+        }
+    }
+
     splitinfer::Manifest manifest;
 
     if (!splitinfer::load_manifest(path, manifest)) {
@@ -116,20 +145,46 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    // Check ablation environment variables.
+    if (std::getenv("SPLITINFER_NO_NMC")) {
+        apply_ablation_no_nmc(manifest);
+    }
+    if (std::getenv("SPLITINFER_NO_PREFETCH")) {
+        std::printf("  [ablation] NO_PREFETCH: noted (prefetch not yet implemented)\n");
+    }
+    if (std::getenv("SPLITINFER_NO_PIPELINE")) {
+        std::printf("  [ablation] NO_PIPELINE: noted (double-buffering not yet implemented)\n");
+    }
+
     print_summary(manifest);
 
-    StubGpuExecutor  gpu;
-    StubFpgaExecutor fpga;
+    bool ok;
 
-    splitinfer::Pipeline pipeline(manifest, gpu, fpga);
+    if (use_real) {
+        std::printf("\nUsing real executors (GpuExecutor + FpgaExecutor)...\n");
+        splitinfer::GpuExecutor  gpu;
+        splitinfer::FpgaExecutor fpga;
 
-    std::printf("\nRunning inference (stub executors)...\n");
-    bool ok = pipeline.run();
+        splitinfer::Pipeline pipeline(manifest, gpu, fpga);
+
+        std::printf("\nRunning inference...\n");
+        ok = pipeline.run();
+
+        print_telemetry(pipeline.get_telemetry().get_stats());
+    } else {
+        std::printf("\nRunning inference (stub executors)...\n");
+        StubGpuExecutor  gpu;
+        StubFpgaExecutor fpga;
+
+        splitinfer::Pipeline pipeline(manifest, gpu, fpga);
+        ok = pipeline.run();
+
+        print_telemetry(pipeline.get_telemetry().get_stats());
+    }
+
     if (!ok) {
         std::fprintf(stderr, "Warning: one or more layers reported an error.\n");
     }
-
-    print_telemetry(pipeline.get_telemetry().get_stats());
 
     std::printf("\nDone. Status: %s\n", ok ? "OK" : "ERROR");
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
