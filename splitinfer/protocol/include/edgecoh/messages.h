@@ -4,7 +4,28 @@
 
 #include <stdint.h>
 
-/* EdgeCoh protocol message types — inspired by CXL.mem */
+/* EdgeCoh protocol message types — inspired by CXL.mem
+ *
+ * Completion semantics:
+ *   The current FPGA firmware (edgecoh_controller.v) uniformly emits
+ *   EDGECOH_MSG_ACK (0xFE) for the completion of every dispatched
+ *   message — SYNC_BARRIER, NMC_EXEC, DATA_WRITE, etc.  The host is
+ *   expected to know which message it just sent and interpret the
+ *   ACK accordingly.
+ *
+ *   EDGECOH_MSG_NMC_DONE (0x21) is reserved for future firmware that
+ *   wants to distinguish "NMC operation complete" from "generic ACK"
+ *   — for example, to deliver NMC-specific status flags or error codes
+ *   in the same response.  Today's firmware does NOT emit this opcode.
+ *   The runtime accepts both 0xFE and 0x21 as completion indicators
+ *   for forward compatibility.  See runtime/src/fpga_executor.cpp
+ *   FpgaExecutor::execute() for the dual-opcode acceptance check.
+ *
+ *   EDGECOH_MSG_DATA_RESPONSE (0x12) is the one exception: it IS
+ *   distinct from ACK because it carries a payload (the requested
+ *   tensor bytes), so the host must know to read additional bytes
+ *   beyond the 8-byte header.
+ */
 
 typedef enum {
     EDGECOH_MSG_TRANSFER_OWNERSHIP = 0x01,
@@ -14,8 +35,11 @@ typedef enum {
     EDGECOH_MSG_DATA_READ          = 0x11,  /* Host -> FPGA: request tensor data */
     EDGECOH_MSG_DATA_RESPONSE      = 0x12,  /* FPGA -> Host: tensor data response */
     EDGECOH_MSG_NMC_EXEC           = 0x20,  /* Host -> FPGA: execute NMC operation */
-    EDGECOH_MSG_NMC_DONE           = 0x21,  /* FPGA -> Host: NMC execution complete */
-    EDGECOH_MSG_ACK                = 0xFE,
+    EDGECOH_MSG_NMC_DONE           = 0x21,  /* RESERVED — see header comment.
+                                              * Current firmware uses MSG_ACK
+                                              * for all completions.  Runtime
+                                              * accepts both for fwd compat. */
+    EDGECOH_MSG_ACK                = 0xFE,  /* Universal completion response */
     EDGECOH_MSG_ERROR              = 0xFF,
 } edgecoh_msg_type_t;
 
