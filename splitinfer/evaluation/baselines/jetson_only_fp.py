@@ -70,30 +70,42 @@ def benchmark(model_path: str, warmup: int, runs: int) -> None:
         latencies_ms.append((t1 - t0) * 1000.0)
 
     latencies_ms = np.array(latencies_ms)
-    mean_ms   = np.mean(latencies_ms)
-    median_ms = np.median(latencies_ms)
-    p99_ms    = np.percentile(latencies_ms, 99)
-    total_s   = np.sum(latencies_ms) / 1000.0
+    # Use sample std (N-1 ddof=1) for unbiased estimate with small N.
+    mean_ms   = float(np.mean(latencies_ms))
+    std_ms    = float(np.std(latencies_ms, ddof=1)) if runs > 1 else 0.0
+    min_ms    = float(np.min(latencies_ms))
+    max_ms    = float(np.max(latencies_ms))
+    median_ms = float(np.median(latencies_ms))
+    p5_ms     = float(np.percentile(latencies_ms, 5))
+    p95_ms    = float(np.percentile(latencies_ms, 95))
+    p99_ms    = float(np.percentile(latencies_ms, 99))
+    total_s   = float(np.sum(latencies_ms) / 1000.0)
     throughput = runs / total_s
 
     print()
     print("=== Results ===")
-    print(f"Mean latency   : {mean_ms:.3f} ms")
+    print(f"Mean latency   : {mean_ms:.3f} ms  (std {std_ms:.3f})")
     print(f"Median latency : {median_ms:.3f} ms")
+    print(f"p5  / p95      : {p5_ms:.3f} / {p95_ms:.3f} ms")
     print(f"P99 latency    : {p99_ms:.3f} ms")
     print(f"Throughput     : {throughput:.2f} inf/s")
     print()
 
-    # JSON-compatible summary for downstream scripts
+    # JSON-compatible summary for downstream scripts (e2_run.py consumes this).
     import json
     result = {
-        "baseline": "B1_jetson_fp32",
-        "model": os.path.basename(model_path),
-        "warmup_runs": warmup,
+        "baseline":     "B1_jetson_fp32",
+        "model":        os.path.basename(model_path),
+        "warmup_runs":  warmup,
         "measure_runs": runs,
-        "mean_ms": round(float(mean_ms), 4),
-        "median_ms": round(float(median_ms), 4),
-        "p99_ms": round(float(p99_ms), 4),
+        "mean_ms":      round(mean_ms, 4),
+        "std_ms":       round(std_ms,  4),
+        "min_ms":       round(min_ms,  4),
+        "p5_ms":        round(p5_ms,   4),
+        "median_ms":    round(median_ms, 4),
+        "p95_ms":       round(p95_ms,  4),
+        "p99_ms":       round(p99_ms,  4),
+        "max_ms":       round(max_ms,  4),
         "throughput_inf_per_s": round(float(throughput), 4),
     }
     print(json.dumps(result, indent=2))

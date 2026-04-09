@@ -1,65 +1,14 @@
 {
   "experiment": "E2_performance_comparison",
   "models": [
-    "dlrm",
-    "yolov8n",
-    "mobilebert"
+    "dlrm"
   ],
   "batches": [
-    1,
-    64,
-    256
+    1
   ],
-  "warmup": 3,
-  "runs": 10,
-  "note": "Data merged from two sweep invocations:\n  - DLRM {1, 64, 256}: initial sweep with warmup=3 runs=10 (~2h wall time)\n  - yolov8n b1 + mobilebert b1: targeted re-run after DLRM sweep was\n    interrupted due to excessive SplitInfer wall time on larger models.\nSplitInfer timed out on yolov8n and mobilebert at batch=1 because the\nMAC controller + USB round-trip per layer exceeds the 10 min per-call\nceiling for these model architectures (100+ conv or transformer layers).",
+  "warmup": 2,
+  "runs": 30,
   "results": [
-    {
-      "model": "dlrm",
-      "batch": 1,
-      "model_size_mb": 14,
-      "b1_fp32": {
-        "status": "ok",
-        "median_ms": 0.5,
-        "mean_ms": 0.51,
-        "throughput": 1930.4,
-        "power": {
-          "rails": {
-            "VDD_IN": {
-              "mean_mw": 6338
-            }
-          },
-          "energy_J": 0.6
-        }
-      },
-      "b2_int8": {
-        "status": "ok",
-        "median_ms": 0.26,
-        "throughput": 3660.0,
-        "power": {
-          "rails": {
-            "VDD_IN": {
-              "mean_mw": 6914
-            }
-          },
-          "energy_J": 26.3
-        }
-      },
-      "splitinfer": {
-        "status": "ok",
-        "median_ms": 595.84,
-        "throughput": 0.3,
-        "iterations": 10,
-        "power": {
-          "rails": {
-            "VDD_IN": {
-              "mean_mw": 5700
-            }
-          },
-          "energy_J": 185.8
-        }
-      }
-    },
     {
       "model": "dlrm",
       "batch": 64,
@@ -311,6 +260,107 @@
         "duration_s": 0.0,
         "iterations": 0,
         "warmup_timeouts": 1
+      }
+    },
+    {
+      "model": "dlrm",
+      "batch": 1,
+      "model_size_mb": 14,
+      "b1_fp32": {
+        "status": "ok",
+        "stats": {
+          "count": 30,
+          "mean_ms": 0.5544,
+          "std_ms": 0.0568,
+          "min_ms": 0.4987,
+          "p5_ms": 0.5011,
+          "median_ms": 0.5331,
+          "p95_ms": 0.6798,
+          "p99_ms": 0.699,
+          "max_ms": 0.7045,
+          "cv_pct": 10.25
+        },
+        "mean_ms": 0.5544,
+        "median_ms": 0.5331,
+        "p99_ms": 0.699,
+        "throughput": 1803.6579,
+        "duration_s": 2.467093022001791,
+        "power": {
+          "samples": 3,
+          "duration_s": 0.4656732940056827,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6493.666666666667,
+              "median_mw": 6507,
+              "max_mw": 6507,
+              "min_mw": 6467,
+              "samples": 3
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 1425.6666666666667,
+              "median_mw": 1426,
+              "max_mw": 1465,
+              "min_mw": 1386,
+              "samples": 3
+            },
+            "VDD_SOC": {
+              "mean_mw": 1706,
+              "median_mw": 1706,
+              "max_mw": 1706,
+              "min_mw": 1706,
+              "samples": 3
+            }
+          },
+          "energy_J": 1.2994
+        }
+      },
+      "b2_int8": {
+        "status": "ok",
+        "stats": {
+          "count": 30,
+          "mean_ms": 0.2388,
+          "std_ms": 0.0223,
+          "min_ms": 0.2246,
+          "p5_ms": 0.2258,
+          "median_ms": 0.2303,
+          "p95_ms": 0.2868,
+          "p99_ms": 0.3158,
+          "max_ms": 0.3199,
+          "cv_pct": 9.34
+        },
+        "mean_ms": 0.2388,
+        "median_ms": 0.2303,
+        "p99_ms": 0.3158,
+        "throughput": 4187.6965,
+        "duration_s": 7.788229531986872,
+        "power": {
+          "samples": 50,
+          "duration_s": 5.7860723869962385,
+          "rails": {
+            "VDD_IN": {
+              "mean_mw": 6770.38,
+              "median_mw": 6785.0,
+              "max_mw": 7023,
+              "min_mw": 6150,
+              "samples": 50
+            },
+            "VDD_CPU_GPU_CV": {
+              "mean_mw": 1626.16,
+              "median_mw": 1663.0,
+              "max_mw": 1782,
+              "min_mw": 1188,
+              "samples": 50
+            },
+            "VDD_SOC": {
+              "mean_mw": 1731.88,
+              "median_mw": 1745.0,
+              "max_mw": 1785,
+              "min_mw": 1666,
+              "samples": 50
+            }
+          },
+          "energy_J": 33.20915000000001
+        }
       }
     }
   ]

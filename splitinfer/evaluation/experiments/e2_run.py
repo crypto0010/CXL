@@ -154,8 +154,29 @@ def _run_baseline_subprocess(cmd: List[str], log_path: Path) -> Dict:
             "power": col.summary(),
         }
 
+    # The upgraded baselines now emit count/std/min/p5/p95/max alongside
+    # the legacy mean/median/p99.  Pass through whatever is present so
+    # the summary JSON has a consistent schema regardless of which
+    # baseline produced it.
+    stats = {
+        "count":     parsed.get("measure_runs"),
+        "mean_ms":   parsed.get("mean_ms"),
+        "std_ms":    parsed.get("std_ms"),
+        "min_ms":    parsed.get("min_ms"),
+        "p5_ms":     parsed.get("p5_ms"),
+        "median_ms": parsed.get("median_ms"),
+        "p95_ms":    parsed.get("p95_ms"),
+        "p99_ms":    parsed.get("p99_ms"),
+        "max_ms":    parsed.get("max_ms"),
+    }
+    if stats["mean_ms"] is not None and stats["std_ms"] is not None and stats["mean_ms"] > 0:
+        stats["cv_pct"] = round(100.0 * stats["std_ms"] / stats["mean_ms"], 2)
+
     return {
         "status":     "ok",
+        "stats":      stats,
+        # Legacy top-level fields (still emitted for back-compat with the
+        # _print_result helper and any downstream scripts).
         "mean_ms":    parsed.get("mean_ms"),
         "median_ms":  parsed.get("median_ms"),
         "p99_ms":     parsed.get("p99_ms"),
@@ -287,11 +308,14 @@ def run_splitinfer(cell: Dict, warmup: int, runs: int, log_path: Path,
             "power":      col.summary(),
         }
 
+    stats = compute_stats(latencies)
     return {
         "status":     "ok",
-        "mean_ms":    statistics.mean(latencies),
-        "median_ms":  statistics.median(latencies),
-        "p99_ms":     _percentile(latencies, 99),
+        "stats":      stats,
+        # Legacy top-level fields so older consumers keep working.
+        "mean_ms":    stats.get("mean_ms"),
+        "median_ms":  stats.get("median_ms"),
+        "p99_ms":     stats.get("p99_ms"),
         "throughput": runs / max(wall_s, 1e-6),
         "duration_s": wall_s,
         "power":      col.summary(),
@@ -300,6 +324,7 @@ def run_splitinfer(cell: Dict, warmup: int, runs: int, log_path: Path,
 
 
 def _percentile(values, p):
+    """Linear-interpolation percentile (matches numpy / C++ splitinfer_run)."""
     if not values:
         return None
     s = sorted(values)
@@ -309,6 +334,33 @@ def _percentile(values, p):
     if f == c:
         return s[f]
     return s[f] + (s[c] - s[f]) * (k - f)
+
+
+def compute_stats(latencies_ms: List[float]) -> Dict:
+    """Uniform statistics dict for any list of per-iteration latencies.
+
+    Returns the same schema the C++ splitinfer_run STATS_JSON emits AND
+    the same fields the upgraded B1/B2 baselines now print in their JSON
+    summary, so downstream consumers see a consistent shape regardless
+    of where the distribution came from.
+    """
+    if not latencies_ms:
+        return {"count": 0}
+    n = len(latencies_ms)
+    mean_v = statistics.mean(latencies_ms)
+    std_v  = statistics.stdev(latencies_ms) if n > 1 else 0.0
+    return {
+        "count":     n,
+        "mean_ms":   round(mean_v, 4),
+        "std_ms":    round(std_v,  4),
+        "min_ms":    round(min(latencies_ms), 4),
+        "p5_ms":     round(_percentile(latencies_ms,  5), 4),
+        "median_ms": round(_percentile(latencies_ms, 50), 4),
+        "p95_ms":    round(_percentile(latencies_ms, 95), 4),
+        "p99_ms":    round(_percentile(latencies_ms, 99), 4),
+        "max_ms":    round(max(latencies_ms), 4),
+        "cv_pct":    round(100.0 * std_v / mean_v, 2) if mean_v > 0 else 0.0,
+    }
 
 
 # ─── Sweep driver ──────────────────────────────────────────────────────────────
@@ -441,11 +493,16 @@ def main():
 
 def _print_result(r: Dict) -> None:
     if r["status"] == "ok":
-        median = r.get("median_ms")
-        thr    = r.get("throughput")
+        stats  = r.get("stats") or {}
+        median = stats.get("median_ms") or r.get("median_ms") or 0.0
+        std    = stats.get("std_ms")    or 0.0
+        p95    = stats.get("p95_ms")    or 0.0
+        cv     = stats.get("cv_pct")    or 0.0
+        thr    = r.get("throughput") or 0.0
         pwr    = r.get("power", {}).get("rails", {}).get("VDD_IN", {}).get("mean_mw", 0)
         nrg    = r.get("power", {}).get("energy_J", 0)
-        print(f"median={median:.2f}ms  thr={thr:.1f}/s  pwr={pwr:.0f}mW  nrg={nrg:.1f}J")
+        print(f"median={median:.2f}±{std:.2f}ms p95={p95:.2f}ms "
+              f"cv={cv:.1f}%  thr={thr:.1f}/s  pwr={pwr:.0f}mW  nrg={nrg:.1f}J")
     else:
         print(f"[{r['status']}]")
 
