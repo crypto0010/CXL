@@ -252,12 +252,15 @@ def run_splitinfer(cell: Dict, warmup: int, runs: int, log_path: Path,
     # multiply the work.  600s per call is the absolute ceiling.
     PER_CALL_TIMEOUT = 600
     timeouts_in_warmup = 0
+    flash_script = str(REPO_ROOT / "fpga" / "scripts" / "flash_fpga.sh")
 
     # Warmup (not measured) — separate runs to settle FPGA state.
     # If even one warmup call times out, we abort this cell rather than
     # waste 30 measurement iterations on a known-broken configuration.
     for _ in range(warmup):
         try:
+            subprocess.run([flash_script], capture_output=True, text=True, timeout=60)
+            time.sleep(1.0)
             subprocess.run(
                 ["sudo", str(splitinfer_bin), str(manifest_path), "--real"],
                 capture_output=True, text=True, env=env, timeout=PER_CALL_TIMEOUT,
@@ -278,9 +281,39 @@ def run_splitinfer(cell: Dict, warmup: int, runs: int, log_path: Path,
             "warmup_timeouts": timeouts_in_warmup,
         }
 
+    # FPGA state-reset strategy: re-flash the bitstream before every
+    # measurement iteration.  This is the only reliable way to guarantee
+    # the edgecoh_controller FSM starts from a clean S_IDLE state with
+    # all CDC handshakes fully quiesced.  The cost is ~6 seconds per
+    # iteration (bitstream load over JTAG).  For 30 iterations that's
+    # ~3 minutes of overhead — acceptable for paper-quality measurement.
+    #
+    # Why simpler approaches failed:
+    #   - Host-side sleep (0.5-2.0 s): insufficient for 36-layer models
+    #     where 36 nmc_done CDC handshakes must fully drain
+    #   - RTL watchdog (100 ms timeout): correctly resets the FSM but
+    #     can't fix the nmc_dispatch busy-flag race across process exits
+    #   - Both combined: still produces ~50% failure rate on iter 3+
+    #
+    # A full re-flash resets ALL FFs (including nmc_dispatch.busy,
+    # the CDC toggle registers, and MIG calibration state) to their
+    # initial values.  The 6-second cost comes from the JTAG bitstream
+    # load (~3.8 MB at 6 MHz) plus MIG DDR2 calibration (~2 s).
+    flash_script = str(REPO_ROOT / "fpga" / "scripts" / "flash_fpga.sh")
+
     t0 = time.monotonic()
     with TegraStatsCollector(interval_ms=100) as col:
         for i in range(runs):
+            # Re-flash FPGA to guarantee clean state for this iteration.
+            try:
+                subprocess.run(
+                    [flash_script],
+                    capture_output=True, text=True, timeout=60)
+                time.sleep(1.0)  # let MIG calibrate
+            except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+                log_lines.append(f"iter {i}: REFLASH FAILED: {e}")
+                continue
+
             try:
                 r = subprocess.run(
                     ["sudo", str(splitinfer_bin), str(manifest_path), "--real"],
@@ -291,7 +324,7 @@ def run_splitinfer(cell: Dict, warmup: int, runs: int, log_path: Path,
                 continue
             log_lines.append(r.stdout[-200:])  # tail of each iter
             for line in r.stdout.splitlines():
-                if "Total latency" in line:
+                if "Mean latency" in line or "Total latency" in line:
                     try:
                         ms = float(line.split(":")[1].strip().split()[0])
                         latencies.append(ms)
