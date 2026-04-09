@@ -1,0 +1,2475 @@
+{
+  "version": "1.0",
+  "layers": [
+    {
+      "name": "matmul0",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "input",
+        "W0"
+      ],
+      "outputs": [
+        "mm0"
+      ]
+    },
+    {
+      "name": "add0",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm0",
+        "b0"
+      ],
+      "outputs": [
+        "add0"
+      ]
+    },
+    {
+      "name": "relu0",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add0"
+      ],
+      "outputs": [
+        "relu0"
+      ]
+    },
+    {
+      "name": "matmul1",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu0",
+        "W1"
+      ],
+      "outputs": [
+        "mm1"
+      ]
+    },
+    {
+      "name": "add1",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm1",
+        "b1"
+      ],
+      "outputs": [
+        "add1"
+      ]
+    },
+    {
+      "name": "relu1",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add1"
+      ],
+      "outputs": [
+        "relu1"
+      ]
+    },
+    {
+      "name": "matmul2",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu1",
+        "W2"
+      ],
+      "outputs": [
+        "mm2"
+      ]
+    },
+    {
+      "name": "add2",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm2",
+        "b2"
+      ],
+      "outputs": [
+        "add2"
+      ]
+    },
+    {
+      "name": "relu2",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add2"
+      ],
+      "outputs": [
+        "relu2"
+      ]
+    },
+    {
+      "name": "matmul3",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu2",
+        "W3"
+      ],
+      "outputs": [
+        "mm3"
+      ]
+    },
+    {
+      "name": "add3",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm3",
+        "b3"
+      ],
+      "outputs": [
+        "add3"
+      ]
+    },
+    {
+      "name": "relu3",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add3"
+      ],
+      "outputs": [
+        "relu3"
+      ]
+    },
+    {
+      "name": "matmul4",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu3",
+        "W4"
+      ],
+      "outputs": [
+        "mm4"
+      ]
+    },
+    {
+      "name": "add4",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm4",
+        "b4"
+      ],
+      "outputs": [
+        "add4"
+      ]
+    },
+    {
+      "name": "relu4",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add4"
+      ],
+      "outputs": [
+        "relu4"
+      ]
+    },
+    {
+      "name": "matmul5",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu4",
+        "W5"
+      ],
+      "outputs": [
+        "mm5"
+      ]
+    },
+    {
+      "name": "add5",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm5",
+        "b5"
+      ],
+      "outputs": [
+        "add5"
+      ]
+    },
+    {
+      "name": "relu5",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add5"
+      ],
+      "outputs": [
+        "relu5"
+      ]
+    },
+    {
+      "name": "matmul6",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu5",
+        "W6"
+      ],
+      "outputs": [
+        "mm6"
+      ]
+    },
+    {
+      "name": "add6",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm6",
+        "b6"
+      ],
+      "outputs": [
+        "add6"
+      ]
+    },
+    {
+      "name": "relu6",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add6"
+      ],
+      "outputs": [
+        "relu6"
+      ]
+    },
+    {
+      "name": "matmul7",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu6",
+        "W7"
+      ],
+      "outputs": [
+        "mm7"
+      ]
+    },
+    {
+      "name": "add7",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm7",
+        "b7"
+      ],
+      "outputs": [
+        "add7"
+      ]
+    },
+    {
+      "name": "relu7",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add7"
+      ],
+      "outputs": [
+        "relu7"
+      ]
+    },
+    {
+      "name": "matmul8",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu7",
+        "W8"
+      ],
+      "outputs": [
+        "mm8"
+      ]
+    },
+    {
+      "name": "add8",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm8",
+        "b8"
+      ],
+      "outputs": [
+        "add8"
+      ]
+    },
+    {
+      "name": "relu8",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add8"
+      ],
+      "outputs": [
+        "relu8"
+      ]
+    },
+    {
+      "name": "matmul9",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu8",
+        "W9"
+      ],
+      "outputs": [
+        "mm9"
+      ]
+    },
+    {
+      "name": "add9",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm9",
+        "b9"
+      ],
+      "outputs": [
+        "add9"
+      ]
+    },
+    {
+      "name": "relu9",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add9"
+      ],
+      "outputs": [
+        "relu9"
+      ]
+    },
+    {
+      "name": "matmul10",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu9",
+        "W10"
+      ],
+      "outputs": [
+        "mm10"
+      ]
+    },
+    {
+      "name": "add10",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm10",
+        "b10"
+      ],
+      "outputs": [
+        "add10"
+      ]
+    },
+    {
+      "name": "relu10",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add10"
+      ],
+      "outputs": [
+        "relu10"
+      ]
+    },
+    {
+      "name": "matmul11",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu10",
+        "W11"
+      ],
+      "outputs": [
+        "mm11"
+      ]
+    },
+    {
+      "name": "add11",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm11",
+        "b11"
+      ],
+      "outputs": [
+        "add11"
+      ]
+    },
+    {
+      "name": "relu11",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add11"
+      ],
+      "outputs": [
+        "relu11"
+      ]
+    },
+    {
+      "name": "matmul12",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu11",
+        "W12"
+      ],
+      "outputs": [
+        "mm12"
+      ]
+    },
+    {
+      "name": "add12",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm12",
+        "b12"
+      ],
+      "outputs": [
+        "add12"
+      ]
+    },
+    {
+      "name": "relu12",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add12"
+      ],
+      "outputs": [
+        "relu12"
+      ]
+    },
+    {
+      "name": "matmul13",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu12",
+        "W13"
+      ],
+      "outputs": [
+        "mm13"
+      ]
+    },
+    {
+      "name": "add13",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm13",
+        "b13"
+      ],
+      "outputs": [
+        "add13"
+      ]
+    },
+    {
+      "name": "relu13",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add13"
+      ],
+      "outputs": [
+        "relu13"
+      ]
+    },
+    {
+      "name": "matmul14",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu13",
+        "W14"
+      ],
+      "outputs": [
+        "mm14"
+      ]
+    },
+    {
+      "name": "add14",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm14",
+        "b14"
+      ],
+      "outputs": [
+        "add14"
+      ]
+    },
+    {
+      "name": "relu14",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add14"
+      ],
+      "outputs": [
+        "relu14"
+      ]
+    },
+    {
+      "name": "matmul15",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu14",
+        "W15"
+      ],
+      "outputs": [
+        "mm15"
+      ]
+    },
+    {
+      "name": "add15",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm15",
+        "b15"
+      ],
+      "outputs": [
+        "add15"
+      ]
+    },
+    {
+      "name": "relu15",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add15"
+      ],
+      "outputs": [
+        "relu15"
+      ]
+    },
+    {
+      "name": "matmul16",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu15",
+        "W16"
+      ],
+      "outputs": [
+        "mm16"
+      ]
+    },
+    {
+      "name": "add16",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm16",
+        "b16"
+      ],
+      "outputs": [
+        "add16"
+      ]
+    },
+    {
+      "name": "relu16",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add16"
+      ],
+      "outputs": [
+        "relu16"
+      ]
+    },
+    {
+      "name": "matmul17",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu16",
+        "W17"
+      ],
+      "outputs": [
+        "mm17"
+      ]
+    },
+    {
+      "name": "add17",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm17",
+        "b17"
+      ],
+      "outputs": [
+        "add17"
+      ]
+    },
+    {
+      "name": "relu17",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add17"
+      ],
+      "outputs": [
+        "relu17"
+      ]
+    },
+    {
+      "name": "matmul18",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu17",
+        "W18"
+      ],
+      "outputs": [
+        "mm18"
+      ]
+    },
+    {
+      "name": "add18",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm18",
+        "b18"
+      ],
+      "outputs": [
+        "add18"
+      ]
+    },
+    {
+      "name": "relu18",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add18"
+      ],
+      "outputs": [
+        "relu18"
+      ]
+    },
+    {
+      "name": "matmul19",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu18",
+        "W19"
+      ],
+      "outputs": [
+        "mm19"
+      ]
+    },
+    {
+      "name": "add19",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm19",
+        "b19"
+      ],
+      "outputs": [
+        "add19"
+      ]
+    },
+    {
+      "name": "relu19",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add19"
+      ],
+      "outputs": [
+        "relu19"
+      ]
+    },
+    {
+      "name": "matmul20",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu19",
+        "W20"
+      ],
+      "outputs": [
+        "mm20"
+      ]
+    },
+    {
+      "name": "add20",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm20",
+        "b20"
+      ],
+      "outputs": [
+        "add20"
+      ]
+    },
+    {
+      "name": "relu20",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add20"
+      ],
+      "outputs": [
+        "relu20"
+      ]
+    },
+    {
+      "name": "matmul21",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu20",
+        "W21"
+      ],
+      "outputs": [
+        "mm21"
+      ]
+    },
+    {
+      "name": "add21",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm21",
+        "b21"
+      ],
+      "outputs": [
+        "add21"
+      ]
+    },
+    {
+      "name": "relu21",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add21"
+      ],
+      "outputs": [
+        "relu21"
+      ]
+    },
+    {
+      "name": "matmul22",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu21",
+        "W22"
+      ],
+      "outputs": [
+        "mm22"
+      ]
+    },
+    {
+      "name": "add22",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm22",
+        "b22"
+      ],
+      "outputs": [
+        "add22"
+      ]
+    },
+    {
+      "name": "relu22",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add22"
+      ],
+      "outputs": [
+        "relu22"
+      ]
+    },
+    {
+      "name": "matmul23",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu22",
+        "W23"
+      ],
+      "outputs": [
+        "mm23"
+      ]
+    },
+    {
+      "name": "add23",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm23",
+        "b23"
+      ],
+      "outputs": [
+        "add23"
+      ]
+    },
+    {
+      "name": "relu23",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add23"
+      ],
+      "outputs": [
+        "relu23"
+      ]
+    },
+    {
+      "name": "matmul24",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu23",
+        "W24"
+      ],
+      "outputs": [
+        "mm24"
+      ]
+    },
+    {
+      "name": "add24",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm24",
+        "b24"
+      ],
+      "outputs": [
+        "add24"
+      ]
+    },
+    {
+      "name": "relu24",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add24"
+      ],
+      "outputs": [
+        "relu24"
+      ]
+    },
+    {
+      "name": "matmul25",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu24",
+        "W25"
+      ],
+      "outputs": [
+        "mm25"
+      ]
+    },
+    {
+      "name": "add25",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm25",
+        "b25"
+      ],
+      "outputs": [
+        "add25"
+      ]
+    },
+    {
+      "name": "relu25",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add25"
+      ],
+      "outputs": [
+        "relu25"
+      ]
+    },
+    {
+      "name": "matmul26",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu25",
+        "W26"
+      ],
+      "outputs": [
+        "mm26"
+      ]
+    },
+    {
+      "name": "add26",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm26",
+        "b26"
+      ],
+      "outputs": [
+        "add26"
+      ]
+    },
+    {
+      "name": "relu26",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add26"
+      ],
+      "outputs": [
+        "relu26"
+      ]
+    },
+    {
+      "name": "matmul27",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu26",
+        "W27"
+      ],
+      "outputs": [
+        "mm27"
+      ]
+    },
+    {
+      "name": "add27",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm27",
+        "b27"
+      ],
+      "outputs": [
+        "add27"
+      ]
+    },
+    {
+      "name": "relu27",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add27"
+      ],
+      "outputs": [
+        "relu27"
+      ]
+    },
+    {
+      "name": "matmul28",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu27",
+        "W28"
+      ],
+      "outputs": [
+        "mm28"
+      ]
+    },
+    {
+      "name": "add28",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm28",
+        "b28"
+      ],
+      "outputs": [
+        "add28"
+      ]
+    },
+    {
+      "name": "relu28",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add28"
+      ],
+      "outputs": [
+        "relu28"
+      ]
+    },
+    {
+      "name": "matmul29",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu28",
+        "W29"
+      ],
+      "outputs": [
+        "mm29"
+      ]
+    },
+    {
+      "name": "add29",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm29",
+        "b29"
+      ],
+      "outputs": [
+        "add29"
+      ]
+    },
+    {
+      "name": "relu29",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add29"
+      ],
+      "outputs": [
+        "relu29"
+      ]
+    },
+    {
+      "name": "matmul30",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu29",
+        "W30"
+      ],
+      "outputs": [
+        "mm30"
+      ]
+    },
+    {
+      "name": "add30",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm30",
+        "b30"
+      ],
+      "outputs": [
+        "add30"
+      ]
+    },
+    {
+      "name": "relu30",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add30"
+      ],
+      "outputs": [
+        "relu30"
+      ]
+    },
+    {
+      "name": "matmul31",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu30",
+        "W31"
+      ],
+      "outputs": [
+        "mm31"
+      ]
+    },
+    {
+      "name": "add31",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm31",
+        "b31"
+      ],
+      "outputs": [
+        "add31"
+      ]
+    },
+    {
+      "name": "relu31",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add31"
+      ],
+      "outputs": [
+        "relu31"
+      ]
+    },
+    {
+      "name": "matmul32",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu31",
+        "W32"
+      ],
+      "outputs": [
+        "mm32"
+      ]
+    },
+    {
+      "name": "add32",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm32",
+        "b32"
+      ],
+      "outputs": [
+        "add32"
+      ]
+    },
+    {
+      "name": "relu32",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add32"
+      ],
+      "outputs": [
+        "relu32"
+      ]
+    },
+    {
+      "name": "matmul33",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu32",
+        "W33"
+      ],
+      "outputs": [
+        "mm33"
+      ]
+    },
+    {
+      "name": "add33",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm33",
+        "b33"
+      ],
+      "outputs": [
+        "add33"
+      ]
+    },
+    {
+      "name": "relu33",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add33"
+      ],
+      "outputs": [
+        "relu33"
+      ]
+    },
+    {
+      "name": "matmul34",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu33",
+        "W34"
+      ],
+      "outputs": [
+        "mm34"
+      ]
+    },
+    {
+      "name": "add34",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm34",
+        "b34"
+      ],
+      "outputs": [
+        "add34"
+      ]
+    },
+    {
+      "name": "relu34",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add34"
+      ],
+      "outputs": [
+        "relu34"
+      ]
+    },
+    {
+      "name": "matmul35",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu34",
+        "W35"
+      ],
+      "outputs": [
+        "mm35"
+      ]
+    },
+    {
+      "name": "add35",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm35",
+        "b35"
+      ],
+      "outputs": [
+        "add35"
+      ]
+    },
+    {
+      "name": "relu35",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add35"
+      ],
+      "outputs": [
+        "relu35"
+      ]
+    },
+    {
+      "name": "matmul36",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu35",
+        "W36"
+      ],
+      "outputs": [
+        "mm36"
+      ]
+    },
+    {
+      "name": "add36",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm36",
+        "b36"
+      ],
+      "outputs": [
+        "add36"
+      ]
+    },
+    {
+      "name": "relu36",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add36"
+      ],
+      "outputs": [
+        "relu36"
+      ]
+    },
+    {
+      "name": "matmul37",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu36",
+        "W37"
+      ],
+      "outputs": [
+        "mm37"
+      ]
+    },
+    {
+      "name": "add37",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm37",
+        "b37"
+      ],
+      "outputs": [
+        "add37"
+      ]
+    },
+    {
+      "name": "relu37",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add37"
+      ],
+      "outputs": [
+        "relu37"
+      ]
+    },
+    {
+      "name": "matmul38",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu37",
+        "W38"
+      ],
+      "outputs": [
+        "mm38"
+      ]
+    },
+    {
+      "name": "add38",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm38",
+        "b38"
+      ],
+      "outputs": [
+        "add38"
+      ]
+    },
+    {
+      "name": "relu38",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add38"
+      ],
+      "outputs": [
+        "relu38"
+      ]
+    },
+    {
+      "name": "matmul39",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu38",
+        "W39"
+      ],
+      "outputs": [
+        "mm39"
+      ]
+    },
+    {
+      "name": "add39",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm39",
+        "b39"
+      ],
+      "outputs": [
+        "add39"
+      ]
+    },
+    {
+      "name": "relu39",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add39"
+      ],
+      "outputs": [
+        "relu39"
+      ]
+    },
+    {
+      "name": "matmul40",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu39",
+        "W40"
+      ],
+      "outputs": [
+        "mm40"
+      ]
+    },
+    {
+      "name": "add40",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm40",
+        "b40"
+      ],
+      "outputs": [
+        "add40"
+      ]
+    },
+    {
+      "name": "relu40",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add40"
+      ],
+      "outputs": [
+        "relu40"
+      ]
+    },
+    {
+      "name": "matmul41",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu40",
+        "W41"
+      ],
+      "outputs": [
+        "mm41"
+      ]
+    },
+    {
+      "name": "add41",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm41",
+        "b41"
+      ],
+      "outputs": [
+        "add41"
+      ]
+    },
+    {
+      "name": "relu41",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add41"
+      ],
+      "outputs": [
+        "relu41"
+      ]
+    },
+    {
+      "name": "matmul42",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu41",
+        "W42"
+      ],
+      "outputs": [
+        "mm42"
+      ]
+    },
+    {
+      "name": "add42",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm42",
+        "b42"
+      ],
+      "outputs": [
+        "add42"
+      ]
+    },
+    {
+      "name": "relu42",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add42"
+      ],
+      "outputs": [
+        "relu42"
+      ]
+    },
+    {
+      "name": "matmul43",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu42",
+        "W43"
+      ],
+      "outputs": [
+        "mm43"
+      ]
+    },
+    {
+      "name": "add43",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm43",
+        "b43"
+      ],
+      "outputs": [
+        "add43"
+      ]
+    },
+    {
+      "name": "relu43",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add43"
+      ],
+      "outputs": [
+        "relu43"
+      ]
+    },
+    {
+      "name": "matmul44",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu43",
+        "W44"
+      ],
+      "outputs": [
+        "mm44"
+      ]
+    },
+    {
+      "name": "add44",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm44",
+        "b44"
+      ],
+      "outputs": [
+        "add44"
+      ]
+    },
+    {
+      "name": "relu44",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add44"
+      ],
+      "outputs": [
+        "relu44"
+      ]
+    },
+    {
+      "name": "matmul45",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu44",
+        "W45"
+      ],
+      "outputs": [
+        "mm45"
+      ]
+    },
+    {
+      "name": "add45",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm45",
+        "b45"
+      ],
+      "outputs": [
+        "add45"
+      ]
+    },
+    {
+      "name": "relu45",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add45"
+      ],
+      "outputs": [
+        "relu45"
+      ]
+    },
+    {
+      "name": "matmul46",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu45",
+        "W46"
+      ],
+      "outputs": [
+        "mm46"
+      ]
+    },
+    {
+      "name": "add46",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm46",
+        "b46"
+      ],
+      "outputs": [
+        "add46"
+      ]
+    },
+    {
+      "name": "relu46",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add46"
+      ],
+      "outputs": [
+        "relu46"
+      ]
+    },
+    {
+      "name": "matmul47",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu46",
+        "W47"
+      ],
+      "outputs": [
+        "mm47"
+      ]
+    },
+    {
+      "name": "add47",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm47",
+        "b47"
+      ],
+      "outputs": [
+        "add47"
+      ]
+    },
+    {
+      "name": "relu47",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add47"
+      ],
+      "outputs": [
+        "relu47"
+      ]
+    },
+    {
+      "name": "matmul48",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu47",
+        "W48"
+      ],
+      "outputs": [
+        "mm48"
+      ]
+    },
+    {
+      "name": "add48",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm48",
+        "b48"
+      ],
+      "outputs": [
+        "add48"
+      ]
+    },
+    {
+      "name": "relu48",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add48"
+      ],
+      "outputs": [
+        "relu48"
+      ]
+    },
+    {
+      "name": "matmul49",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu48",
+        "W49"
+      ],
+      "outputs": [
+        "mm49"
+      ]
+    },
+    {
+      "name": "add49",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm49",
+        "b49"
+      ],
+      "outputs": [
+        "add49"
+      ]
+    },
+    {
+      "name": "relu49",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add49"
+      ],
+      "outputs": [
+        "relu49"
+      ]
+    },
+    {
+      "name": "matmul50",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu49",
+        "W50"
+      ],
+      "outputs": [
+        "mm50"
+      ]
+    },
+    {
+      "name": "add50",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm50",
+        "b50"
+      ],
+      "outputs": [
+        "add50"
+      ]
+    },
+    {
+      "name": "relu50",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add50"
+      ],
+      "outputs": [
+        "relu50"
+      ]
+    },
+    {
+      "name": "matmul51",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu50",
+        "W51"
+      ],
+      "outputs": [
+        "mm51"
+      ]
+    },
+    {
+      "name": "add51",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm51",
+        "b51"
+      ],
+      "outputs": [
+        "add51"
+      ]
+    },
+    {
+      "name": "relu51",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add51"
+      ],
+      "outputs": [
+        "relu51"
+      ]
+    },
+    {
+      "name": "matmul52",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu51",
+        "W52"
+      ],
+      "outputs": [
+        "mm52"
+      ]
+    },
+    {
+      "name": "add52",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm52",
+        "b52"
+      ],
+      "outputs": [
+        "add52"
+      ]
+    },
+    {
+      "name": "relu52",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add52"
+      ],
+      "outputs": [
+        "relu52"
+      ]
+    },
+    {
+      "name": "matmul53",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu52",
+        "W53"
+      ],
+      "outputs": [
+        "mm53"
+      ]
+    },
+    {
+      "name": "add53",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm53",
+        "b53"
+      ],
+      "outputs": [
+        "add53"
+      ]
+    },
+    {
+      "name": "relu53",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add53"
+      ],
+      "outputs": [
+        "relu53"
+      ]
+    },
+    {
+      "name": "matmul54",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu53",
+        "W54"
+      ],
+      "outputs": [
+        "mm54"
+      ]
+    },
+    {
+      "name": "add54",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm54",
+        "b54"
+      ],
+      "outputs": [
+        "add54"
+      ]
+    },
+    {
+      "name": "relu54",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add54"
+      ],
+      "outputs": [
+        "relu54"
+      ]
+    },
+    {
+      "name": "matmul55",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu54",
+        "W55"
+      ],
+      "outputs": [
+        "mm55"
+      ]
+    },
+    {
+      "name": "add55",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm55",
+        "b55"
+      ],
+      "outputs": [
+        "add55"
+      ]
+    },
+    {
+      "name": "relu55",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add55"
+      ],
+      "outputs": [
+        "relu55"
+      ]
+    },
+    {
+      "name": "matmul56",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu55",
+        "W56"
+      ],
+      "outputs": [
+        "mm56"
+      ]
+    },
+    {
+      "name": "add56",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm56",
+        "b56"
+      ],
+      "outputs": [
+        "add56"
+      ]
+    },
+    {
+      "name": "relu56",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add56"
+      ],
+      "outputs": [
+        "relu56"
+      ]
+    },
+    {
+      "name": "matmul57",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu56",
+        "W57"
+      ],
+      "outputs": [
+        "mm57"
+      ]
+    },
+    {
+      "name": "add57",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm57",
+        "b57"
+      ],
+      "outputs": [
+        "add57"
+      ]
+    },
+    {
+      "name": "relu57",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add57"
+      ],
+      "outputs": [
+        "relu57"
+      ]
+    },
+    {
+      "name": "matmul58",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 100000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu57",
+        "W58"
+      ],
+      "outputs": [
+        "mm58"
+      ]
+    },
+    {
+      "name": "add58",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 20000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm58",
+        "b58"
+      ],
+      "outputs": [
+        "add58"
+      ]
+    },
+    {
+      "name": "relu58",
+      "op_type": "Relu",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add58"
+      ],
+      "outputs": [
+        "relu58"
+      ]
+    },
+    {
+      "name": "matmul59",
+      "op_type": "MatMul",
+      "device": "fpga",
+      "weight_bytes": 20000000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "relu58",
+        "W59"
+      ],
+      "outputs": [
+        "mm59"
+      ]
+    },
+    {
+      "name": "add59",
+      "op_type": "Add",
+      "device": "fpga",
+      "weight_bytes": 4000,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "mm59",
+        "b59"
+      ],
+      "outputs": [
+        "add59"
+      ]
+    },
+    {
+      "name": "output_id",
+      "op_type": "Identity",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "output_tensor_bytes": 0,
+      "inputs": [
+        "add59"
+      ],
+      "outputs": [
+        "output"
+      ]
+    }
+  ],
+  "transfers": [],
+  "summary": {
+    "total_layers": 180,
+    "gpu_layers": 0,
+    "fpga_layers": 180,
+    "estimated_latency_ms": 463.69999999999925,
+    "gpu_memory_bytes": 0,
+    "fpga_memory_bytes": 100000000,
+    "num_transfers": 0
+  }
+}

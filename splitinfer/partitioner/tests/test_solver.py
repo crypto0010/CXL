@@ -28,13 +28,30 @@ def test_all_assignments_valid():
 def test_large_weight_prefers_fpga():
     assert partition_model(_layers(), CostModel(_hw())).assignments[0] == "fpga"
 
-def test_capacity_respected():
+def test_capacity_respected_resident():
+    """Resident (legacy) mode: sum of FPGA layer weights must fit DDR2."""
     layers = _layers()
     layers[0] = LayerInfo("fc1","MatMul",["x","W1"],["y1"],100*1024*1024,512)
     layers[2] = LayerInfo("fc2","MatMul",["r1","W2"],["y2"],50*1024*1024,256)
-    result = partition_model(layers, CostModel(_hw()))
+    result = partition_model(layers, CostModel(_hw()), streaming=False)
     fpga_bytes = sum(layers[i].weight_bytes for i, a in enumerate(result.assignments) if a == "fpga")
     assert fpga_bytes <= 128 * 1024 * 1024
+
+def test_capacity_respected_streaming():
+    """Streaming (default) mode: each INDIVIDUAL layer must fit DDR2,
+    but sum can exceed it because layers are streamed in sequentially."""
+    layers = _layers()
+    layers[0] = LayerInfo("fc1","MatMul",["x","W1"],["y1"],100*1024*1024,512)
+    layers[2] = LayerInfo("fc2","MatMul",["r1","W2"],["y2"],50*1024*1024,256)
+    result = partition_model(layers, CostModel(_hw()))  # streaming=True by default
+    for i, a in enumerate(result.assignments):
+        if a == "fpga":
+            assert layers[i].weight_bytes <= 128 * 1024 * 1024
+    # Both large layers should be on FPGA (each fits individually)
+    assert result.assignments[0] == "fpga"
+    assert result.assignments[2] == "fpga"
+    # Peak resident footprint is the max layer, not the sum
+    assert result.fpga_memory_bytes == 100 * 1024 * 1024
 
 def test_total_latency():
     assert partition_model(_layers(), CostModel(_hw())).total_latency_ms > 0

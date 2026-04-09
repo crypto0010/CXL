@@ -41,7 +41,14 @@ def main() -> None:
         sys.exit(1)
 
     print(f"Loading ONNX model: {args.model}")
-    model = onnx.load(args.model)
+    # IMPORTANT: load_external_data=False is required for multi-GB models.
+    # The default load_external_data=True materializes every weight tensor
+    # into RAM, which OOM-kills the partitioner on models larger than
+    # available memory.  We only need initializer *shapes* (init.dims +
+    # data_type) to compute weight_bytes per layer, never the actual data.
+    # See parse_onnx_graph() — it uses init.dims × dtype.itemsize, which
+    # works identically whether data_location is DEFAULT or EXTERNAL.
+    model = onnx.load(args.model, load_external_data=False)
     layers = parse_onnx_graph(model)
     print(f"Parsed {len(layers)} layers")
 

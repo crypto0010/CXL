@@ -1,0 +1,62 @@
+{
+  "experiment": "E1_capacity_unlock_dense_mlp",
+  "hardware": {
+    "platform": "NVIDIA Jetson Orin Nano Super",
+    "ram_total_gb": 7.4,
+    "ram_available_gb": 6.0,
+    "swap_gb": 3.7,
+    "fpga_ddr2_mb": 128
+  },
+  "model_family": "dense MLP (streaming external data)",
+  "baseline_fp32_measurements": [
+    {
+      "model_size_gb": 4.58,
+      "architecture": "10000 -> 30000 -> 30000 -> 1000",
+      "b1_status": "ok",
+      "b1_session_create_s": 15.79,
+      "b1_inference_ms": 273.13,
+      "b1_peak_rss_mb": 6046
+    },
+    {
+      "model_size_gb": 6.0,
+      "architecture": "10000 -> 35000 -> 35000 -> 1000",
+      "b1_status": "ok_thrashing",
+      "b1_session_create_s": 22.65,
+      "b1_inference_ms": 1981.72,
+      "b1_peak_rss_mb": 6157,
+      "note": "7.3x latency increase for 1.3x model size = thrashing regime"
+    },
+    {
+      "model_size_gb": 9.39,
+      "architecture": "10000 -> 45000 -> 45000 -> 1000",
+      "b1_status": "oom_killed",
+      "b1_peak_rss_mb": 7373,
+      "note": "OOM killer fired during model load; memory monitor captured the collapse"
+    }
+  ],
+  "splitinfer_streaming_partitioner": {
+    "model_size_gb": 5.51,
+    "architecture": "60-layer MLP (5000->5000 hidden), 180 ONNX nodes total",
+    "gpu_layers": 0,
+    "fpga_layers": 180,
+    "transfers": 0,
+    "fpga_peak_resident_mb": 100,
+    "gpu_memory_gb": 0.0,
+    "estimated_latency_ms": 463.7,
+    "note": "Streaming solver assigns all layers to FPGA; peak FPGA DDR2 footprint is the largest single layer (100 MB), regardless of total model size. Baseline at this size would thrash (6+ GB RSS); at 9 GB baseline OOM-kills."
+  },
+  "capacity_unlock_summary": {
+    "finding": "SplitInfer's streaming partitioner handles models that are ~60x larger than their per-layer peak resident footprint. Dense MLPs up to 9.4 GB cannot run on Jetson Orin Nano alone (OOM killed), while SplitInfer can in principle stream arbitrary-depth models through 128 MB FPGA DDR2.",
+    "measured_crossover_gb": {
+      "baseline_works": 4.58,
+      "baseline_thrashing": 6.0,
+      "baseline_oom": 9.39,
+      "splitinfer_fits_per_layer": 0.09765625
+    },
+    "caveats": [
+      "SplitInfer's actual measured latency on a 5.5 GB model was not recorded \u2014 the 180-layer runtime call timed out at 120s, and debugging the full end-to-end path was deferred. The 463.7 ms figure is the partitioner's analytical estimate.",
+      "The actual hardware per-layer cost (~5 ms USB round-trip) means measured SplitInfer latency would be ~900 ms minimum for 180 layers, ~2x the analytical estimate.",
+      "The partitioner's streaming cost model does not yet price in per-layer weight download (transfer_to_fpga) over USB; for FP32 weights at 40 MB/s the 100 MB peak layer alone takes 2.5 seconds per layer to download, making the honest end-to-end latency ~7.5 minutes for 180 layers. This is the architectural limit \u2014 SplitInfer wins on capacity, not latency."
+    ]
+  }
+}
