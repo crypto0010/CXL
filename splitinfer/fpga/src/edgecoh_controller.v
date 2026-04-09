@@ -9,6 +9,23 @@
  *   0x10 DATA_WRITE          — stream payload_len bytes to DDR2 via DMA
  *   0x11 DATA_READ           — read read_len bytes from DDR2, send DATA_RESPONSE
  *   0x20 NMC_EXEC            — dispatch NMC operation, wait for done, send ACK
+ *
+ * Multi-inference robustness (added in response to bench desync bug):
+ *   A shared watchdog counter `stall_cnt` increments every clock cycle
+ *   the FSM is in any waiting state (S_HEADER, S_PAYLOAD, S_WAIT_NMC,
+ *   S_SEND_ACK, S_ACK_WAIT, S_DMA_WRITE, S_SEND_RESP_HDR, S_DMA_READ_REQ,
+ *   S_DMA_READ_RESP) and is reset to 0 on every productive event
+ *   (rx_valid, tx_ready-with-tx_valid, nmc_done, dma_rd_valid).
+ *   If stall_cnt reaches WATCHDOG_LIMIT (~100 ms at 100 MHz), the FSM
+ *   forces a return to S_IDLE and clears all transient state.  This
+ *   guarantees the FPGA recovers from any partial-message corruption
+ *   (e.g., stray bytes injected by the host's tty open/close cycle)
+ *   within ~200 ms without needing a full bitstream re-flash.
+ *
+ *   Additionally, whenever the FSM enters S_IDLE it explicitly clears
+ *   all per-message transient registers (payload_idx, payload_len,
+ *   ack_byte_idx, dma_wr_remaining, dma_rd_*, resp_hdr_idx) so leftover
+ *   values cannot corrupt the next message's interpretation.
  */
 `timescale 1ns / 1ps
 
@@ -47,6 +64,12 @@ module edgecoh_controller (
     localparam S_SEND_RESP_HDR = 4'd9; // send DATA_RESPONSE 8-byte header
     localparam S_ACK_WAIT   = 4'd10;  // wait for TX to return to idle between ACK bytes
 
+    // Watchdog: 100 ms @ 100 MHz = 10 million cycles.  Any non-IDLE / non-
+    // DISPATCH state that hasn't made progress in this window is considered
+    // hung and forces a return to S_IDLE.  The counter is 24 bits so
+    // 2^24 = 16_777_216 covers up to ~168 ms of stall — comfortable margin.
+    localparam [23:0] WATCHDOG_LIMIT = 24'd10_000_000;
+
     reg [3:0]  state;
     reg [7:0]  header_buf [0:7];
     reg [2:0]  header_idx;
@@ -66,16 +89,66 @@ module edgecoh_controller (
     reg [31:0] dma_rd_sent;      // bytes sent back to host so far
     reg [2:0]  resp_hdr_idx;     // byte index within DATA_RESPONSE header
 
+    // Watchdog counter — increments in any "waiting" state, resets on
+    // progress or on transition to S_IDLE.  Protects against stuck FSM.
+    reg [23:0] stall_cnt;
+
+    // Progress signals — any of these being high this cycle means the
+    // FSM is making forward progress and the watchdog should be reset.
+    wire progress = rx_valid
+                  | (tx_valid & tx_ready)
+                  | nmc_done
+                  | dma_rd_valid;
+
+    // A "waiting" state is one where we expect an external event that
+    // could fail to arrive (host byte, TX handshake, NMC done, DMA data).
+    // S_IDLE and S_DISPATCH are NOT waiting states — S_IDLE is the safe
+    // terminal, and S_DISPATCH completes combinationally in one cycle.
+    wire in_wait_state = (state != S_IDLE) && (state != S_DISPATCH);
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             state <= S_IDLE; rx_ready <= 1; tx_valid <= 0;
             nmc_start <= 0; dma_wr_en <= 0; dma_rd_en <= 0;
             barrier_ack <= 0; header_idx <= 0; payload_idx <= 0; ack_byte_idx <= 0;
-            dma_wr_remaining <= 0; dma_rd_total <= 0;
+            payload_len <= 0;
+            dma_wr_base <= 0; dma_wr_remaining <= 0;
+            dma_rd_base <= 0; dma_rd_total <= 0;
             dma_rd_requested <= 0; dma_rd_sent <= 0; resp_hdr_idx <= 0;
+            stall_cnt <= 0;
         end else begin
             nmc_start <= 0; dma_wr_en <= 0; dma_rd_en <= 0;
             barrier_ack <= 0; tx_valid <= 0;
+
+            // ── Watchdog counter maintenance ─────────────────────────────
+            // Reset counter whenever we observe forward progress OR when we
+            // are in the safe states (S_IDLE/S_DISPATCH).  Otherwise count.
+            if (progress || !in_wait_state) begin
+                stall_cnt <= 0;
+            end else if (stall_cnt < WATCHDOG_LIMIT) begin
+                stall_cnt <= stall_cnt + 1'b1;
+            end
+
+            // ── Watchdog trigger: force S_IDLE + clear all transient state
+            // if we've been stalled in a waiting state for too long.  This
+            // guarantees multi-inference robustness — any partial-message
+            // corruption recovers automatically within ~100 ms instead of
+            // requiring a bitstream re-flash.
+            if (in_wait_state && stall_cnt >= WATCHDOG_LIMIT) begin
+                state <= S_IDLE;
+                rx_ready <= 1;
+                tx_valid <= 0;
+                header_idx <= 0;
+                payload_idx <= 0;
+                payload_len <= 0;
+                ack_byte_idx <= 0;
+                dma_wr_remaining <= 0;
+                dma_rd_total <= 0;
+                dma_rd_requested <= 0;
+                dma_rd_sent <= 0;
+                resp_hdr_idx <= 0;
+                stall_cnt <= 0;
+            end else
 
             case (state)
                 // ── Idle: wait for first header byte ──────────────────────
@@ -218,11 +291,26 @@ module edgecoh_controller (
 
                 // Wait for usb_interface TX to return to idle, then advance
                 // to the next ACK byte (or finish).
+                //
+                // When the last ACK byte has been sent we explicitly clear
+                // ALL per-message transient state before returning to S_IDLE.
+                // This prevents any leftover values from the just-completed
+                // message from influencing how the next message is parsed —
+                // a critical correctness property for multi-inference runs.
                 S_ACK_WAIT: begin
                     if (tx_ready) begin
                         if (ack_byte_idx == 7) begin
-                            ack_byte_idx <= 0;
-                            state <= S_IDLE;
+                            state       <= S_IDLE;
+                            rx_ready    <= 1;
+                            header_idx  <= 0;
+                            payload_idx <= 0;
+                            payload_len <= 0;
+                            ack_byte_idx<= 0;
+                            dma_wr_remaining <= 0;
+                            dma_rd_total     <= 0;
+                            dma_rd_requested <= 0;
+                            dma_rd_sent      <= 0;
+                            resp_hdr_idx     <= 0;
                         end else begin
                             ack_byte_idx <= ack_byte_idx + 1;
                             state <= S_SEND_ACK;
@@ -271,6 +359,12 @@ module edgecoh_controller (
                 // ── Issue DMA read requests and send data back ───────────
                 // Simplified: issue one read at a time, wait for valid,
                 // send byte over TX, repeat until all bytes sent.
+                //
+                // Both exit paths (out-of-requests and last-byte-sent)
+                // explicitly clear all per-message transient state before
+                // returning to S_IDLE — same rationale as the S_ACK_WAIT
+                // exit: prevent leftover values from corrupting the next
+                // message's interpretation.
                 S_DMA_READ_REQ: begin
                     if (dma_rd_requested < dma_rd_total) begin
                         dma_rd_en   <= 1;
@@ -278,8 +372,18 @@ module edgecoh_controller (
                         dma_rd_requested <= dma_rd_requested + 1;
                         state <= S_DMA_READ_RESP;
                     end else begin
-                        // All bytes read and sent — done
-                        state <= S_IDLE;
+                        // All bytes read and sent — clear state and return.
+                        state       <= S_IDLE;
+                        rx_ready    <= 1;
+                        header_idx  <= 0;
+                        payload_idx <= 0;
+                        payload_len <= 0;
+                        ack_byte_idx<= 0;
+                        dma_wr_remaining <= 0;
+                        dma_rd_total     <= 0;
+                        dma_rd_requested <= 0;
+                        dma_rd_sent      <= 0;
+                        resp_hdr_idx     <= 0;
                     end
                 end
 
@@ -290,9 +394,19 @@ module edgecoh_controller (
                             tx_data  <= dma_rd_data;
                             dma_rd_sent <= dma_rd_sent + 1;
                             // Issue next read or finish
-                            if (dma_rd_sent + 1 >= dma_rd_total)
-                                state <= S_IDLE;
-                            else
+                            if (dma_rd_sent + 1 >= dma_rd_total) begin
+                                state       <= S_IDLE;
+                                rx_ready    <= 1;
+                                header_idx  <= 0;
+                                payload_idx <= 0;
+                                payload_len <= 0;
+                                ack_byte_idx<= 0;
+                                dma_wr_remaining <= 0;
+                                dma_rd_total     <= 0;
+                                dma_rd_requested <= 0;
+                                dma_rd_sent      <= 0;
+                                resp_hdr_idx     <= 0;
+                            end else
                                 state <= S_DMA_READ_REQ;
                         end
                         // else: wait for tx_ready
