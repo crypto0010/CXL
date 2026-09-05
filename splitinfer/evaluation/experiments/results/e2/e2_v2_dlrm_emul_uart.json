@@ -1,0 +1,538 @@
+{
+ "experiment": "E2_v2",
+ "model": "evaluation/models/out/dlrm_small.onnx",
+ "program": "evaluation/lowered/dlrm_small",
+ "runs": 30,
+ "warmup": 5,
+ "transport": "emul",
+ "cells": {
+  "B1_ort_fp32_cpu": {
+   "cmd": "/usr/bin/python3 /home/csdf/cxl/splitinfer/evaluation/baselines/jetson_only_fp.py evaluation/models/out/dlrm_small.onnx --warmup 5 --runs 30",
+   "duration_s": 3.15112141300051,
+   "process_runs": 7,
+   "power": {
+    "samples": 28,
+    "duration_s": 3.1501033610002196,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 6510.25,
+      "median_mw": 6428.0,
+      "max_mw": 7153,
+      "min_mw": 6309,
+      "samples": 28
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 1530.4285714285713,
+      "median_mw": 1485.0,
+      "max_mw": 1901,
+      "min_mw": 1386,
+      "samples": 28
+     },
+     "VDD_SOC": {
+      "mean_mw": 1615.0357142857142,
+      "median_mw": 1626.0,
+      "max_mw": 1706,
+      "min_mw": 1587,
+      "samples": 28
+     }
+    },
+    "energy_J": 17.583950000000005
+   },
+   "result": {
+    "baseline": "B1_jetson_fp32",
+    "model": "dlrm_small.onnx",
+    "warmup_runs": 5,
+    "measure_runs": 30,
+    "mean_ms": 0.5583,
+    "std_ms": 0.0255,
+    "min_ms": 0.529,
+    "p5_ms": 0.5338,
+    "median_ms": 0.547,
+    "p95_ms": 0.6048,
+    "p99_ms": 0.6199,
+    "max_ms": 0.6257,
+    "throughput_inf_per_s": 1791.1882
+   },
+   "status": "ok",
+   "energy_per_inf_J": 0.003634672575,
+   "power_samples": 28
+  },
+  "B2_ort_int8_cpu": {
+   "cmd": "/usr/bin/python3 /home/csdf/cxl/splitinfer/evaluation/baselines/jetson_only_quant.py evaluation/models/out/dlrm_small.onnx --warmup 5 --runs 30",
+   "duration_s": 7.126987717998418,
+   "process_runs": 1,
+   "power": {
+    "samples": 63,
+    "duration_s": 7.125853085999552,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 6142.412698412699,
+      "median_mw": 6071,
+      "max_mw": 6864,
+      "min_mw": 5832,
+      "samples": 63
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 1278.6031746031747,
+      "median_mw": 1228,
+      "max_mw": 1901,
+      "min_mw": 1030,
+      "samples": 63
+     },
+     "VDD_SOC": {
+      "mean_mw": 1574.8095238095239,
+      "median_mw": 1587,
+      "max_mw": 1626,
+      "min_mw": 1547,
+      "samples": 63
+     }
+    },
+    "energy_J": 38.0822
+   },
+   "result": {
+    "baseline": "B2_jetson_int8",
+    "model": "dlrm_small.onnx",
+    "quant_mode": "static",
+    "warmup_runs": 5,
+    "measure_runs": 30,
+    "mean_ms": 0.2978,
+    "std_ms": 0.1017,
+    "min_ms": 0.2605,
+    "p5_ms": 0.2617,
+    "median_ms": 0.2699,
+    "p95_ms": 0.3629,
+    "p99_ms": 0.6918,
+    "max_ms": 0.8181,
+    "throughput_inf_per_s": 3357.6648,
+    "quant_time_s": 1.002
+   },
+   "status": "ok",
+   "energy_per_inf_J": 0.0018292105015873016,
+   "power_samples": 63
+  },
+  "B3_trt_fp16_gpu": {
+   "cmd": "/usr/bin/python3 /home/csdf/cxl/splitinfer/evaluation/baselines/jetson_tensorrt.py evaluation/models/out/dlrm_small.onnx --precision fp16 --warmup 5 --runs 30 --min-window-s 0 --json-out /tmp/trt_b3.json",
+   "duration_s": 3.4266398990002926,
+   "process_runs": 3,
+   "power": {
+    "samples": 30,
+    "duration_s": 3.425490161000198,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 6036.066666666667,
+      "median_mw": 6031.0,
+      "max_mw": 6388,
+      "min_mw": 5713,
+      "samples": 30
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 1174.8666666666666,
+      "median_mw": 1148.0,
+      "max_mw": 1426,
+      "min_mw": 950,
+      "samples": 30
+     },
+     "VDD_SOC": {
+      "mean_mw": 1585.4333333333334,
+      "median_mw": 1587.0,
+      "max_mw": 1626,
+      "min_mw": 1547,
+      "samples": 30
+     }
+    },
+    "energy_J": 17.4992
+   },
+   "result": {
+    "baseline": "B_tensorrt_fp16",
+    "model": "dlrm_small.onnx",
+    "precision": "fp16",
+    "engine": "/tmp/trt_cache/dlrm_small.onnx.fp16.plan",
+    "warmup_runs": 5,
+    "measure_runs": 30,
+    "stats": {
+     "count": 30,
+     "mean_ms": 0.49802826664138894,
+     "std_ms": 0.28749049063920096,
+     "min_ms": 0.41590600085328333,
+     "p5_ms": 0.42109115074708825,
+     "median_ms": 0.4481115011003567,
+     "p95_ms": 0.4758176486575394,
+     "p99_ms": 1.5714907079382114,
+     "max_ms": 2.0177429978502914,
+     "cv_pct": 57.7257376530019
+    },
+    "throughput_inf_per_s": 2007.9181584286694,
+    "power": null
+   },
+   "status": "ok",
+   "energy_per_inf_J": 0.0030061318193318662,
+   "power_samples": 30
+  },
+  "B4_trt_int8_gpu": {
+   "cmd": "/usr/bin/python3 /home/csdf/cxl/splitinfer/evaluation/baselines/jetson_tensorrt.py evaluation/models/out/dlrm_small.onnx --precision int8 --warmup 5 --runs 30 --min-window-s 0 --json-out /tmp/trt_b4.json",
+   "duration_s": 3.445030109000072,
+   "process_runs": 4,
+   "power": {
+    "samples": 30,
+    "duration_s": 3.443918859000405,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 6358.933333333333,
+      "median_mw": 6328.5,
+      "max_mw": 6705,
+      "min_mw": 6229,
+      "samples": 30
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 1386,
+      "median_mw": 1386.0,
+      "max_mw": 1584,
+      "min_mw": 1267,
+      "samples": 30
+     },
+     "VDD_SOC": {
+      "mean_mw": 1618.2666666666667,
+      "median_mw": 1626.0,
+      "max_mw": 1666,
+      "min_mw": 1587,
+      "samples": 30
+     }
+    },
+    "energy_J": 18.422150000000002
+   },
+   "result": {
+    "baseline": "B_tensorrt_int8",
+    "model": "dlrm_small.onnx",
+    "precision": "int8",
+    "engine": "/tmp/trt_cache/dlrm_small.onnx.int8.plan",
+    "warmup_runs": 5,
+    "measure_runs": 30,
+    "stats": {
+     "count": 30,
+     "mean_ms": 0.7430333999460951,
+     "std_ms": 1.0915816896676094,
+     "min_ms": 0.3713020014401991,
+     "p5_ms": 0.3794791515247198,
+     "median_ms": 0.4030439995403867,
+     "p95_ms": 3.38882255055068,
+     "p99_ms": 4.6491218608571225,
+     "max_ms": 4.8339290005969815,
+     "cv_pct": 146.90883205880118
+    },
+    "throughput_inf_per_s": 1345.8345211299345,
+    "power": null
+   },
+   "status": "ok",
+   "energy_per_inf_J": 0.004724899854697222,
+   "power_samples": 30
+  },
+  "SI_host": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode host --iterations 3 --warmup 2 --json",
+   "duration_s": 3.022310063999612,
+   "process_runs": 59,
+   "power": {
+    "samples": 26,
+    "duration_s": 3.021200104001764,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 6003.423076923077,
+      "median_mw": 5991.0,
+      "max_mw": 6190,
+      "min_mw": 5832,
+      "samples": 26
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 1195.576923076923,
+      "median_mw": 1188.0,
+      "max_mw": 1307,
+      "min_mw": 1109,
+      "samples": 26
+     },
+     "VDD_SOC": {
+      "mean_mw": 1556.2307692307693,
+      "median_mw": 1547.0,
+      "max_mw": 1587,
+      "min_mw": 1547,
+      "samples": 26
+     }
+    },
+    "energy_J": 15.0038
+   },
+   "result": {
+    "mode": "host",
+    "transport": "emul",
+    "iterations": 3,
+    "warmup": 2,
+    "prepare_ms": 1.893,
+    "stats": {
+     "count": 3,
+     "mean_ms": 1.6414,
+     "std_ms": 0.0081,
+     "min_ms": 1.6341,
+     "p5_ms": 1.6347,
+     "median_ms": 1.6399,
+     "p95_ms": 1.6492,
+     "p99_ms": 1.65,
+     "max_ms": 1.6502,
+     "cv_pct": 0.5
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 0.0,
+     "msgs": 0.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "correctness": {
+     "bit_exact": 3,
+     "total": 3,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.061286
+    },
+    "per_kind_ms": {
+     "concat": 0.0001,
+     "fc": 1.6256,
+     "gather": 0.0088
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 0.00985401863846154,
+   "power_samples": 26
+  },
+  "SI_nmc": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode nmc --transport emul --iterations 3 --warmup 2 --json --emul-link-bw 11520 --emul-rtt-ms 5 --emul-clock-hz 81.25e6",
+   "duration_s": 336.5384033279988,
+   "process_runs": 1,
+   "power": {
+    "samples": 2988,
+    "duration_s": 336.537256951,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 5386.652610441767,
+      "median_mw": 5317.0,
+      "max_mw": 7182,
+      "min_mw": 5079,
+      "samples": 2988
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 747.7449799196787,
+      "median_mw": 713.0,
+      "max_mw": 1941,
+      "min_mw": 554,
+      "samples": 2988
+     },
+     "VDD_SOC": {
+      "mean_mw": 1513.6623159303883,
+      "median_mw": 1507.0,
+      "max_mw": 1706,
+      "min_mw": 1468,
+      "samples": 2988
+     }
+    },
+    "energy_J": 1608.9684000000195
+   },
+   "result": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 3,
+    "warmup": 2,
+    "prepare_ms": 333742.958,
+    "stats": {
+     "count": 3,
+     "mean_ms": 551.4956,
+     "std_ms": 0.2264,
+     "min_ms": 551.2716,
+     "p5_ms": 551.2935,
+     "median_ms": 551.4908,
+     "p95_ms": 551.701,
+     "p99_ms": 551.7197,
+     "max_ms": 551.7244,
+     "cv_pct": 0.04
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "correctness": {
+     "bit_exact": 3,
+     "total": 3,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.061286
+    },
+    "per_kind_ms": {
+     "concat": 0.0007,
+     "fc": 83.2405,
+     "gather": 227.8406
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 2.9707152133871486,
+   "power_samples": 2988,
+   "emulated": true,
+   "measured": false
+  },
+  "SI_pool": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode pool --transport emul --iterations 3 --warmup 2 --json --prefetch-pages 64 --emul-link-bw 11520 --emul-rtt-ms 5 --emul-clock-hz 81.25e6",
+   "duration_s": 1874.7143019939977,
+   "process_runs": 1,
+   "power": {
+    "samples": 16663,
+    "duration_s": 1874.7124075930005,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 5190.899297845526,
+      "median_mw": 5118,
+      "max_mw": 7578,
+      "min_mw": 5039,
+      "samples": 16663
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 632.7575466602652,
+      "median_mw": 595,
+      "max_mw": 2099,
+      "min_mw": 554,
+      "samples": 16663
+     },
+     "VDD_SOC": {
+      "mean_mw": 1490.0524515393386,
+      "median_mw": 1468,
+      "max_mw": 1825,
+      "min_mw": 1468,
+      "samples": 16663
+     }
+    },
+    "energy_J": 8649.063799999823
+   },
+   "result": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 3,
+    "warmup": 2,
+    "prepare_ms": 333841.745,
+    "stats": {
+     "count": 3,
+     "mean_ms": 306954.8569,
+     "std_ms": 2563.895,
+     "min_ms": 304110.4555,
+     "p5_ms": 304466.0107,
+     "median_ms": 307666.0069,
+     "p95_ms": 308945.8982,
+     "p99_ms": 309059.6663,
+     "max_ms": 309088.1083,
+     "cv_pct": 0.84
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3534848.0,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 863.0,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 3,
+     "total": 3,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.061286
+    },
+    "per_kind_ms": {
+     "concat": 0.0008,
+     "fc": 170375.3952,
+     "gather": 136579.4073
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 1593.371751152484,
+   "power_samples": 16663,
+   "emulated": true,
+   "measured": false
+  },
+  "SI_pool_warm": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode pool --transport emul --iterations 3 --warmup 2 --json --prefetch-pages 64 --pool-warm --emul-link-bw 11520 --emul-rtt-ms 5 --emul-clock-hz 81.25e6",
+   "duration_s": 657.8791108299993,
+   "process_runs": 1,
+   "power": {
+    "samples": 5848,
+    "duration_s": 657.8783791130008,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 5226.205198358413,
+      "median_mw": 5158.0,
+      "max_mw": 7182,
+      "min_mw": 5079,
+      "samples": 5848
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 650.7715458276334,
+      "median_mw": 633.0,
+      "max_mw": 1941,
+      "min_mw": 554,
+      "samples": 5848
+     },
+     "VDD_SOC": {
+      "mean_mw": 1509.1465458276334,
+      "median_mw": 1507.0,
+      "max_mw": 1706,
+      "min_mw": 1468,
+      "samples": 5848
+     }
+    },
+    "energy_J": 3055.763050000193
+   },
+   "result": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 3,
+    "warmup": 2,
+    "prepare_ms": 333736.614,
+    "stats": {
+     "count": 3,
+     "mean_ms": 2385.8639,
+     "std_ms": 1644.4265,
+     "min_ms": 1432.7192,
+     "p5_ms": 1433.4666,
+     "median_ms": 1440.1932,
+     "p95_ms": 4000.2306,
+     "p99_ms": 4227.7894,
+     "max_ms": 4284.6791,
+     "cv_pct": 68.92
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 27306.7,
+     "msgs": 1.7,
+     "faults": 1.7,
+     "pages": 6.7,
+     "fetch_rtts": 1.7
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 3,
+     "total": 3,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.061286
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 2.9881,
+     "gather": 2382.8443
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 12.469014316755676,
+   "power_samples": 5848,
+   "emulated": true,
+   "measured": false
+  }
+ }
+}
