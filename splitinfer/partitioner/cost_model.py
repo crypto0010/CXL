@@ -55,12 +55,13 @@ class HardwareParams:
         """The Nexys 4 DDR over FT2232HQ UART at 115,200 baud, as measured.
 
         11,520 B/s is the 8N1 ceiling; ~5 ms is the measured NMC_EXEC round
-        trip.  GPU and FPGA rates are placeholders to be replaced by the
-        calibration script's output.
+        trip.  fpga_int8_gops is derived from simulation of the v2 MAC data
+        path (0.684 MAC/cycle at 81.25 MHz = 0.111 GOPS; sim/v2/tb_mac_golden).
+        gpu_gflops is a placeholder until the TensorRT calibration runs.
         """
         base = dict(
             gpu_gflops=2000.0,
-            fpga_int8_gops=0.03,
+            fpga_int8_gops=0.111,
             fpga_ddr2_bw_gbps=1.3,
             link_bw_bytes_per_s=11_520.0,
             link_rtt_ms=5.0,

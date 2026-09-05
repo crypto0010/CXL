@@ -16,4 +16,5 @@ if(BUILD_TESTS)
 endif()
 
 add_subdirectory(protocol)
+add_subdirectory(cxlwin)
 add_subdirectory(runtime)
