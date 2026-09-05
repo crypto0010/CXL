@@ -1,0 +1,97 @@
+\relax 
+\citation{ivy,treadmarks,munin}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\citation{ivy}
+\citation{munin}
+\citation{treadmarks}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Jetson-only latency versus dense-model size (measured\textsuperscript  {M}). Latency rises non-linearly at 6\nobreakspace  {}GB and the process is killed at 9.39\nobreakspace  {}GB.}}{2}{}\protected@file@percent }
+\newlabel{fig:capacity}{{1}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Background}{2}{}\protected@file@percent }
+\newlabel{sec:background}{{II}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}The memory wall, measured}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Two ways to use attached memory}{2}{}\protected@file@percent }
+\newlabel{eq:crossover}{{1}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces SplitInfer. Offline: the placer chooses host/pool/NMC per layer and the lowering emits one INT8 program and DDR2 image. Online: the runtime executes the program in a mode; pool mode dereferences pointers into the \textsc  {cxlwin}{} window, whose page faults become EdgeCoh reads; NMC mode dispatches to the engines and reads back results.}}{2}{}\protected@file@percent }
+\newlabel{fig:arch}{{2}{2}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces \textsc  {cxlwin}{} page states}}{2}{}\protected@file@percent }
+\newlabel{tab:states}{{I}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}CXL.mem as an analogy, software DSM as an ancestor}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Design}{2}{}\protected@file@percent }
+\newlabel{sec:design}{{III}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}\textsc  {cxlwin}{}: a load/store window with ownership}{2}{}\protected@file@percent }
+\newlabel{sec:cxlwin}{{\mbox  {III-A}}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Page-state transitions. Dashed states are transient and exist only while a transfer is outstanding. A host access to a \textsc  {device}-bias page is a coherence violation; by default it is counted and serviced, in strict mode it aborts.}}{3}{}\protected@file@percent }
+\newlabel{fig:states}{{3}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}EdgeCoh: the message protocol}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Near-memory engines}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}INT8 lowering and the program}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Placement}{3}{}\protected@file@percent }
+\newlabel{sec:placement}{{\mbox  {III-E}}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Implementation and Verification}{3}{}\protected@file@percent }
+\newlabel{sec:impl}{{IV}{3}}
+\citation{dlrm}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Methodology}{4}{}\protected@file@percent }
+\newlabel{sec:method}{{V}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces E2 latencies (log scale; bar = median, whisker to p99).}}{4}{}\protected@file@percent }
+\newlabel{fig:e2}{{4}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{4}{}\protected@file@percent }
+\newlabel{sec:results}{{VI}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}E2: every path on one workload}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces E2: DLRM, batch 1, 30 iterations. Latency per inference; link traffic per inference; bit-exact agreement with expected INT32 output. Provenance: \textsuperscript  {M}{} measured, \textsuperscript  {E}{} emulated link at UART parameters (11{,}520\nobreakspace  {}B/s, 5\nobreakspace  {}ms RTT).}}{5}{}\protected@file@percent }
+\newlabel{tab:e2}{{II}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces E6 (\textsuperscript  {E}): latency per inference versus link bandwidth for NMC and three pool configurations. The crossover between NMC and prefetching pool lies between USB\nobreakspace  {}2.0 and USB\nobreakspace  {}3.}}{5}{}\protected@file@percent }
+\newlabel{fig:crossover}{{5}{5}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces E6 (\textsuperscript  {E}): median latency per inference (ms) across link classes.}}{5}{}\protected@file@percent }
+\newlabel{tab:e6}{{III}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}E6: the crossover}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces E7 (\textsuperscript  {E}): 8-layer MLP, 167.6\nobreakspace  {}MiB INT8 $>$ 128\nobreakspace  {}MB DDR2, streamed through 2$\times $23.9\nobreakspace  {}MiB slots.}}{5}{}\protected@file@percent }
+\newlabel{tab:e7}{{IV}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}E7: capacity, executed}{5}{}\protected@file@percent }
+\newlabel{sec:capacity}{{\mbox  {VI-C}}{5}}
+\citation{ivy}
+\citation{munin}
+\citation{treadmarks}
+\citation{pond_cxl}
+\citation{tpp_cxl}
+\citation{cxl_type2}
+\citation{flexgen}
+\citation{zero_inference}
+\citation{powerinfer}
+\citation{hbm_pim}
+\citation{upmem}
+\citation{nmc_survey}
+\citation{vitis_ai}
+\citation{finn}
+\citation{hls4ml}
+\citation{neurosurgeon}
+\citation{dads}
+\citation{deepthings}
+\bibcite{ivy}{1}
+\bibcite{munin}{2}
+\bibcite{treadmarks}{3}
+\bibcite{cxl_type2}{4}
+\bibcite{pond_cxl}{5}
+\bibcite{tpp_cxl}{6}
+\bibcite{flexgen}{7}
+\bibcite{zero_inference}{8}
+\bibcite{powerinfer}{9}
+\bibcite{hbm_pim}{10}
+\bibcite{upmem}{11}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cost model against execution}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Accuracy}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{6}{}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Related Work}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
+\bibcite{nmc_survey}{12}
+\bibcite{vitis_ai}{13}
+\bibcite{finn}{14}
+\bibcite{hls4ml}{15}
+\bibcite{neurosurgeon}{16}
+\bibcite{dads}{17}
+\bibcite{deepthings}{18}
+\bibcite{dlrm}{19}
+\@writefile{toc}{\contentsline {section}{Biographies}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Hemraj Lamkuche}{7}{}\protected@file@percent }
+\gdef \@abspage@last{7}
