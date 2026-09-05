@@ -133,18 +133,14 @@ bool Pipeline::run() {
             }
             double xfer_dt = elapsed_ms(t0);
 
-            if (is_prefetch) {
-                /* Time spent issuing the transfer counts as transfer cost
-                 * but is "hidden" by being scheduled before the next compute. */
-                m.transfer_ms += xfer_dt;
-                ++m.prefetch_attempts;
-                ++m.prefetch_hits;  /* the issue happened strictly before the next execute() — overlapped */
-            } else {
-                /* Strict serial mode: this is part of the critical path. */
-                m.transfer_ms += xfer_dt;
-                ++m.prefetch_attempts;
-                /* No hit — this transfer was NOT overlapped with prior compute */
-            }
+            /* v2: the former prefetch_hits counter was incremented from the
+             * is_prefetch flag alone — with synchronous executors both paths
+             * ran identical code, so the metric measured nothing.  It is no
+             * longer reported.  This pipeline is LEGACY; splitinfer_v2 is the
+             * evaluated runtime. */
+            (void)is_prefetch;
+            m.transfer_ms += xfer_dt;
+            ++m.prefetch_attempts;
         }
     };
 
