@@ -14,7 +14,7 @@
  * Channel A (/dev/ttyUSB0) is the JTAG/programming channel — we never touch it.
  * Channel B (/dev/ttyUSB1) is wired to the FPGA's uart_rx/uart_tx pins.
  */
-#include "edgecoh/transport.h"
+#include "edgecoh/transport_priv.h"
 #include "edgecoh/messages.h"
 
 #include <stdlib.h>
@@ -34,9 +34,13 @@
  * EDGECOH_TTY=/dev/ttyUSB2 (etc.) in the environment. */
 #define EDGECOH_DEFAULT_TTY "/dev/ttyUSB1"
 
-struct edgecoh_transport {
-    int fd;
-};
+typedef struct { int fd; } usb_priv_t;
+#define FD(t) (((usb_priv_t *)(t)->priv)->fd)
+
+static int usb_send(edgecoh_transport_t *t, const uint8_t *buf, int len);
+static int usb_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len, int timeout_ms);
+static void usb_close(edgecoh_transport_t *t);
+static const edgecoh_transport_ops_t usb_ops = { usb_send, usb_recv, usb_close };
 
 /* Open the tty, configure 921600 8N1 raw mode. */
 edgecoh_transport_t *edgecoh_transport_open(uint16_t vid, uint16_t pid) {
@@ -112,23 +116,24 @@ edgecoh_transport_t *edgecoh_transport_open(uint16_t vid, uint16_t pid) {
     }
 
     edgecoh_transport_t *t = calloc(1, sizeof(*t));
-    if (!t) { close(fd); return NULL; }
-    t->fd = fd;
+    usb_priv_t *pv = calloc(1, sizeof(*pv));
+    if (!t || !pv) { free(t); free(pv); close(fd); return NULL; }
+    t->ops = &usb_ops; t->priv = pv; pv->fd = fd;
     return t;
 }
 
-void edgecoh_transport_close(edgecoh_transport_t *t) {
-    if (!t) return;
-    if (t->fd >= 0) close(t->fd);
+static void usb_close(edgecoh_transport_t *t) {
+    if (FD(t) >= 0) close(FD(t));
+    free(t->priv);
     free(t);
 }
 
-int edgecoh_transport_send(edgecoh_transport_t *t, const uint8_t *buf, int len) {
-    if (!t || t->fd < 0 || !buf || len <= 0) return -1;
+static int usb_send(edgecoh_transport_t *t, const uint8_t *buf, int len) {
+    if (FD(t) < 0 || !buf || len <= 0) return -1;
 
     int total = 0;
     while (total < len) {
-        ssize_t n = write(t->fd, buf + total, (size_t)(len - total));
+        ssize_t n = write(FD(t), buf + total, (size_t)(len - total));
         if (n < 0) {
             if (errno == EINTR) continue;
             fprintf(stderr, "edgecoh: write error: %s\n", strerror(errno));
@@ -138,13 +143,13 @@ int edgecoh_transport_send(edgecoh_transport_t *t, const uint8_t *buf, int len) 
     }
 
     /* Drain TX so the bytes are actually on the wire before we return. */
-    tcdrain(t->fd);
+    tcdrain(FD(t));
     return total;
 }
 
-int edgecoh_transport_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len,
-                           int timeout_ms) {
-    if (!t || t->fd < 0 || !buf || buf_len <= 0) return -1;
+static int usb_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len,
+                    int timeout_ms) {
+    if (FD(t) < 0 || !buf || buf_len <= 0) return -1;
 
     /* Compute absolute deadline so partial reads don't restart the timeout. */
     struct timespec ts;
@@ -161,13 +166,13 @@ int edgecoh_transport_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len,
 
         fd_set rfds;
         FD_ZERO(&rfds);
-        FD_SET(t->fd, &rfds);
+        FD_SET(FD(t), &rfds);
         struct timeval tv = {
             .tv_sec  = remaining / 1000,
             .tv_usec = (remaining % 1000) * 1000,
         };
 
-        int rc = select(t->fd + 1, &rfds, NULL, NULL, &tv);
+        int rc = select(FD(t) + 1, &rfds, NULL, NULL, &tv);
         if (rc < 0) {
             if (errno == EINTR) continue;
             fprintf(stderr, "edgecoh: select error: %s\n", strerror(errno));
@@ -175,7 +180,7 @@ int edgecoh_transport_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len,
         }
         if (rc == 0) return total;  /* timeout */
 
-        ssize_t n = read(t->fd, buf + total, (size_t)(buf_len - total));
+        ssize_t n = read(FD(t), buf + total, (size_t)(buf_len - total));
         if (n < 0) {
             if (errno == EINTR || errno == EAGAIN) continue;
             fprintf(stderr, "edgecoh: read error: %s\n", strerror(errno));
@@ -202,4 +207,13 @@ int edgecoh_recv_header(edgecoh_transport_t *t, edgecoh_header_t *hdr,
     int n = edgecoh_transport_recv(t, buf, sizeof(buf), timeout_ms);
     if (n < (int)sizeof(edgecoh_header_t)) return -1;
     return edgecoh_deserialize_header(buf, n, hdr);
+}
+
+/* ── Public dispatch ─────────────────────────────────────────────────── */
+void edgecoh_transport_close(edgecoh_transport_t *t) { if (t && t->ops) t->ops->close(t); }
+int edgecoh_transport_send(edgecoh_transport_t *t, const uint8_t *buf, int len) {
+    return (t && t->ops) ? t->ops->send(t, buf, len) : -1;
+}
+int edgecoh_transport_recv(edgecoh_transport_t *t, uint8_t *buf, int buf_len, int timeout_ms) {
+    return (t && t->ops) ? t->ops->recv(t, buf, buf_len, timeout_ms) : -1;
 }

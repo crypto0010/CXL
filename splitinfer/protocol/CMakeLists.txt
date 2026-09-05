@@ -2,6 +2,7 @@ add_library(edgecoh
     src/messages.c
     src/edgecoh.c
     src/transport_usb.c
+    src/transport_emul.c
 )
 target_include_directories(edgecoh PUBLIC include)
 find_library(LIBUSB usb-1.0)
@@ -18,6 +19,10 @@ if(BUILD_TESTS)
     add_executable(test_state_machine tests/test_state_machine.c)
     target_link_libraries(test_state_machine edgecoh)
     add_test(NAME test_state_machine COMMAND test_state_machine)
+
+    add_executable(test_emul_device tests/test_emul_device.c)
+    target_link_libraries(test_emul_device edgecoh)
+    add_test(NAME test_emul_device COMMAND test_emul_device)
 
     # Integration test: requires Nexys 4 DDR FPGA connected via USB.
     # Built with BUILD_TESTS=ON but NOT registered with ctest (hardware required).
