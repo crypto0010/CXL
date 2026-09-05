@@ -59,3 +59,8 @@ splitinfer/evaluation/models/generated/dlrm_scaled.onnx
 
 # Claude settings
 .claude/
+
+# generated models and lowered artifacts
+splitinfer/evaluation/models/out/
+splitinfer/evaluation/lowered/*/image.bin
+splitinfer/evaluation/lowered/*/vectors.bin

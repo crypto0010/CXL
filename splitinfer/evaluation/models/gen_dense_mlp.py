@@ -54,6 +54,9 @@ def _make_external_tensor(name: str, dims, offset: int, length: int,
     return t
 
 
+SEED: int | None = 0
+
+
 def build_dense_mlp_streaming(out_path: str,
                               input_dim: int,
                               hidden_dim: int,
@@ -66,13 +69,16 @@ def build_dense_mlp_streaming(out_path: str,
 
     CHUNK = 4 * 1024 * 1024
     import numpy as np
-    zero_chunk = np.zeros(CHUNK // 4, dtype=np.float32).tobytes()
+    # v1 wrote all-zero weights; every published capacity/latency figure was
+    # on a zero model.  Weights are now seeded random, scaled 1/sqrt(fan_in)
+    # so activations stay O(1) through 60 layers.  --zero-weights restores v1.
+    rng = np.random.default_rng(SEED) if SEED is not None else None
 
     offsets: dict[str, tuple[int, int]] = {}
 
     print(f"  [streaming] writing weights to {data_basename}...")
     with open(data_path, "wb") as fd:
-        def write_zero_tensor(name: str, nbytes: int) -> None:
+        def write_zero_tensor(name: str, nbytes: int, std: float = 0.0) -> None:
             off = fd.tell()
             if off % 8 != 0:
                 pad = 8 - (off % 8)
@@ -81,10 +87,10 @@ def build_dense_mlp_streaming(out_path: str,
             remaining = nbytes
             while remaining > 0:
                 write_n = min(remaining, CHUNK)
-                if write_n == CHUNK:
-                    fd.write(zero_chunk)
-                else:
+                if rng is None or std == 0.0:
                     fd.write(b"\x00" * write_n)
+                else:
+                    fd.write((rng.standard_normal(write_n // 4) * std).astype(np.float32).tobytes())
                 remaining -= write_n
             offsets[name] = (off, nbytes)
 
@@ -95,8 +101,8 @@ def build_dense_mlp_streaming(out_path: str,
             in_d, out_d = dims[j], dims[j + 1]
             wb = in_d * out_d * 4
             bb =         out_d * 4
-            write_zero_tensor(f"W{j}", wb)
-            write_zero_tensor(f"b{j}", bb)
+            write_zero_tensor(f"W{j}", wb, std=1.0 / np.sqrt(in_d))
+            write_zero_tensor(f"b{j}", bb, std=0.05)
             total_weight_bytes += wb + bb
             print(f"    layer {j}: W=[{in_d},{out_d}] ({wb/1024**3:.2f} GB)")
 

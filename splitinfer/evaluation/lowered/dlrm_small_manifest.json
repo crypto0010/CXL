@@ -1,0 +1,1484 @@
+{
+  "version": "2.0",
+  "model": "evaluation/models/out/dlrm_small.onnx",
+  "batch": 1,
+  "layers": [
+    {
+      "name": "gather_0",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_0",
+        "emb_idx_0"
+      ],
+      "outputs": [
+        "emb_out_0"
+      ]
+    },
+    {
+      "name": "gather_1",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_1",
+        "emb_idx_1"
+      ],
+      "outputs": [
+        "emb_out_1"
+      ]
+    },
+    {
+      "name": "gather_2",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_2",
+        "emb_idx_2"
+      ],
+      "outputs": [
+        "emb_out_2"
+      ]
+    },
+    {
+      "name": "gather_3",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_3",
+        "emb_idx_3"
+      ],
+      "outputs": [
+        "emb_out_3"
+      ]
+    },
+    {
+      "name": "gather_4",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_4",
+        "emb_idx_4"
+      ],
+      "outputs": [
+        "emb_out_4"
+      ]
+    },
+    {
+      "name": "gather_5",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_5",
+        "emb_idx_5"
+      ],
+      "outputs": [
+        "emb_out_5"
+      ]
+    },
+    {
+      "name": "gather_6",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_6",
+        "emb_idx_6"
+      ],
+      "outputs": [
+        "emb_out_6"
+      ]
+    },
+    {
+      "name": "gather_7",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_7",
+        "emb_idx_7"
+      ],
+      "outputs": [
+        "emb_out_7"
+      ]
+    },
+    {
+      "name": "gather_8",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_8",
+        "emb_idx_8"
+      ],
+      "outputs": [
+        "emb_out_8"
+      ]
+    },
+    {
+      "name": "gather_9",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_9",
+        "emb_idx_9"
+      ],
+      "outputs": [
+        "emb_out_9"
+      ]
+    },
+    {
+      "name": "gather_10",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_10",
+        "emb_idx_10"
+      ],
+      "outputs": [
+        "emb_out_10"
+      ]
+    },
+    {
+      "name": "gather_11",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_11",
+        "emb_idx_11"
+      ],
+      "outputs": [
+        "emb_out_11"
+      ]
+    },
+    {
+      "name": "gather_12",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_12",
+        "emb_idx_12"
+      ],
+      "outputs": [
+        "emb_out_12"
+      ]
+    },
+    {
+      "name": "gather_13",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_13",
+        "emb_idx_13"
+      ],
+      "outputs": [
+        "emb_out_13"
+      ]
+    },
+    {
+      "name": "gather_14",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_14",
+        "emb_idx_14"
+      ],
+      "outputs": [
+        "emb_out_14"
+      ]
+    },
+    {
+      "name": "gather_15",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_15",
+        "emb_idx_15"
+      ],
+      "outputs": [
+        "emb_out_15"
+      ]
+    },
+    {
+      "name": "gather_16",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_16",
+        "emb_idx_16"
+      ],
+      "outputs": [
+        "emb_out_16"
+      ]
+    },
+    {
+      "name": "gather_17",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_17",
+        "emb_idx_17"
+      ],
+      "outputs": [
+        "emb_out_17"
+      ]
+    },
+    {
+      "name": "gather_18",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_18",
+        "emb_idx_18"
+      ],
+      "outputs": [
+        "emb_out_18"
+      ]
+    },
+    {
+      "name": "gather_19",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_19",
+        "emb_idx_19"
+      ],
+      "outputs": [
+        "emb_out_19"
+      ]
+    },
+    {
+      "name": "gather_20",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_20",
+        "emb_idx_20"
+      ],
+      "outputs": [
+        "emb_out_20"
+      ]
+    },
+    {
+      "name": "gather_21",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_21",
+        "emb_idx_21"
+      ],
+      "outputs": [
+        "emb_out_21"
+      ]
+    },
+    {
+      "name": "gather_22",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_22",
+        "emb_idx_22"
+      ],
+      "outputs": [
+        "emb_out_22"
+      ]
+    },
+    {
+      "name": "gather_23",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_23",
+        "emb_idx_23"
+      ],
+      "outputs": [
+        "emb_out_23"
+      ]
+    },
+    {
+      "name": "gather_24",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_24",
+        "emb_idx_24"
+      ],
+      "outputs": [
+        "emb_out_24"
+      ]
+    },
+    {
+      "name": "gather_25",
+      "op_type": "Gather",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 256000,
+      "input_activation_bytes": 8,
+      "output_tensor_bytes": 256,
+      "weight_shapes": [
+        [
+          1000,
+          64
+        ]
+      ],
+      "output_shape": [
+        1,
+        64
+      ],
+      "inputs": [
+        "emb_table_25",
+        "emb_idx_25"
+      ],
+      "outputs": [
+        "emb_out_25"
+      ]
+    },
+    {
+      "name": "concat_all",
+      "op_type": "Concat",
+      "placement": "gpu",
+      "device": "gpu",
+      "weight_bytes": 0,
+      "input_activation_bytes": 7168,
+      "output_tensor_bytes": 7168,
+      "weight_shapes": [],
+      "output_shape": [
+        1,
+        1792
+      ],
+      "inputs": [
+        "emb_out_0",
+        "emb_out_1",
+        "emb_out_2",
+        "emb_out_3",
+        "emb_out_4",
+        "emb_out_5",
+        "emb_out_6",
+        "emb_out_7",
+        "emb_out_8",
+        "emb_out_9",
+        "emb_out_10",
+        "emb_out_11",
+        "emb_out_12",
+        "emb_out_13",
+        "emb_out_14",
+        "emb_out_15",
+        "emb_out_16",
+        "emb_out_17",
+        "emb_out_18",
+        "emb_out_19",
+        "emb_out_20",
+        "emb_out_21",
+        "emb_out_22",
+        "emb_out_23",
+        "emb_out_24",
+        "emb_out_25",
+        "dense_input"
+      ],
+      "outputs": [
+        "concat_out"
+      ]
+    },
+    {
+      "name": "mlp_matmul0",
+      "op_type": "MatMul",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 7340032,
+      "input_activation_bytes": 7168,
+      "output_tensor_bytes": 4096,
+      "weight_shapes": [
+        [
+          1792,
+          1024
+        ]
+      ],
+      "output_shape": [
+        1,
+        1024
+      ],
+      "inputs": [
+        "concat_out",
+        "mlp_w0"
+      ],
+      "outputs": [
+        "mlp_mm0"
+      ]
+    },
+    {
+      "name": "mlp_add_op0",
+      "op_type": "Add",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 4096,
+      "input_activation_bytes": 4096,
+      "output_tensor_bytes": 4096,
+      "weight_shapes": [
+        [
+          1024
+        ]
+      ],
+      "output_shape": [
+        1,
+        1024
+      ],
+      "inputs": [
+        "mlp_mm0",
+        "mlp_b0"
+      ],
+      "outputs": [
+        "mlp_add0"
+      ]
+    },
+    {
+      "name": "mlp_relu0",
+      "op_type": "Relu",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "input_activation_bytes": 4096,
+      "output_tensor_bytes": 4096,
+      "weight_shapes": [],
+      "output_shape": [
+        1,
+        1024
+      ],
+      "inputs": [
+        "mlp_add0"
+      ],
+      "outputs": [
+        "mlp_relu0"
+      ]
+    },
+    {
+      "name": "mlp_matmul1",
+      "op_type": "MatMul",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 1048576,
+      "input_activation_bytes": 4096,
+      "output_tensor_bytes": 1024,
+      "weight_shapes": [
+        [
+          1024,
+          256
+        ]
+      ],
+      "output_shape": [
+        1,
+        256
+      ],
+      "inputs": [
+        "mlp_relu0",
+        "mlp_w1"
+      ],
+      "outputs": [
+        "mlp_mm1"
+      ]
+    },
+    {
+      "name": "mlp_add_op1",
+      "op_type": "Add",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 1024,
+      "input_activation_bytes": 1024,
+      "output_tensor_bytes": 1024,
+      "weight_shapes": [
+        [
+          256
+        ]
+      ],
+      "output_shape": [
+        1,
+        256
+      ],
+      "inputs": [
+        "mlp_mm1",
+        "mlp_b1"
+      ],
+      "outputs": [
+        "mlp_add1"
+      ]
+    },
+    {
+      "name": "mlp_relu1",
+      "op_type": "Relu",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 0,
+      "input_activation_bytes": 1024,
+      "output_tensor_bytes": 1024,
+      "weight_shapes": [],
+      "output_shape": [
+        1,
+        256
+      ],
+      "inputs": [
+        "mlp_add1"
+      ],
+      "outputs": [
+        "mlp_relu1"
+      ]
+    },
+    {
+      "name": "mlp_matmul2",
+      "op_type": "MatMul",
+      "placement": "fpga",
+      "device": "fpga",
+      "weight_bytes": 1024,
+      "input_activation_bytes": 1024,
+      "output_tensor_bytes": 4,
+      "weight_shapes": [
+        [
+          256,
+          1
+        ]
+      ],
+      "output_shape": [
+        1,
+        1
+      ],
+      "inputs": [
+        "mlp_relu1",
+        "mlp_w2"
+      ],
+      "outputs": [
+        "mlp_mm2"
+      ]
+    },
+    {
+      "name": "mlp_add_op2",
+      "op_type": "Add",
+      "placement": "pool",
+      "device": "gpu",
+      "weight_bytes": 4,
+      "input_activation_bytes": 4,
+      "output_tensor_bytes": 4,
+      "weight_shapes": [
+        [
+          1
+        ]
+      ],
+      "output_shape": [
+        1,
+        1
+      ],
+      "inputs": [
+        "mlp_mm2",
+        "mlp_b2"
+      ],
+      "outputs": [
+        "mlp_add2"
+      ]
+    },
+    {
+      "name": "output_id",
+      "op_type": "Identity",
+      "placement": "gpu",
+      "device": "gpu",
+      "weight_bytes": 0,
+      "input_activation_bytes": 4,
+      "output_tensor_bytes": 4,
+      "weight_shapes": [],
+      "output_shape": [
+        1,
+        1
+      ],
+      "inputs": [
+        "mlp_add2"
+      ],
+      "outputs": [
+        "output"
+      ]
+    }
+  ],
+  "transfers": [
+    {
+      "after_layer": "gather_25",
+      "before_layer": "concat_all",
+      "from_device": "fpga",
+      "to_device": "gpu",
+      "tensor_names": [
+        "emb_out_25"
+      ],
+      "tensor_bytes": 256
+    },
+    {
+      "after_layer": "concat_all",
+      "before_layer": "mlp_matmul0",
+      "from_device": "gpu",
+      "to_device": "fpga",
+      "tensor_names": [
+        "concat_out"
+      ],
+      "tensor_bytes": 7168
+    },
+    {
+      "after_layer": "mlp_matmul2",
+      "before_layer": "mlp_add_op2",
+      "from_device": "fpga",
+      "to_device": "gpu",
+      "tensor_names": [
+        "mlp_mm2"
+      ],
+      "tensor_bytes": 4
+    }
+  ],
+  "summary": {
+    "total_layers": 36,
+    "placements": {
+      "gpu": 2,
+      "pool": 1,
+      "fpga": 33
+    },
+    "gpu_layers": 3,
+    "fpga_layers": 33,
+    "estimated_latency_ms": 967.5047370875872,
+    "breakdown_ms": {
+      "gpu_compute": 0.0100000005,
+      "fpga_compute": 37.824598198198196,
+      "pool_fault": 5.347222222222222,
+      "weight_stream": 0.0,
+      "dispatch": 259.5312500000001,
+      "activation_xfer": 664.7916666666666
+    },
+    "host_weight_bytes": 0,
+    "gpu_memory_bytes": 0,
+    "fpga_peak_resident_bytes": 15050756,
+    "fpga_memory_bytes": 15050756,
+    "fpga_weight_traffic_bytes": 0,
+    "pool_fault_bytes": 4,
+    "activation_transfer_bytes": 7428,
+    "num_transfers": 3,
+    "total_weight_bytes": 15050756
+  },
+  "decisions": [
+    {
+      "name": "gather_0",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_1",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_2",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_3",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_4",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_5",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_6",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_7",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_8",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_9",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_10",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_11",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_12",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_13",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_14",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_15",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_16",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_17",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_18",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_19",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_20",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_21",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_22",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_23",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_24",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "gather_25",
+      "placement": "fpga",
+      "cost_ms": 7.864983333333333,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 22227.227222222224,
+        "fpga": 7.864983333333333
+      },
+      "arithmetic_intensity": 0.0,
+      "link_crossover_bytes_per_s": 89511011.13642856
+    },
+    {
+      "name": "concat_all",
+      "placement": "gpu",
+      "cost_ms": 0.005,
+      "boundary_ms": 27.22222222222222,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 0.005
+      },
+      "arithmetic_intensity": "inf",
+      "link_crossover_bytes_per_s": null
+    },
+    {
+      "name": "mlp_matmul0",
+      "placement": "fpga",
+      "cost_ms": 40.92779054054054,
+      "boundary_ms": 632.2222222222223,
+      "candidates_ms": {
+        "gpu": 0.001835008,
+        "pool": 637295.5573905637,
+        "fpga": 40.92779054054054
+      },
+      "arithmetic_intensity": 0.5,
+      "link_crossover_bytes_per_s": "inf"
+    },
+    {
+      "name": "mlp_add_op0",
+      "placement": "fpga",
+      "cost_ms": 7.873808558558558,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 5.12e-07,
+        "pool": 360.55555606755553,
+        "fpga": 7.873808558558558
+      },
+      "arithmetic_intensity": 0.25,
+      "link_crossover_bytes_per_s": 1425286.5652961896
+    },
+    {
+      "name": "mlp_relu0",
+      "placement": "fpga",
+      "cost_ms": 7.873808558558558,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 5.12e-07,
+        "pool": 5.12e-07,
+        "fpga": 7.873808558558558
+      },
+      "arithmetic_intensity": "inf",
+      "link_crossover_bytes_per_s": null
+    },
+    {
+      "name": "mlp_matmul1",
+      "placement": "fpga",
+      "cost_ms": 12.587898648648649,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.000262144,
+        "pool": 91042.22248436623,
+        "fpga": 12.587898648648649
+      },
+      "arithmetic_intensity": 0.5,
+      "link_crossover_bytes_per_s": "inf"
+    },
+    {
+      "name": "mlp_add_op1",
+      "placement": "fpga",
+      "cost_ms": 7.8668896396396395,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 1.28e-07,
+        "pool": 93.88888901688888,
+        "fpga": 7.8668896396396395
+      },
+      "arithmetic_intensity": 0.25,
+      "link_crossover_bytes_per_s": 357181.53624077083
+    },
+    {
+      "name": "mlp_relu1",
+      "placement": "fpga",
+      "cost_ms": 7.8668896396396395,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 1.28e-07,
+        "pool": 1.28e-07,
+        "fpga": 7.8668896396396395
+      },
+      "arithmetic_intensity": "inf",
+      "link_crossover_bytes_per_s": null
+    },
+    {
+      "name": "mlp_matmul2",
+      "placement": "fpga",
+      "cost_ms": 7.869195945945946,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 2.56e-07,
+        "pool": 93.88888914488889,
+        "fpga": 7.869195945945946
+      },
+      "arithmetic_intensity": 0.5,
+      "link_crossover_bytes_per_s": 356894.4438290621
+    },
+    {
+      "name": "mlp_add_op2",
+      "placement": "pool",
+      "cost_ms": 5.347222222722222,
+      "boundary_ms": 5.347222222222222,
+      "candidates_ms": {
+        "gpu": 5e-10,
+        "pool": 5.347222222722222,
+        "fpga": 7.864592342342342
+      },
+      "arithmetic_intensity": 0.25,
+      "link_crossover_bytes_per_s": 1396.3592451090014
+    },
+    {
+      "name": "output_id",
+      "placement": "gpu",
+      "cost_ms": 0.005,
+      "boundary_ms": 0.0,
+      "candidates_ms": {
+        "gpu": 0.005,
+        "pool": 0.005
+      },
+      "arithmetic_intensity": "inf",
+      "link_crossover_bytes_per_s": null
+    }
+  ],
+  "hardware_params": {
+    "gpu_gflops": 2000.0,
+    "fpga_int8_gops": 0.111,
+    "fpga_ddr2_bw_gbps": 1.3,
+    "link_bw_bytes_per_s": 11520.0,
+    "link_rtt_ms": 5.0,
+    "fpga_ddr2_capacity_bytes": 134217728,
+    "host_weight_budget_bytes": 0.0,
+    "page_bytes": 4096,
+    "link_chunk_bytes": 4096,
+    "pool_prefetch_pages": 64,
+    "fpga_weights_resident": true,
+    "dispatch_msg_bytes": 33
+  }
+}

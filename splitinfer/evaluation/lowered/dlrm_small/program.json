@@ -1,0 +1,2218 @@
+{
+ "version": "2.0",
+ "batch": 1,
+ "ddr2": {
+  "image_bytes": 3770432,
+  "layout_end": 3780896
+ },
+ "segments": [
+  {
+   "addr": 0,
+   "offset": 0,
+   "length": 64000,
+   "layer": "gather_0",
+   "kind": "table"
+  },
+  {
+   "addr": 64080,
+   "offset": 64000,
+   "length": 64000,
+   "layer": "gather_1",
+   "kind": "table"
+  },
+  {
+   "addr": 128160,
+   "offset": 128000,
+   "length": 64000,
+   "layer": "gather_2",
+   "kind": "table"
+  },
+  {
+   "addr": 192240,
+   "offset": 192000,
+   "length": 64000,
+   "layer": "gather_3",
+   "kind": "table"
+  },
+  {
+   "addr": 256320,
+   "offset": 256000,
+   "length": 64000,
+   "layer": "gather_4",
+   "kind": "table"
+  },
+  {
+   "addr": 320400,
+   "offset": 320000,
+   "length": 64000,
+   "layer": "gather_5",
+   "kind": "table"
+  },
+  {
+   "addr": 384480,
+   "offset": 384000,
+   "length": 64000,
+   "layer": "gather_6",
+   "kind": "table"
+  },
+  {
+   "addr": 448560,
+   "offset": 448000,
+   "length": 64000,
+   "layer": "gather_7",
+   "kind": "table"
+  },
+  {
+   "addr": 512640,
+   "offset": 512000,
+   "length": 64000,
+   "layer": "gather_8",
+   "kind": "table"
+  },
+  {
+   "addr": 576720,
+   "offset": 576000,
+   "length": 64000,
+   "layer": "gather_9",
+   "kind": "table"
+  },
+  {
+   "addr": 640800,
+   "offset": 640000,
+   "length": 64000,
+   "layer": "gather_10",
+   "kind": "table"
+  },
+  {
+   "addr": 704880,
+   "offset": 704000,
+   "length": 64000,
+   "layer": "gather_11",
+   "kind": "table"
+  },
+  {
+   "addr": 768960,
+   "offset": 768000,
+   "length": 64000,
+   "layer": "gather_12",
+   "kind": "table"
+  },
+  {
+   "addr": 833040,
+   "offset": 832000,
+   "length": 64000,
+   "layer": "gather_13",
+   "kind": "table"
+  },
+  {
+   "addr": 897120,
+   "offset": 896000,
+   "length": 64000,
+   "layer": "gather_14",
+   "kind": "table"
+  },
+  {
+   "addr": 961200,
+   "offset": 960000,
+   "length": 64000,
+   "layer": "gather_15",
+   "kind": "table"
+  },
+  {
+   "addr": 1025280,
+   "offset": 1024000,
+   "length": 64000,
+   "layer": "gather_16",
+   "kind": "table"
+  },
+  {
+   "addr": 1089360,
+   "offset": 1088000,
+   "length": 64000,
+   "layer": "gather_17",
+   "kind": "table"
+  },
+  {
+   "addr": 1153440,
+   "offset": 1152000,
+   "length": 64000,
+   "layer": "gather_18",
+   "kind": "table"
+  },
+  {
+   "addr": 1217520,
+   "offset": 1216000,
+   "length": 64000,
+   "layer": "gather_19",
+   "kind": "table"
+  },
+  {
+   "addr": 1281600,
+   "offset": 1280000,
+   "length": 64000,
+   "layer": "gather_20",
+   "kind": "table"
+  },
+  {
+   "addr": 1345680,
+   "offset": 1344000,
+   "length": 64000,
+   "layer": "gather_21",
+   "kind": "table"
+  },
+  {
+   "addr": 1409760,
+   "offset": 1408000,
+   "length": 64000,
+   "layer": "gather_22",
+   "kind": "table"
+  },
+  {
+   "addr": 1473840,
+   "offset": 1472000,
+   "length": 64000,
+   "layer": "gather_23",
+   "kind": "table"
+  },
+  {
+   "addr": 1537920,
+   "offset": 1536000,
+   "length": 64000,
+   "layer": "gather_24",
+   "kind": "table"
+  },
+  {
+   "addr": 1602000,
+   "offset": 1600000,
+   "length": 64000,
+   "layer": "gather_25",
+   "kind": "table"
+  },
+  {
+   "addr": 1668000,
+   "offset": 1664000,
+   "length": 1835008,
+   "layer": "mlp_matmul0",
+   "kind": "weight"
+  },
+  {
+   "addr": 3503008,
+   "offset": 3499008,
+   "length": 4096,
+   "layer": "mlp_matmul0",
+   "kind": "bias"
+  },
+  {
+   "addr": 3512224,
+   "offset": 3503104,
+   "length": 262144,
+   "layer": "mlp_matmul1",
+   "kind": "weight"
+  },
+  {
+   "addr": 3774368,
+   "offset": 3765248,
+   "length": 1024,
+   "layer": "mlp_matmul1",
+   "kind": "bias"
+  },
+  {
+   "addr": 3776672,
+   "offset": 3766272,
+   "length": 4096,
+   "layer": "mlp_matmul2",
+   "kind": "weight"
+  },
+  {
+   "addr": 3780768,
+   "offset": 3770368,
+   "length": 64,
+   "layer": "mlp_matmul2",
+   "kind": "bias"
+  }
+ ],
+ "inputs": [
+  {
+   "name": "emb_idx_0",
+   "kind": "index",
+   "ddr2_addr": 64000,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_1",
+   "kind": "index",
+   "ddr2_addr": 128080,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_2",
+   "kind": "index",
+   "ddr2_addr": 192160,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_3",
+   "kind": "index",
+   "ddr2_addr": 256240,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_4",
+   "kind": "index",
+   "ddr2_addr": 320320,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_5",
+   "kind": "index",
+   "ddr2_addr": 384400,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_6",
+   "kind": "index",
+   "ddr2_addr": 448480,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_7",
+   "kind": "index",
+   "ddr2_addr": 512560,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_8",
+   "kind": "index",
+   "ddr2_addr": 576640,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_9",
+   "kind": "index",
+   "ddr2_addr": 640720,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_10",
+   "kind": "index",
+   "ddr2_addr": 704800,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_11",
+   "kind": "index",
+   "ddr2_addr": 768880,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_12",
+   "kind": "index",
+   "ddr2_addr": 832960,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_13",
+   "kind": "index",
+   "ddr2_addr": 897040,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_14",
+   "kind": "index",
+   "ddr2_addr": 961120,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_15",
+   "kind": "index",
+   "ddr2_addr": 1025200,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_16",
+   "kind": "index",
+   "ddr2_addr": 1089280,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_17",
+   "kind": "index",
+   "ddr2_addr": 1153360,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_18",
+   "kind": "index",
+   "ddr2_addr": 1217440,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_19",
+   "kind": "index",
+   "ddr2_addr": 1281520,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_20",
+   "kind": "index",
+   "ddr2_addr": 1345600,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_21",
+   "kind": "index",
+   "ddr2_addr": 1409680,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_22",
+   "kind": "index",
+   "ddr2_addr": 1473760,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_23",
+   "kind": "index",
+   "ddr2_addr": 1537840,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_24",
+   "kind": "index",
+   "ddr2_addr": 1601920,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "emb_idx_25",
+   "kind": "index",
+   "ddr2_addr": 1666000,
+   "count": 1,
+   "rows": 1000
+  },
+  {
+   "name": "dense_input",
+   "kind": "dense",
+   "ddr2_addr": 1666080,
+   "count": 128,
+   "scale": 0.03070410781019316
+  }
+ ],
+ "layers": [
+  {
+   "name": "gather_0",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 0,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 64000,
+   "n_idx": 1,
+   "out_addr": 64016,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_0"
+  },
+  {
+   "name": "gather_1",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 64080,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 128080,
+   "n_idx": 1,
+   "out_addr": 128096,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_1"
+  },
+  {
+   "name": "gather_2",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 128160,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 192160,
+   "n_idx": 1,
+   "out_addr": 192176,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_2"
+  },
+  {
+   "name": "gather_3",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 192240,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 256240,
+   "n_idx": 1,
+   "out_addr": 256256,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_3"
+  },
+  {
+   "name": "gather_4",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 256320,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 320320,
+   "n_idx": 1,
+   "out_addr": 320336,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_4"
+  },
+  {
+   "name": "gather_5",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 320400,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 384400,
+   "n_idx": 1,
+   "out_addr": 384416,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_5"
+  },
+  {
+   "name": "gather_6",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 384480,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 448480,
+   "n_idx": 1,
+   "out_addr": 448496,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_6"
+  },
+  {
+   "name": "gather_7",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 448560,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 512560,
+   "n_idx": 1,
+   "out_addr": 512576,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_7"
+  },
+  {
+   "name": "gather_8",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 512640,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 576640,
+   "n_idx": 1,
+   "out_addr": 576656,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_8"
+  },
+  {
+   "name": "gather_9",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 576720,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 640720,
+   "n_idx": 1,
+   "out_addr": 640736,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_9"
+  },
+  {
+   "name": "gather_10",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 640800,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 704800,
+   "n_idx": 1,
+   "out_addr": 704816,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_10"
+  },
+  {
+   "name": "gather_11",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 704880,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 768880,
+   "n_idx": 1,
+   "out_addr": 768896,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_11"
+  },
+  {
+   "name": "gather_12",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 768960,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 832960,
+   "n_idx": 1,
+   "out_addr": 832976,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_12"
+  },
+  {
+   "name": "gather_13",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 833040,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 897040,
+   "n_idx": 1,
+   "out_addr": 897056,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_13"
+  },
+  {
+   "name": "gather_14",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 897120,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 961120,
+   "n_idx": 1,
+   "out_addr": 961136,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_14"
+  },
+  {
+   "name": "gather_15",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 961200,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1025200,
+   "n_idx": 1,
+   "out_addr": 1025216,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_15"
+  },
+  {
+   "name": "gather_16",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1025280,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1089280,
+   "n_idx": 1,
+   "out_addr": 1089296,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_16"
+  },
+  {
+   "name": "gather_17",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1089360,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1153360,
+   "n_idx": 1,
+   "out_addr": 1153376,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_17"
+  },
+  {
+   "name": "gather_18",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1153440,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1217440,
+   "n_idx": 1,
+   "out_addr": 1217456,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_18"
+  },
+  {
+   "name": "gather_19",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1217520,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1281520,
+   "n_idx": 1,
+   "out_addr": 1281536,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_19"
+  },
+  {
+   "name": "gather_20",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1281600,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1345600,
+   "n_idx": 1,
+   "out_addr": 1345616,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_20"
+  },
+  {
+   "name": "gather_21",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1345680,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1409680,
+   "n_idx": 1,
+   "out_addr": 1409696,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_21"
+  },
+  {
+   "name": "gather_22",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1409760,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1473760,
+   "n_idx": 1,
+   "out_addr": 1473776,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_22"
+  },
+  {
+   "name": "gather_23",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1473840,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1537840,
+   "n_idx": 1,
+   "out_addr": 1537856,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_23"
+  },
+  {
+   "name": "gather_24",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1537920,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1601920,
+   "n_idx": 1,
+   "out_addr": 1601936,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_24"
+  },
+  {
+   "name": "gather_25",
+   "kind": "gather",
+   "placement": "fpga",
+   "table_addr": 1602000,
+   "rows": 1000,
+   "dim": 64,
+   "dim_bytes": 64,
+   "idx_addr": 1666000,
+   "n_idx": 1,
+   "out_addr": 1666016,
+   "scale": 0.03070410781019316,
+   "index_input": "emb_idx_25"
+  },
+  {
+   "name": "concat_all",
+   "kind": "concat",
+   "placement": "gpu",
+   "parts": [
+    {
+     "src": "layer",
+     "tensor": "emb_out_0",
+     "addr": 64016,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_1",
+     "addr": 128096,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_2",
+     "addr": 192176,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_3",
+     "addr": 256256,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_4",
+     "addr": 320336,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_5",
+     "addr": 384416,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_6",
+     "addr": 448496,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_7",
+     "addr": 512576,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_8",
+     "addr": 576656,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_9",
+     "addr": 640736,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_10",
+     "addr": 704816,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_11",
+     "addr": 768896,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_12",
+     "addr": 832976,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_13",
+     "addr": 897056,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_14",
+     "addr": 961136,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_15",
+     "addr": 1025216,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_16",
+     "addr": 1089296,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_17",
+     "addr": 1153376,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_18",
+     "addr": 1217456,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_19",
+     "addr": 1281536,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_20",
+     "addr": 1345616,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_21",
+     "addr": 1409696,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_22",
+     "addr": 1473776,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_23",
+     "addr": 1537856,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_24",
+     "addr": 1601936,
+     "len": 64
+    },
+    {
+     "src": "layer",
+     "tensor": "emb_out_25",
+     "addr": 1666016,
+     "len": 64
+    },
+    {
+     "src": "input",
+     "tensor": "dense_input",
+     "addr": 1666080,
+     "len": 128
+    }
+   ],
+   "out_addr": 1666208,
+   "len": 1792,
+   "scale": 0.03070410781019316
+  },
+  {
+   "name": "mlp_matmul0",
+   "kind": "fc",
+   "placement": "fpga",
+   "in_addr": 1666208,
+   "K": 1792,
+   "K_pad": 1792,
+   "N": 1024,
+   "M_pad": 1024,
+   "w_addr": 1668000,
+   "b_addr": 3503008,
+   "acc_addr": 3507104,
+   "out_addr": 3511200,
+   "mult": 28004,
+   "shift": 24,
+   "relu": 1,
+   "final": false,
+   "in_scale": 0.03070410781019316,
+   "w_scale": 0.0009070283432645122,
+   "out_scale": 0.016684562202513686,
+   "has_bias": true
+  },
+  {
+   "name": "mlp_matmul1",
+   "kind": "fc",
+   "placement": "fpga",
+   "in_addr": 3511200,
+   "K": 1024,
+   "K_pad": 1024,
+   "N": 256,
+   "M_pad": 256,
+   "w_addr": 3512224,
+   "b_addr": 3774368,
+   "acc_addr": 3775392,
+   "out_addr": 3776416,
+   "mult": 29602,
+   "shift": 24,
+   "relu": 1,
+   "final": false,
+   "in_scale": 0.016684562202513686,
+   "w_scale": 0.0011595076932681826,
+   "out_scale": 0.010964294118205393,
+   "has_bias": true
+  },
+  {
+   "name": "mlp_matmul2",
+   "kind": "fc",
+   "placement": "fpga",
+   "in_addr": 3776416,
+   "K": 256,
+   "K_pad": 256,
+   "N": 1,
+   "M_pad": 16,
+   "w_addr": 3776672,
+   "b_addr": 3780768,
+   "acc_addr": 3780832,
+   "out_addr": 3780832,
+   "mult": 0,
+   "shift": 0,
+   "relu": 0,
+   "final": true,
+   "in_scale": 0.010964294118205393,
+   "w_scale": 0.001364357006831432,
+   "out_scale": 1.4959211505134184e-05,
+   "has_bias": true
+  }
+ ],
+ "output": {
+  "layer": "mlp_matmul2",
+  "count": 1,
+  "dequant_scale": 1.4959211505134184e-05,
+  "int32": true
+ },
+ "vectors": {
+  "file": "vectors.bin",
+  "count": 8,
+  "entries": [
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 0,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 4,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 8,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 12,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 16,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 20,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 24,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 28,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 32,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 36,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 40,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 44,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 48,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 52,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 56,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 60,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 64,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 68,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 72,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 76,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 80,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 84,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 88,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 92,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 96,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 100,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 104,
+      "len": 128
+     }
+    ],
+    "expect_off": 232,
+    "expect_count": 1,
+    "fp32_ref": [
+     -0.19013100862503052
+    ],
+    "int8_dequant": [
+     -0.18455179233884042
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 236,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 240,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 244,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 248,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 252,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 256,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 260,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 264,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 268,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 272,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 276,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 280,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 284,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 288,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 292,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 296,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 300,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 304,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 308,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 312,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 316,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 320,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 324,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 328,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 332,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 336,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 340,
+      "len": 128
+     }
+    ],
+    "expect_off": 468,
+    "expect_count": 1,
+    "fp32_ref": [
+     0.5459384322166443
+    ],
+    "int8_dequant": [
+     0.5385914510308512
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 472,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 476,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 480,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 484,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 488,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 492,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 496,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 500,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 504,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 508,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 512,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 516,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 520,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 524,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 528,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 532,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 536,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 540,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 544,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 548,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 552,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 556,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 560,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 564,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 568,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 572,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 576,
+      "len": 128
+     }
+    ],
+    "expect_off": 704,
+    "expect_count": 1,
+    "fp32_ref": [
+     -0.26115670800209045
+    ],
+    "int8_dequant": [
+     -0.245151558146139
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 708,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 712,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 716,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 720,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 724,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 728,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 732,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 736,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 740,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 744,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 748,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 752,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 756,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 760,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 764,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 768,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 772,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 776,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 780,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 784,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 788,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 792,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 796,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 800,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 804,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 808,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 812,
+      "len": 128
+     }
+    ],
+    "expect_off": 940,
+    "expect_count": 1,
+    "fp32_ref": [
+     -0.25403591990470886
+    ],
+    "int8_dequant": [
+     -0.24708129643030133
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 944,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 948,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 952,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 956,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 960,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 964,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 968,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 972,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 976,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 980,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 984,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 988,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 992,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 996,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 1000,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 1004,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 1008,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 1012,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 1016,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 1020,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 1024,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 1028,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 1032,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 1036,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 1040,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 1044,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 1048,
+      "len": 128
+     }
+    ],
+    "expect_off": 1176,
+    "expect_count": 1,
+    "fp32_ref": [
+     0.09270817786455154
+    ],
+    "int8_dequant": [
+     0.09068274014412342
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 1180,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 1184,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 1188,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 1192,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 1196,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 1200,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 1204,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 1208,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 1212,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 1216,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 1220,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 1224,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 1228,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 1232,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 1236,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 1240,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 1244,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 1248,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 1252,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 1256,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 1260,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 1264,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 1268,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 1272,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 1276,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 1280,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 1284,
+      "len": 128
+     }
+    ],
+    "expect_off": 1412,
+    "expect_count": 1,
+    "fp32_ref": [
+     -0.11867543309926987
+    ],
+    "int8_dequant": [
+     -0.10357758046154909
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 1416,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 1420,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 1424,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 1428,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 1432,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 1436,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 1440,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 1444,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 1448,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 1452,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 1456,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 1460,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 1464,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 1468,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 1472,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 1476,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 1480,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 1484,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 1488,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 1492,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 1496,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 1500,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 1504,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 1508,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 1512,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 1516,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 1520,
+      "len": 128
+     }
+    ],
+    "expect_off": 1648,
+    "expect_count": 1,
+    "fp32_ref": [
+     -0.15139763057231903
+    ],
+    "int8_dequant": [
+     -0.15497743119319016
+    ]
+   },
+   {
+    "inputs": [
+     {
+      "name": "emb_idx_0",
+      "off": 1652,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_1",
+      "off": 1656,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_2",
+      "off": 1660,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_3",
+      "off": 1664,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_4",
+      "off": 1668,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_5",
+      "off": 1672,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_6",
+      "off": 1676,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_7",
+      "off": 1680,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_8",
+      "off": 1684,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_9",
+      "off": 1688,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_10",
+      "off": 1692,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_11",
+      "off": 1696,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_12",
+      "off": 1700,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_13",
+      "off": 1704,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_14",
+      "off": 1708,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_15",
+      "off": 1712,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_16",
+      "off": 1716,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_17",
+      "off": 1720,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_18",
+      "off": 1724,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_19",
+      "off": 1728,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_20",
+      "off": 1732,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_21",
+      "off": 1736,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_22",
+      "off": 1740,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_23",
+      "off": 1744,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_24",
+      "off": 1748,
+      "len": 4
+     },
+     {
+      "name": "emb_idx_25",
+      "off": 1752,
+      "len": 4
+     },
+     {
+      "name": "dense_input",
+      "off": 1756,
+      "len": 128
+     }
+    ],
+    "expect_off": 1884,
+    "expect_count": 1,
+    "fp32_ref": [
+     0.0968644991517067
+    ],
+    "int8_dequant": [
+     0.0968010576497233
+    ]
+   }
+  ],
+  "max_norm_err_vs_fp32": 0.1272196959068352
+ }
+}

@@ -182,7 +182,13 @@ def build_dlrm(out_path: str,
                table_rows: int = 1000,
                table_cols: int = 64,
                dense_dim:  int = 128,
-               batch_size: int = 1) -> None:
+               batch_size: int = 1,
+               seed: int | None = 0) -> None:
+    """In-memory builder.  Weights are seeded random by default (seed=None
+    gives all-zero weights, the v1 behaviour).  v1 built every synthetic
+    model with zero weights, which made correctness validation vacuous and
+    INT8 quantisation degenerate; timing numbers were unaffected."""
+    rng = np.random.default_rng(seed) if seed is not None else None
     NUM_TABLES = num_tables
     TABLE_ROWS = table_rows
     TABLE_COLS = table_cols
@@ -198,7 +204,10 @@ def build_dlrm(out_path: str,
         table_name = f"emb_table_{i}"
         idx_name   = f"emb_idx_{i}"
         out_name   = f"emb_out_{i}"
-        weight = np.zeros((TABLE_ROWS, TABLE_COLS), dtype=np.float32)
+        if rng is None:
+            weight = np.zeros((TABLE_ROWS, TABLE_COLS), dtype=np.float32)
+        else:
+            weight = (rng.standard_normal((TABLE_ROWS, TABLE_COLS)) * 0.5).astype(np.float32)
         initializers.append(numpy_helper.from_array(weight, name=table_name))
         nodes.append(helper.make_node(
             "Gather",
@@ -229,8 +238,12 @@ def build_dlrm(out_path: str,
         mm_out   = f"mlp_mm{j}"
         add_out  = f"mlp_add{j}"
 
-        W = np.zeros((in_dim, out_dim), dtype=np.float32)
-        B = np.zeros((out_dim,),        dtype=np.float32)
+        if rng is None:
+            W = np.zeros((in_dim, out_dim), dtype=np.float32)
+            B = np.zeros((out_dim,),        dtype=np.float32)
+        else:
+            W = (rng.standard_normal((in_dim, out_dim)) / np.sqrt(in_dim)).astype(np.float32)
+            B = (rng.standard_normal((out_dim,)) * 0.05).astype(np.float32)
         initializers.append(numpy_helper.from_array(W, name=w_name))
         initializers.append(numpy_helper.from_array(B, name=b_name))
 
@@ -320,6 +333,9 @@ if __name__ == "__main__":
                         help="Dense feature input dimension (default: 128)")
     parser.add_argument("--batch", type=int, default=1,
                         help="Static batch size baked into the model (default: 1)")
+    parser.add_argument("--seed", type=int, default=0, help="RNG seed for random weights")
+    parser.add_argument("--zero-weights", action="store_true",
+                        help="all-zero weights (v1 behaviour; NOT for correctness runs)")
     parser.add_argument("--streaming", action="store_true",
                         help="Use memory-efficient streaming generator (required "
                              "for multi-GB models — writes weights directly to "
@@ -340,4 +356,5 @@ if __name__ == "__main__":
                    table_rows=args.rows,
                    table_cols=args.cols,
                    dense_dim=args.dense_dim,
-                   batch_size=args.batch)
+                   batch_size=args.batch,
+                   seed=None if args.zero_weights else args.seed)
