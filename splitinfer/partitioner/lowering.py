@@ -209,10 +209,36 @@ class Lowering:
             for i in cn.input:
                 tensor_scale[i] = s
 
+        # Pre-allocate every Concat output buffer and pin each part's address
+        # inside it, so producers (gathers, dense inputs) write straight into
+        # the concat buffer and Concat is a no-op in every execution mode.
+        pinned_addr: dict[str, int] = {}
+        for cn in concat_nodes:
+            total = 0
+            lens = []
+            for i in cn.input:
+                if i in self.inits:
+                    raise NotImplementedError("Concat of an initializer")
+                prod = next((x for x in nodes if i in x.output), None)
+                if prod is not None and prod.op_type == "Gather":
+                    ln = int(self.inits[prod.input[0]].shape[1])
+                else:
+                    vi = next(v for v in self.graph.input if v.name == i)
+                    ln = int(np.prod([d.dim_value or 1 for d in vi.type.tensor_type.shape.dim]))
+                lens.append(ln); total += ln
+            base = self.alloc.alloc(_pad16(total))
+            off = 0
+            for i, ln in zip(cn.input, lens):
+                if off % ALIGN != 0:
+                    raise ValueError(f"concat part {i} would be unaligned at offset {off}; "
+                                     "embedding dims must be multiples of 16")
+                pinned_addr[i] = base + off
+                off += ln
+            pinned_addr[cn.output[0]] = base
+
         # Walk the graph in order and emit layers.
         produced_addr: dict[str, int] = {}     # tensor name -> DDR2 addr of INT8 activation
         produced_len: dict[str, int] = {}
-        pending_concat_parts: dict[str, list] = {}
         for n in nodes:
             place = self.placement.get(n.name, "gpu")
             if n.op_type == "Gather":
@@ -225,7 +251,7 @@ class Lowering:
                 t_addr = self._place(tq, n.name, "table")
                 idx_name = n.input[1]
                 idx_addr = self.alloc.alloc(16)
-                out_addr = self.alloc.alloc(dim_bytes)
+                out_addr = pinned_addr[n.output[0]] if n.output[0] in pinned_addr else self.alloc.alloc(dim_bytes)
                 self.inputs.append({"name": idx_name, "kind": "index", "ddr2_addr": idx_addr, "count": 1,
                                     "rows": int(rows)})
                 self.layers.append(Layer(n.name, "gather", place, {
@@ -243,12 +269,12 @@ class Lowering:
                     else:                          # graph input (dense)
                         vi = next(v for v in self.graph.input if v.name == i)
                         ln = int(np.prod([d.dim_value or 1 for d in vi.type.tensor_type.shape.dim]))
-                        addr = self.alloc.alloc(_pad16(ln))
+                        addr = pinned_addr[i]
                         self.inputs.append({"name": i, "kind": "dense", "ddr2_addr": addr, "count": ln,
                                             "scale": tensor_scale[i]})
                         parts.append({"src": "input", "tensor": i, "addr": addr, "len": ln})
                         total += ln
-                out_addr = self.alloc.alloc(_pad16(total))
+                out_addr = pinned_addr[n.output[0]]
                 self.layers.append(Layer(n.name, "concat", place, {
                     "parts": parts, "out_addr": out_addr, "len": total, "scale": scale[n.output[0]]}))
                 produced_addr[n.output[0]] = out_addr; produced_len[n.output[0]] = total

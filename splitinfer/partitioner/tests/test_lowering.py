@@ -67,3 +67,20 @@ def test_reference_is_deterministic_integer(dlrm):
     a, _ = lw.run_reference(f)
     b, _ = lw.run_reference(f)
     assert a.dtype == np.int32 and np.array_equal(a, b)
+
+
+def test_concat_parts_are_contiguous_in_ddr2(dlrm):
+    """Concat must be a no-op: every part's address == concat base + running offset."""
+    model, manifest, out = dlrm
+    lw = Lowering(onnx.load(model), json.load(open(manifest)), calibration_inputs=2)
+    prog = lw.lower()
+    cat = next(l for l in prog["layers"] if l["kind"] == "concat")
+    off = 0
+    for p in cat["parts"]:
+        assert p["addr"] == cat["out_addr"] + off, (p, off)
+        off += p["len"]
+    gathers = {l["name"]: l for l in prog["layers"] if l["kind"] == "gather"}
+    for p in cat["parts"]:
+        if p["src"] == "layer":
+            g = next(g for g in gathers.values() if g["out_addr"] == p["addr"])
+            assert g["dim"] == p["len"]

@@ -1,0 +1,6 @@
+add_library(splitinfer2 json.cpp program.cpp kernels.cpp executors.cpp)
+target_include_directories(splitinfer2 PUBLIC .)
+target_link_libraries(splitinfer2 PUBLIC cxlwin edgecoh)
+target_compile_options(splitinfer2 PRIVATE -O2)
+add_executable(splitinfer_v2 splitinfer_v2.cpp)
+target_link_libraries(splitinfer_v2 splitinfer2)
