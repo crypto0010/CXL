@@ -127,6 +127,7 @@ def main():
     if a.json_out:
         os.makedirs(os.path.dirname(os.path.abspath(a.json_out)), exist_ok=True)
         with open(a.json_out, "w") as f: json.dump(res, f, indent=1)
+    print(json.dumps(res))   # single-line JSON for orchestrators
 
 
 if __name__ == "__main__":

@@ -198,8 +198,7 @@ int main() {
     pipeline.run();
     auto stats_pre_on = pipeline.get_telemetry().get_stats();
     CHECK(stats_pre_on.prefetch_attempts == 1u);
-    CHECK(stats_pre_on.prefetch_hits     == 1u);
-    CHECK(stats_pre_on.prefetch_hit_rate == 1.0);
+    /* v2: prefetch_hits was fabricated (flag-driven, never an observed overlap); assertions removed. */
 
     pipeline.set_prefetch_enabled(false);
     CHECK(pipeline.is_prefetch_enabled() == false);
@@ -207,8 +206,6 @@ int main() {
     pipeline.run();
     auto stats_pre_off = pipeline.get_telemetry().get_stats();
     CHECK(stats_pre_off.prefetch_attempts == 1u);
-    CHECK(stats_pre_off.prefetch_hits     == 0u);
-    CHECK(stats_pre_off.prefetch_hit_rate == 0.0);
 
     // ── New per-bucket time accounting (Task #17) ─────────────────────────────
     // The new TelemetryStats fields gpu_time_ms, fpga_time_ms, transfer_time_ms,
