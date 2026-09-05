@@ -92,7 +92,15 @@ class _Allocator:
 
 class Lowering:
     def __init__(self, model: onnx.ModelProto, manifest: dict, calibration_inputs: int = 16,
-                 seed: int = 0):
+                 seed: int = 0, streaming: bool = False, ddr2_bytes: int = DDR2_BYTES):
+        """streaming=True: FC weights/biases are NOT all resident.  Each FC
+        layer's weights are assigned to one of two rotating slots sized for
+        the largest layer, and the runtime downloads them immediately before
+        dispatching that layer (double-buffered).  Peak DDR2 footprint is
+        then bounded by 2 x max layer, not the model size — the capacity
+        mechanism the paper describes, executed rather than asserted."""
+        self.streaming = streaming
+        self.ddr2_bytes = ddr2_bytes
         self.model = model
         self.graph = model.graph
         self.manifest = manifest
@@ -105,6 +113,8 @@ class Lowering:
         self.layers: list[Layer] = []
         self.inputs: list[dict] = []
         self.alloc = _Allocator(0)
+        self.slot_addr: list[int] = []      # streaming slots
+        self.slot_bytes = 0
 
     # ── FP32 reference via onnxruntime ────────────────────────────────────
 
@@ -151,9 +161,10 @@ class Lowering:
 
     # ── Image helpers ─────────────────────────────────────────────────────
 
-    def _place(self, data: np.ndarray, layer: str, kind: str) -> int:
+    def _place(self, data: np.ndarray, layer: str, kind: str, addr: int | None = None) -> int:
         b = data.tobytes()
-        addr = self.alloc.alloc(len(b))
+        if addr is None:
+            addr = self.alloc.alloc(len(b))
         off = len(self.image)
         self.image += b
         pad = _align(len(self.image)) - len(self.image)
@@ -236,6 +247,16 @@ class Lowering:
                 off += ln
             pinned_addr[cn.output[0]] = base
 
+        if self.streaming:
+            biggest = 0
+            for ch in fc_chains.values():
+                W = self.inits[ch["matmul"].input[1]]
+                K, N = W.shape
+                biggest = max(biggest, _pad16(N) * _pad16(K) + _pad16(N) * 4)
+            self.slot_bytes = _align(biggest)
+            self.slot_addr = [self.alloc.alloc(self.slot_bytes), self.alloc.alloc(self.slot_bytes)]
+        fc_index = 0
+
         # Walk the graph in order and emit layers.
         produced_addr: dict[str, int] = {}     # tensor name -> DDR2 addr of INT8 activation
         produced_len: dict[str, int] = {}
@@ -294,12 +315,18 @@ class Lowering:
                 s_w = float(np.max(np.abs(W))) / 127.0 or 1.0
                 Wt = np.zeros((_pad16(N), _pad16(K)), dtype=np.int8)     # [M_pad x K_pad]
                 Wt[:N, :K] = _sat8(np.round(W.T / s_w))
-                w_addr = self._place(Wt, n.name, "weight")
                 b = np.zeros(_pad16(N), dtype=np.int32)
                 if ch["add"] is not None:
                     bname = next(i for i in ch["add"].input if i in self.inits)
                     b[:N] = np.round(self.inits[bname].astype(np.float32).reshape(-1) / (s_w * s_x)).astype(np.int32)
-                b_addr = self._place(b, n.name, "bias")
+                if self.streaming:
+                    slot = self.slot_addr[fc_index % 2]
+                    w_addr = self._place(Wt, n.name, "weight", addr=slot)
+                    b_addr = self._place(b, n.name, "bias", addr=slot + _align(Wt.nbytes))
+                else:
+                    w_addr = self._place(Wt, n.name, "weight")
+                    b_addr = self._place(b, n.name, "bias")
+                fc_index += 1
                 acc_addr = self.alloc.alloc(_pad16(N) * 4)
                 out_name = ch["out"]
                 final = out_name == self.graph.output[0].name or (
@@ -320,7 +347,7 @@ class Lowering:
                     "acc_addr": acc_addr, "out_addr": out_addr,
                     "mult": mult, "shift": shift, "relu": int(ch["relu"] is not None),
                     "final": bool(final), "in_scale": s_x, "w_scale": s_w, "out_scale": s_y,
-                    "has_bias": ch["add"] is not None}))
+                    "has_bias": ch["add"] is not None, "stream": bool(self.streaming)}))
                 produced_addr[out_name] = out_addr; produced_len[out_name] = N
             elif n.op_type in ("Add", "Relu") and n.name in fused_into:
                 continue
@@ -331,10 +358,15 @@ class Lowering:
                 raise NotImplementedError(f"lowering does not support {n.op_type} ({n.name})")
 
         last_fc = next(l for l in reversed(self.layers) if l.kind == "fc")
+        if self.alloc.next > self.ddr2_bytes:
+            raise MemoryError(f"layout needs {self.alloc.next} B > DDR2 {self.ddr2_bytes} B; use streaming=True")
         program = {
             "version": "2.0",
             "batch": 1,
-            "ddr2": {"image_bytes": len(self.image), "layout_end": self.alloc.next},
+            "streaming": bool(self.streaming),
+            "ddr2": {"image_bytes": len(self.image), "layout_end": self.alloc.next,
+                     "capacity": self.ddr2_bytes, "slot_bytes": self.slot_bytes,
+                     "total_weight_bytes": int(sum(s.length for s in self.segments))},
             "segments": [s.__dict__ for s in self.segments],
             "inputs": self.inputs,
             "layers": [{"name": l.name, "kind": l.kind, "placement": l.placement, **l.params}
@@ -442,11 +474,11 @@ class Lowering:
 
 
 def lower_model(model_path: str, manifest_path: str, out_dir: str, n_vectors: int = 8,
-                calibration_inputs: int = 16, seed: int = 0) -> dict:
+                calibration_inputs: int = 16, seed: int = 0, streaming: bool = False) -> dict:
     model = onnx.load(model_path)
     with open(manifest_path) as fh:
         manifest = json.load(fh)
-    lw = Lowering(model, manifest, calibration_inputs=calibration_inputs, seed=seed)
+    lw = Lowering(model, manifest, calibration_inputs=calibration_inputs, seed=seed, streaming=streaming)
     lw.lower()
     return lw.write(out_dir, n_vectors=n_vectors)
 
@@ -457,8 +489,9 @@ if __name__ == "__main__":
     ap.add_argument("model"); ap.add_argument("manifest"); ap.add_argument("out_dir")
     ap.add_argument("--vectors", type=int, default=8)
     ap.add_argument("--calib", type=int, default=16)
+    ap.add_argument("--streaming", action="store_true", help="rotating weight slots (model > DDR2)")
     a = ap.parse_args()
-    p = lower_model(a.model, a.manifest, a.out_dir, a.vectors, a.calib)
+    p = lower_model(a.model, a.manifest, a.out_dir, a.vectors, a.calib, streaming=a.streaming)
     print(f"layers={len(p['layers'])} image={p['ddr2']['image_bytes']/2**20:.2f} MiB "
-          f"layout_end={p['ddr2']['layout_end']/2**20:.2f} MiB "
+          f"layout_end={p['ddr2']['layout_end']/2**20:.2f} MiB streaming={p['streaming']} "
           f"max_norm_err_vs_fp32={p['vectors']['max_norm_err_vs_fp32']:.4f}")

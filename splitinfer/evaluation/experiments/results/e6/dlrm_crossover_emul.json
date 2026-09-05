@@ -1,0 +1,1312 @@
+{
+ "experiment": "E6_crossover",
+ "emulated": true,
+ "program": "evaluation/lowered/dlrm_small",
+ "points": [
+  {
+   "link": "uart-115200",
+   "bytes_per_s": 11520.0,
+   "rtt_ms": 5.0,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 333741.694,
+    "stats": {
+     "count": 1,
+     "mean_ms": 551.1572,
+     "std_ms": 0.0,
+     "min_ms": 551.1572,
+     "p5_ms": 551.1572,
+     "median_ms": 551.1572,
+     "p95_ms": 551.1572,
+     "p99_ms": 551.1572,
+     "max_ms": 551.1572,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0005,
+     "fc": 83.2625,
+     "gather": 227.6648
+    },
+    "status": "ok",
+    "wall_s": 334.90518021583557
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 333757.283,
+    "stats": {
+     "count": 1,
+     "mean_ms": 196769.0541,
+     "std_ms": 0.0,
+     "min_ms": 196769.0541,
+     "p5_ms": 196769.0541,
+     "median_ms": 196769.0541,
+     "p95_ms": 196769.0541,
+     "p99_ms": 196769.0541,
+     "max_ms": 196769.0541,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0034,
+     "fc": 187328.0926,
+     "gather": 9440.8744
+    },
+    "status": "ok",
+    "wall_s": 727.3498153686523
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 333751.903,
+    "stats": {
+     "count": 1,
+     "mean_ms": 310511.6748,
+     "std_ms": 0.0,
+     "min_ms": 310511.6748,
+     "p5_ms": 310511.6748,
+     "median_ms": 310511.6748,
+     "p95_ms": 310511.6748,
+     "p99_ms": 310511.6748,
+     "max_ms": 310511.6748,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3575808.0,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 873.0,
+     "fetch_rtts": 14.0
+    },
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0008,
+     "fc": 173931.5964,
+     "gather": 136580.0284
+    },
+    "status": "ok",
+    "wall_s": 953.7531983852386
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 333750.69,
+    "stats": {
+     "count": 1,
+     "mean_ms": 326421.7032,
+     "std_ms": 0.0,
+     "min_ms": 326421.7032,
+     "p5_ms": 326421.7032,
+     "median_ms": 326421.7032,
+     "p95_ms": 326421.7032,
+     "p99_ms": 326421.7032,
+     "max_ms": 326421.7032,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3760128.0,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 918.0,
+     "fetch_rtts": 2.0
+    },
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 144367.5658,
+     "gather": 182054.1039
+    },
+    "status": "ok",
+    "wall_s": 983.8004653453827
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 333786.028,
+    "stats": {
+     "count": 1,
+     "mean_ms": 7500.3519,
+     "std_ms": 0.0,
+     "min_ms": 7500.3519,
+     "p5_ms": 7500.3519,
+     "median_ms": 7500.3519,
+     "p95_ms": 7500.3519,
+     "p99_ms": 7500.3519,
+     "max_ms": 7500.3519,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 86016.0,
+     "msgs": 4.0,
+     "faults": 4.0,
+     "pages": 21.0,
+     "fetch_rtts": 4.0
+    },
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0009,
+     "fc": 2.9947,
+     "gather": 7497.3071
+    },
+    "status": "ok",
+    "wall_s": 650.7874567508698
+   }
+  },
+  {
+   "link": "uart-921600",
+   "bytes_per_s": 92160.0,
+   "rtt_ms": 1.0,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 42192.199,
+    "stats": {
+     "count": 1,
+     "mean_ms": 134.2277,
+     "std_ms": 0.0,
+     "min_ms": 134.2277,
+     "p5_ms": 134.2277,
+     "median_ms": 134.2277,
+     "p95_ms": 134.2277,
+     "p99_ms": 134.2277,
+     "max_ms": 134.2277,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0005,
+     "fc": 47.6839,
+     "gather": 42.9738
+    },
+    "status": "ok",
+    "wall_s": 42.508779525756836
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 42199.503,
+    "stats": {
+     "count": 1,
+     "mean_ms": 24934.6652,
+     "std_ms": 0.0,
+     "min_ms": 24934.6652,
+     "p5_ms": 24934.6652,
+     "median_ms": 24934.6652,
+     "p95_ms": 24934.6652,
+     "p99_ms": 24934.6652,
+     "max_ms": 24934.6652,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0016,
+     "fc": 23738.4024,
+     "gather": 1196.1971
+    },
+    "status": "ok",
+    "wall_s": 92.13562035560608
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 42198.664,
+    "stats": {
+     "count": 1,
+     "mean_ms": 38828.8898,
+     "std_ms": 0.0,
+     "min_ms": 38828.8898,
+     "p5_ms": 38828.8898,
+     "median_ms": 38828.8898,
+     "p95_ms": 38828.8898,
+     "p99_ms": 38828.8898,
+     "max_ms": 38828.8898,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3575808.0,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 873.0,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0009,
+     "fc": 21751.264,
+     "gather": 17077.5768
+    },
+    "status": "ok",
+    "wall_s": 119.772287607193
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 42198.306,
+    "stats": {
+     "count": 1,
+     "mean_ms": 40810.1189,
+     "std_ms": 0.0,
+     "min_ms": 40810.1189,
+     "p5_ms": 40810.1189,
+     "median_ms": 40810.1189,
+     "p95_ms": 40810.1189,
+     "p99_ms": 40810.1189,
+     "max_ms": 40810.1189,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3760128.0,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 918.0,
+     "fetch_rtts": 2.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 18050.595,
+     "gather": 22759.489
+    },
+    "status": "ok",
+    "wall_s": 123.50631880760193
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 1,
+    "warmup": 1,
+    "prepare_ms": 42200.92,
+    "stats": {
+     "count": 1,
+     "mean_ms": 943.1823,
+     "std_ms": 0.0,
+     "min_ms": 943.1823,
+     "p5_ms": 943.1823,
+     "median_ms": 943.1823,
+     "p95_ms": 943.1823,
+     "p99_ms": 943.1823,
+     "max_ms": 943.1823,
+     "cv_pct": 0.0
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 86016.0,
+     "msgs": 4.0,
+     "faults": 4.0,
+     "pages": 21.0,
+     "fetch_rtts": 4.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 1,
+     "total": 1,
+     "max_abs_err_fp32": 0.007347,
+     "max_norm_err_fp32": 0.013458
+    },
+    "per_kind_ms": {
+     "concat": 0.0009,
+     "fc": 2.9908,
+     "gather": 940.1466
+    },
+    "status": "ok",
+    "wall_s": 81.88025784492493
+   }
+  },
+  {
+   "link": "usb2-bulk",
+   "bytes_per_s": 30000000.0,
+   "rtt_ms": 0.5,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 705.39,
+    "stats": {
+     "count": 5,
+     "mean_ms": 77.427,
+     "std_ms": 0.4748,
+     "min_ms": 76.6841,
+     "p5_ms": 76.7954,
+     "median_ms": 77.6386,
+     "p95_ms": 77.834,
+     "p99_ms": 77.8596,
+     "max_ms": 77.866,
+     "cv_pct": 0.61
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 42.5686,
+     "gather": 17.6269
+    },
+    "status": "ok",
+    "wall_s": 1.2141873836517334
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 707.159,
+    "stats": {
+     "count": 5,
+     "mean_ms": 438.4226,
+     "std_ms": 2.3503,
+     "min_ms": 436.678,
+     "p5_ms": 436.7044,
+     "median_ms": 437.1433,
+     "p95_ms": 441.5965,
+     "p99_ms": 442.0529,
+     "max_ms": 442.167,
+     "cv_pct": 0.54
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0005,
+     "fc": 417.3237,
+     "gather": 21.0595
+    },
+    "status": "ok",
+    "wall_s": 3.3934388160705566
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 706.401,
+    "stats": {
+     "count": 5,
+     "mean_ms": 134.9617,
+     "std_ms": 1.7092,
+     "min_ms": 133.3761,
+     "p5_ms": 133.3804,
+     "median_ms": 134.7116,
+     "p95_ms": 137.0604,
+     "p99_ms": 137.2731,
+     "max_ms": 137.3263,
+     "cv_pct": 1.27
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3562700.8,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 869.8,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0005,
+     "fc": 76.6574,
+     "gather": 58.2685
+    },
+    "status": "ok",
+    "wall_s": 1.5703606605529785
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 706.604,
+    "stats": {
+     "count": 5,
+     "mean_ms": 133.0229,
+     "std_ms": 0.6878,
+     "min_ms": 132.012,
+     "p5_ms": 132.1432,
+     "median_ms": 133.197,
+     "p95_ms": 133.6471,
+     "p99_ms": 133.6623,
+     "max_ms": 133.6661,
+     "cv_pct": 0.52
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3744563.2,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 914.2,
+     "fetch_rtts": 2.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 60.237,
+     "gather": 72.7555
+    },
+    "status": "ok",
+    "wall_s": 1.5634851455688477
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 708.745,
+    "stats": {
+     "count": 5,
+     "mean_ms": 5.4037,
+     "std_ms": 2.1544,
+     "min_ms": 3.0161,
+     "p5_ms": 3.2726,
+     "median_ms": 4.8983,
+     "p95_ms": 8.1846,
+     "p99_ms": 8.6017,
+     "max_ms": 8.706,
+     "cv_pct": 39.87
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 33587.2,
+     "msgs": 1.8,
+     "faults": 1.8,
+     "pages": 8.2,
+     "fetch_rtts": 1.8
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 2.9665,
+     "gather": 2.4202
+    },
+    "status": "ok",
+    "wall_s": 0.9196736812591553
+   }
+  },
+  {
+   "link": "usb3",
+   "bytes_per_s": 300000000.0,
+   "rtt_ms": 0.1,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 213.924,
+    "stats": {
+     "count": 5,
+     "mean_ms": 54.0523,
+     "std_ms": 0.0886,
+     "min_ms": 53.9237,
+     "p5_ms": 53.9413,
+     "median_ms": 54.0757,
+     "p95_ms": 54.1442,
+     "p99_ms": 54.1544,
+     "max_ms": 54.1569,
+     "cv_pct": 0.16
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 40.8786,
+     "gather": 7.1198
+    },
+    "status": "ok",
+    "wall_s": 0.5827341079711914
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 216.696,
+    "stats": {
+     "count": 5,
+     "mean_ms": 149.6984,
+     "std_ms": 3.6644,
+     "min_ms": 143.2007,
+     "p5_ms": 144.723,
+     "median_ms": 150.9251,
+     "p95_ms": 151.9144,
+     "p99_ms": 151.9877,
+     "max_ms": 152.0061,
+     "cv_pct": 2.45
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 142.4128,
+     "gather": 7.2553
+    },
+    "status": "ok",
+    "wall_s": 1.166196346282959
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 215.649,
+    "stats": {
+     "count": 5,
+     "mean_ms": 21.902,
+     "std_ms": 0.3354,
+     "min_ms": 21.4254,
+     "p5_ms": 21.5028,
+     "median_ms": 21.8229,
+     "p95_ms": 22.2312,
+     "p99_ms": 22.2346,
+     "max_ms": 22.2355,
+     "cv_pct": 1.53
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3562700.8,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 869.8,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 13.5386,
+     "gather": 8.3428
+    },
+    "status": "ok",
+    "wall_s": 0.4033336639404297
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 217.551,
+    "stats": {
+     "count": 5,
+     "mean_ms": 18.1545,
+     "std_ms": 1.0977,
+     "min_ms": 17.2598,
+     "p5_ms": 17.27,
+     "median_ms": 17.5089,
+     "p95_ms": 19.4401,
+     "p99_ms": 19.4899,
+     "max_ms": 19.5024,
+     "cv_pct": 6.05
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3744563.2,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 914.2,
+     "fetch_rtts": 2.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 9.2013,
+     "gather": 8.9329
+    },
+    "status": "ok",
+    "wall_s": 0.37566661834716797
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 217.227,
+    "stats": {
+     "count": 5,
+     "mean_ms": 3.5203,
+     "std_ms": 0.4081,
+     "min_ms": 2.9893,
+     "p5_ms": 3.0743,
+     "median_ms": 3.4751,
+     "p95_ms": 4.0191,
+     "p99_ms": 4.1033,
+     "max_ms": 4.1243,
+     "cv_pct": 11.59
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 33587.2,
+     "msgs": 1.8,
+     "faults": 1.8,
+     "pages": 8.2,
+     "fetch_rtts": 1.8
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 2.8403,
+     "gather": 0.6656
+    },
+    "status": "ok",
+    "wall_s": 0.2947371006011963
+   }
+  },
+  {
+   "link": "pcie3x1",
+   "bytes_per_s": 800000000.0,
+   "rtt_ms": 0.01,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 117.646,
+    "stats": {
+     "count": 5,
+     "mean_ms": 48.7102,
+     "std_ms": 0.4123,
+     "min_ms": 47.9816,
+     "p5_ms": 48.147,
+     "median_ms": 48.8603,
+     "p95_ms": 48.9664,
+     "p99_ms": 48.9749,
+     "max_ms": 48.977,
+     "cv_pct": 0.85
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 40.3235,
+     "gather": 4.8823
+    },
+    "status": "ok",
+    "wall_s": 0.45409417152404785
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 126.078,
+    "stats": {
+     "count": 5,
+     "mean_ms": 93.7896,
+     "std_ms": 3.8764,
+     "min_ms": 86.8863,
+     "p5_ms": 88.4987,
+     "median_ms": 95.5479,
+     "p95_ms": 95.896,
+     "p99_ms": 95.9563,
+     "max_ms": 95.9714,
+     "cv_pct": 4.13
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 89.2912,
+     "gather": 4.4704
+    },
+    "status": "ok",
+    "wall_s": 0.7443523406982422
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 125.138,
+    "stats": {
+     "count": 5,
+     "mean_ms": 11.0263,
+     "std_ms": 0.4824,
+     "min_ms": 10.5879,
+     "p5_ms": 10.6282,
+     "median_ms": 10.8587,
+     "p95_ms": 11.6798,
+     "p99_ms": 11.8036,
+     "max_ms": 11.8345,
+     "cv_pct": 4.38
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3562700.8,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 869.8,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 6.882,
+     "gather": 4.1238
+    },
+    "status": "ok",
+    "wall_s": 0.23853611946105957
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 124.576,
+    "stats": {
+     "count": 5,
+     "mean_ms": 11.0147,
+     "std_ms": 0.4796,
+     "min_ms": 10.2416,
+     "p5_ms": 10.37,
+     "median_ms": 11.1697,
+     "p95_ms": 11.3982,
+     "p99_ms": 11.4028,
+     "max_ms": 11.404,
+     "cv_pct": 4.35
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3744563.2,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 914.2,
+     "fetch_rtts": 2.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 6.4245,
+     "gather": 4.5724
+    },
+    "status": "ok",
+    "wall_s": 0.2448112964630127
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 123.099,
+    "stats": {
+     "count": 5,
+     "mean_ms": 2.9088,
+     "std_ms": 0.1402,
+     "min_ms": 2.7591,
+     "p5_ms": 2.7782,
+     "median_ms": 2.8846,
+     "p95_ms": 3.0921,
+     "p99_ms": 3.1291,
+     "max_ms": 3.1383,
+     "cv_pct": 4.82
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 33587.2,
+     "msgs": 1.8,
+     "faults": 1.8,
+     "pages": 8.2,
+     "fetch_rtts": 1.8
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 2.4995,
+     "gather": 0.3969
+    },
+    "status": "ok",
+    "wall_s": 0.19648456573486328
+   }
+  },
+  {
+   "link": "pcie4x4",
+   "bytes_per_s": 6000000000.0,
+   "rtt_ms": 0.005,
+   "nmc": {
+    "mode": "nmc",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 108.655,
+    "stats": {
+     "count": 5,
+     "mean_ms": 48.2378,
+     "std_ms": 0.3619,
+     "min_ms": 47.6013,
+     "p5_ms": 47.7445,
+     "median_ms": 48.3466,
+     "p95_ms": 48.4637,
+     "p99_ms": 48.4646,
+     "max_ms": 48.4648,
+     "cv_pct": 0.75
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 40.2768,
+     "gather": 4.6205
+    },
+    "status": "ok",
+    "wall_s": 0.43494391441345215
+   },
+   "pool_pf1": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 114.538,
+    "stats": {
+     "count": 5,
+     "mean_ms": 89.0652,
+     "std_ms": 2.6054,
+     "min_ms": 84.5239,
+     "p5_ms": 85.5352,
+     "median_ms": 89.6816,
+     "p95_ms": 90.8829,
+     "p99_ms": 90.943,
+     "max_ms": 90.9581,
+     "cv_pct": 2.93
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2220032.0,
+     "msgs": 542.0,
+     "faults": 542.0,
+     "pages": 542.0,
+     "fetch_rtts": 542.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0004,
+     "fc": 84.8074,
+     "gather": 4.2313
+    },
+    "status": "ok",
+    "wall_s": 0.6970880031585693
+   },
+   "pool_pf64": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 111.625,
+    "stats": {
+     "count": 5,
+     "mean_ms": 8.5716,
+     "std_ms": 1.0812,
+     "min_ms": 7.348,
+     "p5_ms": 7.3964,
+     "median_ms": 8.6787,
+     "p95_ms": 9.6373,
+     "p99_ms": 9.646,
+     "max_ms": 9.6482,
+     "cv_pct": 12.61
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3562700.8,
+     "msgs": 14.0,
+     "faults": 14.0,
+     "pages": 869.8,
+     "fetch_rtts": 14.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 5.8607,
+     "gather": 2.693
+    },
+    "status": "ok",
+    "wall_s": 0.21663498878479004
+   },
+   "pool_pf512": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 115.727,
+    "stats": {
+     "count": 5,
+     "mean_ms": 6.3273,
+     "std_ms": 0.3435,
+     "min_ms": 5.9548,
+     "p5_ms": 5.9986,
+     "median_ms": 6.2565,
+     "p95_ms": 6.7766,
+     "p99_ms": 6.857,
+     "max_ms": 6.8771,
+     "cv_pct": 5.43
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 3744563.2,
+     "msgs": 2.0,
+     "faults": 2.0,
+     "pages": 914.2,
+     "fetch_rtts": 2.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 4.1002,
+     "gather": 2.2112
+    },
+    "status": "ok",
+    "wall_s": 0.20162272453308105
+   },
+   "pool_warm": {
+    "mode": "pool",
+    "transport": "emul",
+    "iterations": 5,
+    "warmup": 1,
+    "prepare_ms": 115.209,
+    "stats": {
+     "count": 5,
+     "mean_ms": 2.6247,
+     "std_ms": 0.2162,
+     "min_ms": 2.3759,
+     "p5_ms": 2.3908,
+     "median_ms": 2.6142,
+     "p95_ms": 2.8516,
+     "p99_ms": 2.8571,
+     "max_ms": 2.8585,
+     "cv_pct": 8.24
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 33587.2,
+     "msgs": 1.8,
+     "faults": 1.8,
+     "pages": 8.2,
+     "fetch_rtts": 1.8
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 0,
+    "correctness": {
+     "bit_exact": 5,
+     "total": 5,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0002,
+     "fc": 2.2757,
+     "gather": 0.338
+    },
+    "status": "ok",
+    "wall_s": 0.1860198974609375
+   }
+  }
+ ]
+}

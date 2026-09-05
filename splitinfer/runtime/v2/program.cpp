@@ -18,6 +18,10 @@ bool Program::load(const std::string& d, std::string* err) {
     try { j = sjson::parse(ss.str()); } catch (std::exception& e) { if (err) *err = e.what(); return false; }
     image_bytes = (uint32_t)j["ddr2"]["image_bytes"].as_int();
     layout_end  = (uint32_t)j["ddr2"]["layout_end"].as_int();
+    ddr2_capacity = (uint32_t)j["ddr2"]["capacity"].as_int(128u << 20);
+    slot_bytes = (uint32_t)j["ddr2"]["slot_bytes"].as_int();
+    total_weight_bytes = (uint64_t)j["ddr2"]["total_weight_bytes"].as_int();
+    streaming = j["streaming"].as_bool(false);
     for (size_t i = 0; i < j["segments"].size(); i++) { const auto& s = j["segments"][i];
         segments.push_back({(uint32_t)s["addr"].as_int(), (uint32_t)s["offset"].as_int(), (uint32_t)s["length"].as_int(), s["layer"].as_str(), s["kind"].as_str()}); }
     for (size_t i = 0; i < j["inputs"].size(); i++) { const auto& s = j["inputs"][i]; InputSpec in;
@@ -35,7 +39,7 @@ bool Program::load(const std::string& d, std::string* err) {
         L.acc_addr = (uint32_t)s["acc_addr"].as_int(); L.out_addr = (uint32_t)s["out_addr"].as_int();
         L.K = (int)s["K"].as_int(); L.K_pad = (int)s["K_pad"].as_int(); L.N = (int)s["N"].as_int(); L.M_pad = (int)s["M_pad"].as_int();
         L.mult = (int)s["mult"].as_int(); L.shift = (int)s["shift"].as_int(); L.relu = (int)s["relu"].as_int();
-        L.final_ = s["final"].as_bool(); L.has_bias = s["has_bias"].as_bool();
+        L.final_ = s["final"].as_bool(); L.has_bias = s["has_bias"].as_bool(); L.stream = s["stream"].as_bool(false);
         layers.push_back(L); }
     output_layer = j["output"]["layer"].as_str(); output_count = (int)j["output"]["count"].as_int();
     dequant_scale = j["output"]["dequant_scale"].as_num(1); output_int32 = j["output"]["int32"].as_bool(true);

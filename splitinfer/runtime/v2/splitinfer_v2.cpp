@@ -98,6 +98,7 @@ int main(int argc, char** argv) {
     uint64_t bytes_out = 0, bytes_in = 0, msgs = 0, faults = 0, pages = 0, fetches = 0;
     for (auto& m : mets) { bytes_out += m.link_bytes_out; bytes_in += m.link_bytes_in; msgs += m.link_msgs; faults += m.faults; pages += m.pages_fetched; fetches += m.fetch_calls; }
     std::map<std::string, double> per_kind; for (auto& m : mets) for (auto& l : m.layers) per_kind[l.kind] += l.ms / mets.size();
+    double stream_ms = 0; for (auto& m : mets) stream_ms += m.weight_stream_ms / mets.size();
 
     if (!json) {
         std::printf("mode=%s transport=%s iterations=%d (warmup %d) prepare=%.1f ms\n", ex->mode(), transport.c_str(), runs, warmup, prepare_ms);
@@ -105,15 +106,18 @@ int main(int argc, char** argv) {
                     pct(lat, 50), mean, sd, pct(lat, 5), pct(lat, 95), pct(lat, 99), *std::max_element(lat.begin(), lat.end()), mean > 0 ? 100 * sd / mean : 0);
         std::printf("per-inference link: %.1f B out, %.1f B in, %.1f msgs", (double)bytes_out / runs, (double)bytes_in / runs, (double)msgs / runs);
         if (mode == "pool") std::printf(", %.1f faults, %.1f pages, %.1f fetch RTTs", (double)faults / runs, (double)pages / runs, (double)fetches / runs);
-        std::printf("\nper-kind ms:"); for (auto& kv : per_kind) std::printf(" %s %.3f", kv.first.c_str(), kv.second); std::printf("\n");
+        std::printf("\nper-kind ms:"); for (auto& kv : per_kind) std::printf(" %s %.3f", kv.first.c_str(), kv.second);
+        if (p.streaming) std::printf("  [weight streaming %.3f ms/inference, %.1f MiB per inference, DDR2 slot 2x%.1f MiB]", stream_ms, (double)p.total_weight_bytes / 1048576.0, (double)p.slot_bytes / 1048576.0);
+        std::printf("\n");
         std::printf("correctness: %d/%d bit-exact vs expected; max |err| vs FP32 %.4f (normalised %.4f)\n", runs - mismatches, runs, max_abs_err_fp32, max_ref > 0 ? max_abs_err_fp32 / max_ref : 0);
     } else {
         std::printf("{\"mode\":\"%s\",\"transport\":\"%s\",\"iterations\":%d,\"warmup\":%d,\"prepare_ms\":%.3f,"
                     "\"stats\":{\"count\":%zu,\"mean_ms\":%.4f,\"std_ms\":%.4f,\"min_ms\":%.4f,\"p5_ms\":%.4f,\"median_ms\":%.4f,\"p95_ms\":%.4f,\"p99_ms\":%.4f,\"max_ms\":%.4f,\"cv_pct\":%.2f},"
                     "\"link\":{\"bytes_out\":%.1f,\"bytes_in\":%.1f,\"msgs\":%.1f,\"faults\":%.1f,\"pages\":%.1f,\"fetch_rtts\":%.1f},"
-                    "\"correctness\":{\"bit_exact\":%d,\"total\":%d,\"max_abs_err_fp32\":%.6f,\"max_norm_err_fp32\":%.6f},\"per_kind_ms\":{",
+                    "\"streaming\":%s,\"weight_stream_ms\":%.3f,\"total_weight_bytes\":%llu,\"correctness\":{\"bit_exact\":%d,\"total\":%d,\"max_abs_err_fp32\":%.6f,\"max_norm_err_fp32\":%.6f},\"per_kind_ms\":{",
                     ex->mode(), transport.c_str(), runs, warmup, prepare_ms, lat.size(), mean, sd, *std::min_element(lat.begin(), lat.end()), pct(lat, 5), pct(lat, 50), pct(lat, 95), pct(lat, 99), *std::max_element(lat.begin(), lat.end()), mean > 0 ? 100 * sd / mean : 0,
                     (double)bytes_out / runs, (double)bytes_in / runs, (double)msgs / runs, (double)faults / runs, (double)pages / runs, (double)fetches / runs,
+                    p.streaming ? "true" : "false", stream_ms, (unsigned long long)p.total_weight_bytes,
                     runs - mismatches, runs, max_abs_err_fp32, max_ref > 0 ? max_abs_err_fp32 / max_ref : 0);
         bool first = true; for (auto& kv : per_kind) { std::printf("%s\"%s\":%.4f", first ? "" : ",", kv.first.c_str(), kv.second); first = false; }
         std::printf("}}\n");

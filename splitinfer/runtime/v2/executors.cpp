@@ -21,7 +21,7 @@ public:
     const char* mode() const override { return "host"; }
     bool prepare(const Program& p, std::string* err) override {
         mem.assign(p.layout_end + 64, 0);
-        for (auto& s : p.segments) std::memcpy(mem.data() + s.addr, p.image.data() + s.offset, s.length);
+        for (auto& s : p.segments) if (!p.streaming || s.kind == "table") std::memcpy(mem.data() + s.addr, p.image.data() + s.offset, s.length);
         (void)err; return true;
     }
     bool run(const Program& p, const std::map<std::string, std::vector<uint8_t>>& in,
@@ -32,6 +32,7 @@ public:
         m.input_ms = ms_since(t0);
         for (auto& L : p.layers) {
             auto tl = Clock::now();
+            if (L.stream) for (auto& s : p.segments) if (s.layer == L.name) std::memcpy(mem.data() + s.addr, p.image.data() + s.offset, s.length);
             if (L.kind == "gather") {
                 int32_t idx; std::memcpy(&idx, mem.data() + L.idx_addr, 4);
                 kernels::gather((int8_t*)(mem.data() + L.table_addr), L.dim_bytes, L.dim, idx, (int8_t*)(mem.data() + L.out_addr));
@@ -95,7 +96,17 @@ struct Link {
         if (m) { m->link_bytes_out += n; m->link_msgs++; }
         return ack();
     }
-    bool load_image(const Program& p) { for (auto& s : p.segments) if (!write(s.addr, p.image.data() + s.offset, s.length)) return false; return true; }
+    bool load_image(const Program& p) {
+        for (auto& s : p.segments) {
+            bool streamed = p.streaming && (s.kind == "weight" || s.kind == "bias");
+            if (!streamed && !write(s.addr, p.image.data() + s.offset, s.length)) return false;
+        }
+        return true;
+    }
+    bool stream_layer(const Program& p, const LayerRec& L) {
+        for (auto& s : p.segments) if (s.layer == L.name && !write(s.addr, p.image.data() + s.offset, s.length)) return false;
+        return true;
+    }
 };
 
 /* ── NMC ─────────────────────────────────────────────────────────────── */
@@ -122,6 +133,7 @@ public:
         m.input_ms = ms_since(t0);
         for (auto& L : p.layers) {
             auto tl = Clock::now();
+            if (L.stream) { auto ts = Clock::now(); if (!link.stream_layer(p, L)) return false; m.weight_stream_ms += ms_since(ts); }
             if (L.kind == "gather") {
                 if (!link.nmc(0x01, L.table_addr, L.rows, L.dim_bytes, L.idx_addr, L.n_idx, L.out_addr)) return false;
             } else if (L.kind == "fc") {
@@ -155,6 +167,7 @@ public:
     ~PoolExecutor() override { if (win) cxlwin_destroy(win); }
     const char* mode() const override { return "pool"; }
     bool prepare(const Program& p, std::string* err) override {
+        if (p.streaming) { if (err) *err = "pool mode requires DDR2-resident weights (program is streaming)"; return false; }
         RunMetrics tmp; Link link{t, &tmp};
         if (!link.load_image(p)) { if (err) *err = "image load failed"; return false; }
         cxlwin_backend_t be; if (cxlwin_backend_edgecoh_create(&be, t, 0) != 0) { if (err) *err = "backend"; return false; }

@@ -3,228 +3,228 @@
  "batch": 1,
  "ddr2": {
   "image_bytes": 3770432,
-  "layout_end": 3780896
+  "layout_end": 3779104
  },
  "segments": [
   {
-   "addr": 0,
+   "addr": 1792,
    "offset": 0,
    "length": 64000,
    "layer": "gather_0",
    "kind": "table"
   },
   {
-   "addr": 64080,
+   "addr": 65808,
    "offset": 64000,
    "length": 64000,
    "layer": "gather_1",
    "kind": "table"
   },
   {
-   "addr": 128160,
+   "addr": 129824,
    "offset": 128000,
    "length": 64000,
    "layer": "gather_2",
    "kind": "table"
   },
   {
-   "addr": 192240,
+   "addr": 193840,
    "offset": 192000,
    "length": 64000,
    "layer": "gather_3",
    "kind": "table"
   },
   {
-   "addr": 256320,
+   "addr": 257856,
    "offset": 256000,
    "length": 64000,
    "layer": "gather_4",
    "kind": "table"
   },
   {
-   "addr": 320400,
+   "addr": 321872,
    "offset": 320000,
    "length": 64000,
    "layer": "gather_5",
    "kind": "table"
   },
   {
-   "addr": 384480,
+   "addr": 385888,
    "offset": 384000,
    "length": 64000,
    "layer": "gather_6",
    "kind": "table"
   },
   {
-   "addr": 448560,
+   "addr": 449904,
    "offset": 448000,
    "length": 64000,
    "layer": "gather_7",
    "kind": "table"
   },
   {
-   "addr": 512640,
+   "addr": 513920,
    "offset": 512000,
    "length": 64000,
    "layer": "gather_8",
    "kind": "table"
   },
   {
-   "addr": 576720,
+   "addr": 577936,
    "offset": 576000,
    "length": 64000,
    "layer": "gather_9",
    "kind": "table"
   },
   {
-   "addr": 640800,
+   "addr": 641952,
    "offset": 640000,
    "length": 64000,
    "layer": "gather_10",
    "kind": "table"
   },
   {
-   "addr": 704880,
+   "addr": 705968,
    "offset": 704000,
    "length": 64000,
    "layer": "gather_11",
    "kind": "table"
   },
   {
-   "addr": 768960,
+   "addr": 769984,
    "offset": 768000,
    "length": 64000,
    "layer": "gather_12",
    "kind": "table"
   },
   {
-   "addr": 833040,
+   "addr": 834000,
    "offset": 832000,
    "length": 64000,
    "layer": "gather_13",
    "kind": "table"
   },
   {
-   "addr": 897120,
+   "addr": 898016,
    "offset": 896000,
    "length": 64000,
    "layer": "gather_14",
    "kind": "table"
   },
   {
-   "addr": 961200,
+   "addr": 962032,
    "offset": 960000,
    "length": 64000,
    "layer": "gather_15",
    "kind": "table"
   },
   {
-   "addr": 1025280,
+   "addr": 1026048,
    "offset": 1024000,
    "length": 64000,
    "layer": "gather_16",
    "kind": "table"
   },
   {
-   "addr": 1089360,
+   "addr": 1090064,
    "offset": 1088000,
    "length": 64000,
    "layer": "gather_17",
    "kind": "table"
   },
   {
-   "addr": 1153440,
+   "addr": 1154080,
    "offset": 1152000,
    "length": 64000,
    "layer": "gather_18",
    "kind": "table"
   },
   {
-   "addr": 1217520,
+   "addr": 1218096,
    "offset": 1216000,
    "length": 64000,
    "layer": "gather_19",
    "kind": "table"
   },
   {
-   "addr": 1281600,
+   "addr": 1282112,
    "offset": 1280000,
    "length": 64000,
    "layer": "gather_20",
    "kind": "table"
   },
   {
-   "addr": 1345680,
+   "addr": 1346128,
    "offset": 1344000,
    "length": 64000,
    "layer": "gather_21",
    "kind": "table"
   },
   {
-   "addr": 1409760,
+   "addr": 1410144,
    "offset": 1408000,
    "length": 64000,
    "layer": "gather_22",
    "kind": "table"
   },
   {
-   "addr": 1473840,
+   "addr": 1474160,
    "offset": 1472000,
    "length": 64000,
    "layer": "gather_23",
    "kind": "table"
   },
   {
-   "addr": 1537920,
+   "addr": 1538176,
    "offset": 1536000,
    "length": 64000,
    "layer": "gather_24",
    "kind": "table"
   },
   {
-   "addr": 1602000,
+   "addr": 1602192,
    "offset": 1600000,
    "length": 64000,
    "layer": "gather_25",
    "kind": "table"
   },
   {
-   "addr": 1668000,
+   "addr": 1666208,
    "offset": 1664000,
    "length": 1835008,
    "layer": "mlp_matmul0",
    "kind": "weight"
   },
   {
-   "addr": 3503008,
+   "addr": 3501216,
    "offset": 3499008,
    "length": 4096,
    "layer": "mlp_matmul0",
    "kind": "bias"
   },
   {
-   "addr": 3512224,
+   "addr": 3510432,
    "offset": 3503104,
    "length": 262144,
    "layer": "mlp_matmul1",
    "kind": "weight"
   },
   {
-   "addr": 3774368,
+   "addr": 3772576,
    "offset": 3765248,
    "length": 1024,
    "layer": "mlp_matmul1",
    "kind": "bias"
   },
   {
-   "addr": 3776672,
+   "addr": 3774880,
    "offset": 3766272,
    "length": 4096,
    "layer": "mlp_matmul2",
    "kind": "weight"
   },
   {
-   "addr": 3780768,
+   "addr": 3778976,
    "offset": 3770368,
    "length": 64,
    "layer": "mlp_matmul2",
@@ -235,189 +235,189 @@
   {
    "name": "emb_idx_0",
    "kind": "index",
-   "ddr2_addr": 64000,
+   "ddr2_addr": 65792,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_1",
    "kind": "index",
-   "ddr2_addr": 128080,
+   "ddr2_addr": 129808,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_2",
    "kind": "index",
-   "ddr2_addr": 192160,
+   "ddr2_addr": 193824,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_3",
    "kind": "index",
-   "ddr2_addr": 256240,
+   "ddr2_addr": 257840,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_4",
    "kind": "index",
-   "ddr2_addr": 320320,
+   "ddr2_addr": 321856,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_5",
    "kind": "index",
-   "ddr2_addr": 384400,
+   "ddr2_addr": 385872,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_6",
    "kind": "index",
-   "ddr2_addr": 448480,
+   "ddr2_addr": 449888,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_7",
    "kind": "index",
-   "ddr2_addr": 512560,
+   "ddr2_addr": 513904,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_8",
    "kind": "index",
-   "ddr2_addr": 576640,
+   "ddr2_addr": 577920,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_9",
    "kind": "index",
-   "ddr2_addr": 640720,
+   "ddr2_addr": 641936,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_10",
    "kind": "index",
-   "ddr2_addr": 704800,
+   "ddr2_addr": 705952,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_11",
    "kind": "index",
-   "ddr2_addr": 768880,
+   "ddr2_addr": 769968,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_12",
    "kind": "index",
-   "ddr2_addr": 832960,
+   "ddr2_addr": 833984,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_13",
    "kind": "index",
-   "ddr2_addr": 897040,
+   "ddr2_addr": 898000,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_14",
    "kind": "index",
-   "ddr2_addr": 961120,
+   "ddr2_addr": 962016,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_15",
    "kind": "index",
-   "ddr2_addr": 1025200,
+   "ddr2_addr": 1026032,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_16",
    "kind": "index",
-   "ddr2_addr": 1089280,
+   "ddr2_addr": 1090048,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_17",
    "kind": "index",
-   "ddr2_addr": 1153360,
+   "ddr2_addr": 1154064,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_18",
    "kind": "index",
-   "ddr2_addr": 1217440,
+   "ddr2_addr": 1218080,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_19",
    "kind": "index",
-   "ddr2_addr": 1281520,
+   "ddr2_addr": 1282096,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_20",
    "kind": "index",
-   "ddr2_addr": 1345600,
+   "ddr2_addr": 1346112,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_21",
    "kind": "index",
-   "ddr2_addr": 1409680,
+   "ddr2_addr": 1410128,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_22",
    "kind": "index",
-   "ddr2_addr": 1473760,
+   "ddr2_addr": 1474144,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_23",
    "kind": "index",
-   "ddr2_addr": 1537840,
+   "ddr2_addr": 1538160,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_24",
    "kind": "index",
-   "ddr2_addr": 1601920,
+   "ddr2_addr": 1602176,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "emb_idx_25",
    "kind": "index",
-   "ddr2_addr": 1666000,
+   "ddr2_addr": 1666192,
    "count": 1,
    "rows": 1000
   },
   {
    "name": "dense_input",
    "kind": "dense",
-   "ddr2_addr": 1666080,
+   "ddr2_addr": 1664,
    "count": 128,
    "scale": 0.03070410781019316
   }
@@ -427,13 +427,13 @@
    "name": "gather_0",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 0,
+   "table_addr": 1792,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 64000,
+   "idx_addr": 65792,
    "n_idx": 1,
-   "out_addr": 64016,
+   "out_addr": 0,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_0"
   },
@@ -441,13 +441,13 @@
    "name": "gather_1",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 64080,
+   "table_addr": 65808,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 128080,
+   "idx_addr": 129808,
    "n_idx": 1,
-   "out_addr": 128096,
+   "out_addr": 64,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_1"
   },
@@ -455,13 +455,13 @@
    "name": "gather_2",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 128160,
+   "table_addr": 129824,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 192160,
+   "idx_addr": 193824,
    "n_idx": 1,
-   "out_addr": 192176,
+   "out_addr": 128,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_2"
   },
@@ -469,13 +469,13 @@
    "name": "gather_3",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 192240,
+   "table_addr": 193840,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 256240,
+   "idx_addr": 257840,
    "n_idx": 1,
-   "out_addr": 256256,
+   "out_addr": 192,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_3"
   },
@@ -483,13 +483,13 @@
    "name": "gather_4",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 256320,
+   "table_addr": 257856,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 320320,
+   "idx_addr": 321856,
    "n_idx": 1,
-   "out_addr": 320336,
+   "out_addr": 256,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_4"
   },
@@ -497,13 +497,13 @@
    "name": "gather_5",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 320400,
+   "table_addr": 321872,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 384400,
+   "idx_addr": 385872,
    "n_idx": 1,
-   "out_addr": 384416,
+   "out_addr": 320,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_5"
   },
@@ -511,13 +511,13 @@
    "name": "gather_6",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 384480,
+   "table_addr": 385888,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 448480,
+   "idx_addr": 449888,
    "n_idx": 1,
-   "out_addr": 448496,
+   "out_addr": 384,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_6"
   },
@@ -525,13 +525,13 @@
    "name": "gather_7",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 448560,
+   "table_addr": 449904,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 512560,
+   "idx_addr": 513904,
    "n_idx": 1,
-   "out_addr": 512576,
+   "out_addr": 448,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_7"
   },
@@ -539,13 +539,13 @@
    "name": "gather_8",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 512640,
+   "table_addr": 513920,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 576640,
+   "idx_addr": 577920,
    "n_idx": 1,
-   "out_addr": 576656,
+   "out_addr": 512,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_8"
   },
@@ -553,13 +553,13 @@
    "name": "gather_9",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 576720,
+   "table_addr": 577936,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 640720,
+   "idx_addr": 641936,
    "n_idx": 1,
-   "out_addr": 640736,
+   "out_addr": 576,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_9"
   },
@@ -567,13 +567,13 @@
    "name": "gather_10",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 640800,
+   "table_addr": 641952,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 704800,
+   "idx_addr": 705952,
    "n_idx": 1,
-   "out_addr": 704816,
+   "out_addr": 640,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_10"
   },
@@ -581,13 +581,13 @@
    "name": "gather_11",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 704880,
+   "table_addr": 705968,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 768880,
+   "idx_addr": 769968,
    "n_idx": 1,
-   "out_addr": 768896,
+   "out_addr": 704,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_11"
   },
@@ -595,13 +595,13 @@
    "name": "gather_12",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 768960,
+   "table_addr": 769984,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 832960,
+   "idx_addr": 833984,
    "n_idx": 1,
-   "out_addr": 832976,
+   "out_addr": 768,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_12"
   },
@@ -609,13 +609,13 @@
    "name": "gather_13",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 833040,
+   "table_addr": 834000,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 897040,
+   "idx_addr": 898000,
    "n_idx": 1,
-   "out_addr": 897056,
+   "out_addr": 832,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_13"
   },
@@ -623,13 +623,13 @@
    "name": "gather_14",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 897120,
+   "table_addr": 898016,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 961120,
+   "idx_addr": 962016,
    "n_idx": 1,
-   "out_addr": 961136,
+   "out_addr": 896,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_14"
   },
@@ -637,13 +637,13 @@
    "name": "gather_15",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 961200,
+   "table_addr": 962032,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1025200,
+   "idx_addr": 1026032,
    "n_idx": 1,
-   "out_addr": 1025216,
+   "out_addr": 960,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_15"
   },
@@ -651,13 +651,13 @@
    "name": "gather_16",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1025280,
+   "table_addr": 1026048,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1089280,
+   "idx_addr": 1090048,
    "n_idx": 1,
-   "out_addr": 1089296,
+   "out_addr": 1024,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_16"
   },
@@ -665,13 +665,13 @@
    "name": "gather_17",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1089360,
+   "table_addr": 1090064,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1153360,
+   "idx_addr": 1154064,
    "n_idx": 1,
-   "out_addr": 1153376,
+   "out_addr": 1088,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_17"
   },
@@ -679,13 +679,13 @@
    "name": "gather_18",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1153440,
+   "table_addr": 1154080,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1217440,
+   "idx_addr": 1218080,
    "n_idx": 1,
-   "out_addr": 1217456,
+   "out_addr": 1152,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_18"
   },
@@ -693,13 +693,13 @@
    "name": "gather_19",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1217520,
+   "table_addr": 1218096,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1281520,
+   "idx_addr": 1282096,
    "n_idx": 1,
-   "out_addr": 1281536,
+   "out_addr": 1216,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_19"
   },
@@ -707,13 +707,13 @@
    "name": "gather_20",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1281600,
+   "table_addr": 1282112,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1345600,
+   "idx_addr": 1346112,
    "n_idx": 1,
-   "out_addr": 1345616,
+   "out_addr": 1280,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_20"
   },
@@ -721,13 +721,13 @@
    "name": "gather_21",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1345680,
+   "table_addr": 1346128,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1409680,
+   "idx_addr": 1410128,
    "n_idx": 1,
-   "out_addr": 1409696,
+   "out_addr": 1344,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_21"
   },
@@ -735,13 +735,13 @@
    "name": "gather_22",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1409760,
+   "table_addr": 1410144,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1473760,
+   "idx_addr": 1474144,
    "n_idx": 1,
-   "out_addr": 1473776,
+   "out_addr": 1408,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_22"
   },
@@ -749,13 +749,13 @@
    "name": "gather_23",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1473840,
+   "table_addr": 1474160,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1537840,
+   "idx_addr": 1538160,
    "n_idx": 1,
-   "out_addr": 1537856,
+   "out_addr": 1472,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_23"
   },
@@ -763,13 +763,13 @@
    "name": "gather_24",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1537920,
+   "table_addr": 1538176,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1601920,
+   "idx_addr": 1602176,
    "n_idx": 1,
-   "out_addr": 1601936,
+   "out_addr": 1536,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_24"
   },
@@ -777,13 +777,13 @@
    "name": "gather_25",
    "kind": "gather",
    "placement": "fpga",
-   "table_addr": 1602000,
+   "table_addr": 1602192,
    "rows": 1000,
    "dim": 64,
    "dim_bytes": 64,
-   "idx_addr": 1666000,
+   "idx_addr": 1666192,
    "n_idx": 1,
-   "out_addr": 1666016,
+   "out_addr": 1600,
    "scale": 0.03070410781019316,
    "index_input": "emb_idx_25"
   },
@@ -795,167 +795,167 @@
     {
      "src": "layer",
      "tensor": "emb_out_0",
-     "addr": 64016,
+     "addr": 0,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_1",
-     "addr": 128096,
+     "addr": 64,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_2",
-     "addr": 192176,
+     "addr": 128,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_3",
-     "addr": 256256,
+     "addr": 192,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_4",
-     "addr": 320336,
+     "addr": 256,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_5",
-     "addr": 384416,
+     "addr": 320,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_6",
-     "addr": 448496,
+     "addr": 384,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_7",
-     "addr": 512576,
+     "addr": 448,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_8",
-     "addr": 576656,
+     "addr": 512,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_9",
-     "addr": 640736,
+     "addr": 576,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_10",
-     "addr": 704816,
+     "addr": 640,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_11",
-     "addr": 768896,
+     "addr": 704,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_12",
-     "addr": 832976,
+     "addr": 768,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_13",
-     "addr": 897056,
+     "addr": 832,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_14",
-     "addr": 961136,
+     "addr": 896,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_15",
-     "addr": 1025216,
+     "addr": 960,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_16",
-     "addr": 1089296,
+     "addr": 1024,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_17",
-     "addr": 1153376,
+     "addr": 1088,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_18",
-     "addr": 1217456,
+     "addr": 1152,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_19",
-     "addr": 1281536,
+     "addr": 1216,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_20",
-     "addr": 1345616,
+     "addr": 1280,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_21",
-     "addr": 1409696,
+     "addr": 1344,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_22",
-     "addr": 1473776,
+     "addr": 1408,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_23",
-     "addr": 1537856,
+     "addr": 1472,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_24",
-     "addr": 1601936,
+     "addr": 1536,
      "len": 64
     },
     {
      "src": "layer",
      "tensor": "emb_out_25",
-     "addr": 1666016,
+     "addr": 1600,
      "len": 64
     },
     {
      "src": "input",
      "tensor": "dense_input",
-     "addr": 1666080,
+     "addr": 1664,
      "len": 128
     }
    ],
-   "out_addr": 1666208,
+   "out_addr": 0,
    "len": 1792,
    "scale": 0.03070410781019316
   },
@@ -963,15 +963,15 @@
    "name": "mlp_matmul0",
    "kind": "fc",
    "placement": "fpga",
-   "in_addr": 1666208,
+   "in_addr": 0,
    "K": 1792,
    "K_pad": 1792,
    "N": 1024,
    "M_pad": 1024,
-   "w_addr": 1668000,
-   "b_addr": 3503008,
-   "acc_addr": 3507104,
-   "out_addr": 3511200,
+   "w_addr": 1666208,
+   "b_addr": 3501216,
+   "acc_addr": 3505312,
+   "out_addr": 3509408,
    "mult": 28004,
    "shift": 24,
    "relu": 1,
@@ -985,15 +985,15 @@
    "name": "mlp_matmul1",
    "kind": "fc",
    "placement": "fpga",
-   "in_addr": 3511200,
+   "in_addr": 3509408,
    "K": 1024,
    "K_pad": 1024,
    "N": 256,
    "M_pad": 256,
-   "w_addr": 3512224,
-   "b_addr": 3774368,
-   "acc_addr": 3775392,
-   "out_addr": 3776416,
+   "w_addr": 3510432,
+   "b_addr": 3772576,
+   "acc_addr": 3773600,
+   "out_addr": 3774624,
    "mult": 29602,
    "shift": 24,
    "relu": 1,
@@ -1007,15 +1007,15 @@
    "name": "mlp_matmul2",
    "kind": "fc",
    "placement": "fpga",
-   "in_addr": 3776416,
+   "in_addr": 3774624,
    "K": 256,
    "K_pad": 256,
    "N": 1,
    "M_pad": 16,
-   "w_addr": 3776672,
-   "b_addr": 3780768,
-   "acc_addr": 3780832,
-   "out_addr": 3780832,
+   "w_addr": 3774880,
+   "b_addr": 3778976,
+   "acc_addr": 3779040,
+   "out_addr": 3779040,
    "mult": 0,
    "shift": 0,
    "relu": 0,

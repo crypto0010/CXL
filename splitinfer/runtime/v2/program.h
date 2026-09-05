@@ -19,14 +19,15 @@ struct LayerRec {
     // fc
     uint32_t in_addr = 0, w_addr = 0, b_addr = 0, acc_addr = 0, out_addr = 0;
     int K = 0, K_pad = 0, N = 0, M_pad = 0, mult = 0, shift = 0, relu = 0;
-    bool final_ = false, has_bias = false;
+    bool final_ = false, has_bias = false, stream = false;
 };
 struct VecInput { std::string name; size_t off = 0, len = 0; };
 struct Vector { std::vector<VecInput> inputs; size_t expect_off = 0; int expect_count = 0; std::vector<double> fp32_ref; };
 
 struct Program {
     std::string dir;
-    uint32_t image_bytes = 0, layout_end = 0;
+    uint32_t image_bytes = 0, layout_end = 0, ddr2_capacity = 0, slot_bytes = 0; uint64_t total_weight_bytes = 0;
+    bool streaming = false;
     std::vector<Segment> segments;
     std::vector<InputSpec> inputs;
     std::vector<LayerRec> layers;

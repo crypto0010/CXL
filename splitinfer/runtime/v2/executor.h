@@ -28,7 +28,7 @@ namespace splitinfer2 {
 
 struct LayerTiming { std::string name, kind; double ms = 0; };
 struct RunMetrics {
-    double total_ms = 0, input_ms = 0, output_ms = 0;
+    double total_ms = 0, input_ms = 0, output_ms = 0, weight_stream_ms = 0;
     std::vector<LayerTiming> layers;
     uint64_t link_bytes_out = 0, link_bytes_in = 0, link_msgs = 0;
     uint64_t faults = 0, pages_fetched = 0, fetch_calls = 0;
