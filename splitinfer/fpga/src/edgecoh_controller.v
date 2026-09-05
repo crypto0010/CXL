@@ -87,6 +87,11 @@ module edgecoh_controller (
     reg [31:0] dma_rd_total;     // total bytes to read
     reg [31:0] dma_rd_requested; // bytes requested so far
     reg [31:0] dma_rd_sent;      // bytes sent back to host so far
+    // v2: DMA read byte latch.  dma_rd_valid is a one-cycle FIFO pop; if
+    // tx_ready happened to be low on that cycle the byte was lost and the
+    // FSM waited for a second valid that never came (watchdog after 100 ms).
+    reg        dma_rd_have;
+    reg [7:0]  dma_rd_latch;
     reg [2:0]  resp_hdr_idx;     // byte index within DATA_RESPONSE header
 
     // Watchdog counter — increments in any "waiting" state, resets on
@@ -98,7 +103,8 @@ module edgecoh_controller (
     wire progress = rx_valid
                   | (tx_valid & tx_ready)
                   | nmc_done
-                  | dma_rd_valid;
+                  | dma_rd_valid
+                  | dma_rd_have;
 
     // A "waiting" state is one where we expect an external event that
     // could fail to arrive (host byte, TX handshake, NMC done, DMA data).
@@ -115,6 +121,7 @@ module edgecoh_controller (
             dma_wr_base <= 0; dma_wr_remaining <= 0;
             dma_rd_base <= 0; dma_rd_total <= 0;
             dma_rd_requested <= 0; dma_rd_sent <= 0; resp_hdr_idx <= 0;
+            dma_rd_have <= 0; dma_rd_latch <= 0;
             stall_cnt <= 0;
         end else begin
             nmc_start <= 0; dma_wr_en <= 0; dma_rd_en <= 0;
@@ -389,27 +396,28 @@ module edgecoh_controller (
 
                 S_DMA_READ_RESP: begin
                     if (dma_rd_valid) begin
-                        if (tx_ready) begin
-                            tx_valid <= 1;
-                            tx_data  <= dma_rd_data;
-                            dma_rd_sent <= dma_rd_sent + 1;
-                            // Issue next read or finish
-                            if (dma_rd_sent + 1 >= dma_rd_total) begin
-                                state       <= S_IDLE;
-                                rx_ready    <= 1;
-                                header_idx  <= 0;
-                                payload_idx <= 0;
-                                payload_len <= 0;
-                                ack_byte_idx<= 0;
-                                dma_wr_remaining <= 0;
-                                dma_rd_total     <= 0;
-                                dma_rd_requested <= 0;
-                                dma_rd_sent      <= 0;
-                                resp_hdr_idx     <= 0;
-                            end else
-                                state <= S_DMA_READ_REQ;
-                        end
-                        // else: wait for tx_ready
+                        dma_rd_latch <= dma_rd_data;
+                        dma_rd_have  <= 1;
+                    end
+                    if ((dma_rd_have || dma_rd_valid) && tx_ready) begin
+                        tx_valid    <= 1;
+                        tx_data     <= dma_rd_have ? dma_rd_latch : dma_rd_data;
+                        dma_rd_have <= 0;
+                        dma_rd_sent <= dma_rd_sent + 1;
+                        if (dma_rd_sent + 1 >= dma_rd_total) begin
+                            state       <= S_IDLE;
+                            rx_ready    <= 1;
+                            header_idx  <= 0;
+                            payload_idx <= 0;
+                            payload_len <= 0;
+                            ack_byte_idx<= 0;
+                            dma_wr_remaining <= 0;
+                            dma_rd_total     <= 0;
+                            dma_rd_requested <= 0;
+                            dma_rd_sent      <= 0;
+                            resp_hdr_idx     <= 0;
+                        end else
+                            state <= S_DMA_READ_REQ;
                     end
                 end
 

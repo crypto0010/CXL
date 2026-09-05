@@ -15,9 +15,10 @@ module nmc_dispatch (
     output reg [31:0] mac_M, mac_K,
     input wire mac_done,
     output reg elt_start,
-    output reg [31:0] elt_input_addr, elt_output_addr, elt_num_words,
-    output reg [1:0]  elt_op,
+    output reg [31:0] elt_input_addr, elt_addr2, elt_output_addr, elt_num_words,
+    output reg [2:0]  elt_op,
     output reg [7:0]  elt_scale,
+    output reg [15:0] elt_mult,
     input wire elt_done
 );
 
@@ -51,12 +52,19 @@ module nmc_dispatch (
                         mac_output_addr <= nmc_output_addr;
                     end
                     NMC_ELEMENTWISE: begin
+                        // Field mapping (see messages.h edgecoh_nmc_exec_msg_t):
+                        //   table_base[2:0]  op      table_base[15:8] scale/shift/relu
+                        //   table_rows       num 16-byte input words
+                        //   table_cols       second-operand address (ops 3,4)
+                        //   input_len[15:0]  requant multiplier (op 4)
                         elt_start <= 1;
                         elt_input_addr <= nmc_input_addr;
+                        elt_addr2 <= nmc_table_cols;
                         elt_output_addr <= nmc_output_addr;
                         elt_num_words <= nmc_table_rows;
-                        elt_op <= nmc_table_base[1:0];
+                        elt_op <= nmc_table_base[2:0];
                         elt_scale <= nmc_table_base[15:8];
+                        elt_mult <= nmc_input_len[15:0];
                     end
                     default: busy <= 0;
                 endcase

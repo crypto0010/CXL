@@ -173,7 +173,7 @@ module top #(
     endgenerate
 
     /* Tie off unused mask — write all bytes */
-    assign app_wdf_mask = 16'h0000;
+    /* v2: byte mask driven by the arbiter (DMA partial-word writes). */
 
     /* ------------------------------------------------------------------ */
     /* sys_clk domain wires                                                */
@@ -224,8 +224,9 @@ module top #(
     wire        mac_start;          /* nmc_dispatch -> mac_controller */
     wire        mac_ctrl_done;      /* mac_controller -> nmc_dispatch */
     wire        mac_start_array;    /* mac_controller -> mac_array_8x8 */
-    wire        mac_load_a, mac_load_b;
-    wire [63:0] mac_row_a, mac_row_b;
+    wire         mac_load_b;
+    wire [511:0] mac_a_rows;
+    wire [63:0]  mac_b_vec;
     wire [31:0] mac_res0, mac_res1, mac_res2, mac_res3;
     wire [31:0] mac_res4, mac_res5, mac_res6, mac_res7;
     wire        mac_compute_done;
@@ -246,7 +247,9 @@ module top #(
     /* Elementwise controller wires */
     wire        elt_start;
     wire [31:0] elt_input_addr, elt_output_addr, elt_num_words;
-    wire [1:0]  elt_op;
+    wire [2:0]  elt_op;
+    wire [31:0] elt_addr2;
+    wire [15:0] elt_mult;
     wire [7:0]  elt_scale;
     wire        elt_done;
 
@@ -273,8 +276,9 @@ module top #(
     wire [127:0] nmc_wr_data = emb_mem_wr_en ? emb_mem_wr_data : elt_mem_wr_data;
 
     /* dma read data back to EdgeCoh (128-bit -> 8-bit, take LSB) */
-    wire [127:0] dma_rd_data_128;
+    wire [7:0]   dma_rd_byte_arb;
     wire         dma_rd_valid_arb;
+    wire         dma_wr_ready_arb, dma_rd_ready_arb;
 
     /* ------------------------------------------------------------------ */
     /* CDC bridges (sys_clk_bufg <-> ui_clk)                               */
@@ -335,7 +339,7 @@ module top #(
         .wr_full  (dma_wr_fifo_full),
         .rd_clk   (ui_clk),
         .rd_rst_n (ui_rst_n),
-        .rd_en    (!dma_wr_fifo_empty),
+        .rd_en    (!dma_wr_fifo_empty && dma_wr_ready_arb),
         .rd_data  (dma_wr_fifo_rd_data),
         .rd_empty (dma_wr_fifo_empty)
     );
@@ -356,7 +360,7 @@ module top #(
         .wr_full  (dma_rd_cmd_full),
         .rd_clk   (ui_clk),
         .rd_rst_n (ui_rst_n),
-        .rd_en    (!dma_rd_cmd_empty),
+        .rd_en    (!dma_rd_cmd_empty && dma_rd_ready_arb),
         .rd_data  (dma_rd_cmd_rd_data),
         .rd_empty (dma_rd_cmd_empty)
     );
@@ -372,7 +376,7 @@ module top #(
         .wr_clk   (ui_clk),
         .wr_rst_n (ui_rst_n),
         .wr_en    (dma_rd_valid_arb && !dma_rd_data_fifo_full),
-        .wr_data  (dma_rd_data_128[7:0]),
+        .wr_data  (dma_rd_byte_arb),
         .wr_full  (dma_rd_data_fifo_full),
         .rd_clk   (sys_clk_bufg),
         .rd_rst_n (sys_rst_n),
@@ -468,10 +472,12 @@ module top #(
         .mac_done        (mac_ctrl_done),
         .elt_start       (elt_start),
         .elt_input_addr  (elt_input_addr),
+        .elt_addr2       (elt_addr2),
         .elt_output_addr (elt_output_addr),
         .elt_num_words   (elt_num_words),
         .elt_op          (elt_op),
         .elt_scale       (elt_scale),
+        .elt_mult        (elt_mult),
         .elt_done        (elt_done)
     );
 
@@ -503,8 +509,8 @@ module top #(
         .mem_rd_data(mac_mem_rd_data), .mem_rd_valid(mac_mem_rd_valid),
         .mem_wr_en(mac_mem_wr_en), .mem_wr_addr(mac_mem_wr_addr),
         .mem_wr_data(mac_mem_wr_data),
-        .mac_start(mac_start_array), .mac_load_a(mac_load_a), .mac_load_b(mac_load_b),
-        .mac_row_a(mac_row_a), .mac_row_b(mac_row_b),
+        .mac_start(mac_start_array), .mac_load_b(mac_load_b),
+        .mac_a_rows(mac_a_rows), .mac_b(mac_b_vec),
         .mac_result_0(mac_res0), .mac_result_1(mac_res1),
         .mac_result_2(mac_res2), .mac_result_3(mac_res3),
         .mac_result_4(mac_res4), .mac_result_5(mac_res5),
@@ -514,8 +520,8 @@ module top #(
 
     mac_array_8x8 u_mac (
         .clk(ui_clk), .rst_n(ui_rst_n), .start(mac_start_array),
-        .load_a(mac_load_a), .load_b(mac_load_b),
-        .row_a(mac_row_a), .row_b(mac_row_b),
+        .load_b(mac_load_b),
+        .a_rows(mac_a_rows), .b(mac_b_vec),
         .result_0(mac_res0), .result_1(mac_res1),
         .result_2(mac_res2), .result_3(mac_res3),
         .result_4(mac_res4), .result_5(mac_res5),
@@ -525,8 +531,8 @@ module top #(
 
     eltwise_controller u_elt_ctrl (
         .clk(ui_clk), .rst_n(ui_rst_n), .start(elt_start),
-        .input_addr(elt_input_addr), .output_addr(elt_output_addr),
-        .num_words(elt_num_words), .op(elt_op), .scale(elt_scale),
+        .input_addr(elt_input_addr), .addr2(elt_addr2), .output_addr(elt_output_addr),
+        .num_words(elt_num_words), .op(elt_op), .scale(elt_scale), .mult(elt_mult),
         .done(elt_done),
         .mem_rd_en(elt_mem_rd_en), .mem_rd_addr(elt_mem_rd_addr),
         .mem_rd_data(nmc_rd_data), .mem_rd_valid(nmc_rd_valid),
@@ -542,6 +548,7 @@ module top #(
         .app_en          (app_en),
         .app_wdf_data    (app_wdf_data),
         .app_wdf_wren    (app_wdf_wren),
+        .app_wdf_mask    (app_wdf_mask),
         .app_wdf_end     (app_wdf_end),
         .app_rd_data     (app_rd_data),
         .app_rd_data_valid(app_rd_data_valid),
@@ -564,13 +571,15 @@ module top #(
         .mac_wr_addr     (mac_mem_wr_addr),
         .mac_wr_data     (mac_mem_wr_data),
         /* DMA ports — via CDC FIFOs from edgecoh_controller */
-        .dma_rd_en       (dma_rd_en_ui),
-        .dma_rd_addr     (dma_rd_addr_ui),
-        .dma_rd_data     (dma_rd_data_128),
-        .dma_rd_valid    (dma_rd_valid_arb),
         .dma_wr_en       (dma_wr_en_ui),
         .dma_wr_addr     (dma_wr_addr_ui),
-        .dma_wr_byte     (dma_wr_data_ui)
+        .dma_wr_byte     (dma_wr_data_ui),
+        .dma_wr_ready    (dma_wr_ready_arb),
+        .dma_rd_en       (dma_rd_en_ui),
+        .dma_rd_addr     (dma_rd_addr_ui),
+        .dma_rd_ready    (dma_rd_ready_arb),
+        .dma_rd_byte     (dma_rd_byte_arb),
+        .dma_rd_valid    (dma_rd_valid_arb)
     );
 
     /* ------------------------------------------------------------------ */

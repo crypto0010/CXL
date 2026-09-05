@@ -1,4 +1,7 @@
-/* splitinfer/fpga/src/embedding_lookup.v */
+/* splitinfer/fpga/src/embedding_lookup.v
+ * Gather rows of an embedding table.  All addresses are BYTE addresses,
+ * embed_dim is in BYTES and must be a multiple of 16; table/indices/output
+ * bases 16-byte aligned. */
 `timescale 1ns / 1ps
 
 module embedding_lookup (
@@ -26,13 +29,17 @@ module embedding_lookup (
                 S_IDLE: if (start) begin
                     idx_counter <= 0; bursts_per_embed <= embed_dim >> 4; state <= S_READ_INDEX;
                 end
+                // Indices are INT32, four per 16-byte word.  Read the aligned
+                // word and select the lane; v1 always took lane 0, so every
+                // group of four indices returned the first one.
                 S_READ_INDEX: if (idx_counter >= num_indices) state <= S_DONE;
                 else begin
-                    mem_rd_en <= 1; mem_rd_addr <= indices_addr[26:0] + (idx_counter << 2);
+                    mem_rd_en <= 1; mem_rd_addr <= indices_addr[26:0] + ((idx_counter >> 2) << 4);
                     state <= S_WAIT_INDEX;
                 end
                 S_WAIT_INDEX: if (mem_rd_valid) begin
-                    current_index <= mem_rd_data[31:0]; burst_counter <= 0; state <= S_READ_EMBED;
+                    current_index <= mem_rd_data[idx_counter[1:0]*32 +: 32];
+                    burst_counter <= 0; state <= S_READ_EMBED;
                 end
                 S_READ_EMBED: if (burst_counter >= bursts_per_embed) begin
                     idx_counter <= idx_counter + 1; state <= S_READ_INDEX;
