@@ -1,0 +1,51 @@
+{
+ "baseline": "B_tensorrt_fp16",
+ "model": "dlrm_small.onnx",
+ "precision": "fp16",
+ "engine": "/tmp/trt_cache/dlrm_small.onnx.fp16.plan",
+ "warmup_runs": 50,
+ "measure_runs": 7503,
+ "stats": {
+  "count": 7503,
+  "mean_ms": 0.4309331367481178,
+  "std_ms": 0.35928246245882106,
+  "min_ms": 0.36580199957825243,
+  "p5_ms": 0.3834349994576769,
+  "median_ms": 0.39649199970881455,
+  "p95_ms": 0.4339969000284327,
+  "p99_ms": 0.9517872619471057,
+  "max_ms": 7.2928869994939305,
+  "cv_pct": 83.37313421056854
+ },
+ "throughput_inf_per_s": 2320.545613052969,
+ "power": {
+  "samples": 28,
+  "duration_s": 3.2493918780019158,
+  "rails": {
+   "VDD_IN": {
+    "mean_mw": 6567.928571428572,
+    "median_mw": 6566.5,
+    "max_mw": 6626,
+    "min_mw": 6507,
+    "samples": 28
+   },
+   "VDD_CPU_GPU_CV": {
+    "mean_mw": 1499.2857142857142,
+    "median_mw": 1505.0,
+    "max_mw": 1584,
+    "min_mw": 1386,
+    "samples": 28
+   },
+   "VDD_SOC": {
+    "mean_mw": 1663.142857142857,
+    "median_mw": 1666.0,
+    "max_mw": 1666,
+    "min_mw": 1626,
+    "samples": 28
+   }
+  },
+  "energy_J": 17.737499999999997
+ },
+ "energy_per_inf_J": 0.002830338061223298,
+ "power_samples": 28
+}

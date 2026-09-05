@@ -1,0 +1,52 @@
+{
+ "baseline": "B_tensorrt_int8",
+ "model": "dlrm_small.onnx",
+ "precision": "int8",
+ "engine": "/tmp/trt_cache/dlrm_small.onnx.int8.plan",
+ "warmup_runs": 50,
+ "measure_runs": 2884,
+ "stats": {
+  "count": 2884,
+  "mean_ms": 0.5265131657174562,
+  "std_ms": 0.6730871816744333,
+  "min_ms": 0.37002699900767766,
+  "p5_ms": 0.3849126484055887,
+  "median_ms": 0.41119650086329784,
+  "p95_ms": 0.51046939988737,
+  "p99_ms": 4.823056561581325,
+  "max_ms": 7.196755999757443,
+  "cv_pct": 127.83862313438016
+ },
+ "throughput_inf_per_s": 1899.2877388684938,
+ "power": {
+  "samples": 13,
+  "duration_s": 1.5257387700003164,
+  "rails": {
+   "VDD_IN": {
+    "mean_mw": 6559,
+    "median_mw": 6547,
+    "max_mw": 6705,
+    "min_mw": 6428,
+    "samples": 13
+   },
+   "VDD_CPU_GPU_CV": {
+    "mean_mw": 1495.8461538461538,
+    "median_mw": 1505,
+    "max_mw": 1584,
+    "min_mw": 1426,
+    "samples": 13
+   },
+   "VDD_SOC": {
+    "mean_mw": 1659.8461538461538,
+    "median_mw": 1666,
+    "max_mw": 1666,
+    "min_mw": 1626,
+    "samples": 13
+   }
+  },
+  "energy_J": 7.868050000000001
+ },
+ "energy_per_inf_J": 0.0034533998539407955,
+ "power_samples": 13,
+ "power_warning": "only 13 tegrastats samples"
+}
