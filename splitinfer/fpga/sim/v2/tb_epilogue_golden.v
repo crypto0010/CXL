@@ -4,7 +4,12 @@
 module tb_epilogue_golden;
     localparam M = 44, NW = (M + 3) / 4;
     localparam A_BASE = 27'h1000, B_BASE = 27'h2000, O_BASE = 27'h3000;
-    localparam [15:0] MULT = 16'd1187; localparam [4:0] SHIFT = 5'd14; localparam RELU = 1'b1;
+`ifndef EPI_MULT
+`define EPI_MULT 16'd1187
+`define EPI_SHIFT 5'd14
+`define EPI_RELU 1'b1
+`endif
+    localparam [15:0] MULT = `EPI_MULT; localparam [4:0] SHIFT = `EPI_SHIFT; localparam RELU = `EPI_RELU;
     reg clk = 0, rst_n = 0; always #6 clk = ~clk;
     wire [26:0] app_addr; wire [2:0] app_cmd; wire app_en; wire [127:0] app_wdf_data;
     wire [15:0] app_wdf_mask; wire app_wdf_wren, app_wdf_end; wire [127:0] app_rd_data;
