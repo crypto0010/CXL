@@ -55,6 +55,19 @@ edgecoh_transport_t *edgecoh_transport_open(uint16_t vid, uint16_t pid) {
         return NULL;
     }
 
+    /* FTDI latency timer: the FT2232H holds received bytes for up to
+     * latency_timer ms before forwarding them to the host.  The default is
+     * 16 ms, which alone accounts for half of a measured 16 ms message
+     * round trip; at 1 ms the round trip is 8 ms (calibrate_link.py,
+     * 2026-09-07).  Best effort: the sysfs node exists only for ftdi_sio
+     * and needs root. */
+    {
+        const char *base = strrchr(path, '/'); base = base ? base + 1 : path;
+        char lt[256]; snprintf(lt, sizeof lt, "/sys/bus/usb-serial/devices/%s/latency_timer", base);
+        FILE *f = fopen(lt, "w");
+        if (f) { fputs("1\n", f); fclose(f); }
+    }
+
     /* Drop O_NONBLOCK after open — we use select() for timeouts. */
     int flags = fcntl(fd, F_GETFL, 0);
     fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);

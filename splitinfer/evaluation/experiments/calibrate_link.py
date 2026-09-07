@@ -75,6 +75,7 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--transport", choices=["usb", "emul"], default="usb")
     ap.add_argument("--out", required=True); ap.add_argument("--reps", type=int, default=20)
     ap.add_argument("--emul-bw", type=float, default=11520); ap.add_argument("--emul-rtt-ms", type=float, default=5)
+    ap.add_argument("--skip-read", action="store_true", help="skip DATA_READ bandwidth (v1 bitstream stalls on reads)")
     a = ap.parse_args()
     lib = _load()
     if a.transport == "emul":
@@ -84,13 +85,25 @@ def main():
     if not t: sys.exit("transport open failed")
     rtt = barrier_rtt(lib, t, a.reps)
     sizes = [64, 1024, 4096]
-    res = {"transport": a.transport, "barrier_rtt_ms": {"median": statistics.median(rtt), "p95": sorted(rtt)[int(0.95 * (len(rtt) - 1))], "n": len(rtt)}, "write": {}, "read": {}}
+    res = {"transport": a.transport, "barrier_rtt_ms": {"median": statistics.median(rtt), "p95": sorted(rtt)[int(0.95 * (len(rtt) - 1))], "n": len(rtt), "all": rtt}, "write": {}, "read": {}, "errors": []}
     for s in sizes:
-        w = write_bw(lib, t, s, max(3, a.reps // 4)); r = read_bw(lib, t, s, max(3, a.reps // 4))
-        res["write"][s] = {"median_s": statistics.median(w), "bytes_per_s": s / statistics.median(w)}
-        res["read"][s] = {"median_s": statistics.median(r), "bytes_per_s": s / statistics.median(r)}
+        try:
+            w = write_bw(lib, t, s, max(3, a.reps // 4))
+            res["write"][s] = {"median_s": statistics.median(w), "bytes_per_s": s / statistics.median(w)}
+        except Exception as e:
+            res["errors"].append(f"write {s}: {e}"); break
+    if not a.skip_read:
+        for s in sizes:
+            try:
+                r = read_bw(lib, t, s, max(3, a.reps // 4))
+                res["read"][s] = {"median_s": statistics.median(r), "bytes_per_s": s / statistics.median(r)}
+            except Exception as e:
+                res["errors"].append(f"read {s}: {e}"); break
     # Fit t = rtt + bytes / bw over the write sizes (least squares on two largest)
-    s1, s2 = sizes[-2], sizes[-1]; t1, t2 = res["write"][s1]["median_s"], res["write"][s2]["median_s"]
+    have = [s for s in sizes if s in res["write"]]
+    if len(have) < 2:
+        sys.exit(f"insufficient write measurements: {res['errors']}")
+    s1, s2 = have[-2], have[-1]; t1, t2 = res["write"][s1]["median_s"], res["write"][s2]["median_s"]
     bw = (s2 - s1) / max(t2 - t1, 1e-9); fixed = t2 - s2 / bw
     res["fit"] = {"link_bw_bytes_per_s": bw, "per_msg_overhead_ms": fixed * 1000}
     res["hardware_params_override"] = {"link_bw_bytes_per_s": bw, "link_rtt_ms": max(statistics.median(rtt), fixed * 1000)}

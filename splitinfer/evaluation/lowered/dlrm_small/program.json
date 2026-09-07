@@ -1,9 +1,13 @@
 {
  "version": "2.0",
  "batch": 1,
+ "streaming": false,
  "ddr2": {
   "image_bytes": 3770432,
-  "layout_end": 3779104
+  "layout_end": 3779104,
+  "capacity": 134217728,
+  "slot_bytes": 0,
+  "total_weight_bytes": 3770432
  },
  "segments": [
   {
@@ -979,7 +983,8 @@
    "in_scale": 0.03070410781019316,
    "w_scale": 0.0009070283432645122,
    "out_scale": 0.016684562202513686,
-   "has_bias": true
+   "has_bias": true,
+   "stream": false
   },
   {
    "name": "mlp_matmul1",
@@ -1001,7 +1006,8 @@
    "in_scale": 0.016684562202513686,
    "w_scale": 0.0011595076932681826,
    "out_scale": 0.010964294118205393,
-   "has_bias": true
+   "has_bias": true,
+   "stream": false
   },
   {
    "name": "mlp_matmul2",
@@ -1023,7 +1029,8 @@
    "in_scale": 0.010964294118205393,
    "w_scale": 0.001364357006831432,
    "out_scale": 1.4959211505134184e-05,
-   "has_bias": true
+   "has_bias": true,
+   "stream": false
   }
  ],
  "output": {
