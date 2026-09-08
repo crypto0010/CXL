@@ -44,6 +44,14 @@ public:
                      std::vector<int32_t>& out, RunMetrics& m) = 0;
     /* Called between iterations to model a cold pool (drop host copies). */
     virtual void reset_between_iterations() {}
+    /* Debug: stop after max_layers (-1 = all); verbose per-layer trace. */
+    virtual void set_debug(int max_layers, bool verbose) { (void)max_layers; (void)verbose; }
+    /* Host executor: expose the DDR2-shaped arena for cross-checking. */
+    virtual const std::vector<uint8_t>* arena() const { return nullptr; }
+    /* NMC executor: after a run, read each layer's output region back from
+     * DDR2 and compare with `ref` (a host arena).  Prints per-layer verdicts;
+     * returns number of mismatching layers. */
+    virtual int verify_layers(const Program& p, const std::vector<uint8_t>& ref) { (void)p; (void)ref; return -1; }
 };
 
 /* Integer kernels shared by Host and Pool: operate on pointers, so Pool can

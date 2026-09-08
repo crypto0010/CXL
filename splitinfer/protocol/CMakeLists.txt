@@ -20,6 +20,9 @@ if(BUILD_TESTS)
     target_link_libraries(test_state_machine edgecoh)
     add_test(NAME test_state_machine COMMAND test_state_machine)
 
+    add_executable(test_dma_integrity tests/test_dma_integrity.c)
+    target_link_libraries(test_dma_integrity edgecoh)
+
     add_executable(test_emul_device tests/test_emul_device.c)
     target_link_libraries(test_emul_device edgecoh)
     add_test(NAME test_emul_device COMMAND test_emul_device)

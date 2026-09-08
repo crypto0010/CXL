@@ -36,6 +36,7 @@ module ddr2_ui_model #(parameter BYTES = 1 << 20, parameter RD_LAT = 12, paramet
             app_rdy     <= ($urandom % 100) >= STALL_PCT;
             app_wdf_rdy <= ($urandom % 100) >= STALL_PCT;
             app_rd_data_valid <= 0;
+            app_rd_data <= {4{$urandom}};       // NOT held after the valid cycle (matches the real MIG)
             // age read queue
             for (i = 0; i < 64; i = i + 1) if (rd_q_v[i]) begin
                 if (rd_q_t[i] == 0) begin

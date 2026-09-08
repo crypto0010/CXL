@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     if (argc < 2) { std::fprintf(stderr, "usage: %s <program_dir> [options]\n", argv[0]); return 2; }
     std::string dir = argv[1], mode = "host", transport = "emul";
     int iterations = 1, warmup = 0, nvec = -1; bool json = false, warm = false;
-    unsigned prefetch = 1; double link_bw = 0, rtt_ms = 0, clock_hz = 0;
+    unsigned prefetch = 1; double link_bw = 0, rtt_ms = 0, clock_hz = 0; int max_layers = -1; bool verbose = false, verify_layers = false;
     for (int i = 2; i < argc; i++) {
         std::string a = argv[i]; auto next = [&]() { return std::string(i + 1 < argc ? argv[++i] : ""); };
         if (a == "--mode") mode = next(); else if (a == "--transport") transport = next();
@@ -48,6 +48,9 @@ int main(int argc, char** argv) {
         else if (a == "--prefetch-pages") prefetch = (unsigned)std::atoi(next().c_str()); else if (a == "--pool-warm") warm = true;
         else if (a == "--emul-link-bw") link_bw = std::atof(next().c_str()); else if (a == "--emul-rtt-ms") rtt_ms = std::atof(next().c_str());
         else if (a == "--emul-clock-hz") clock_hz = std::atof(next().c_str());
+        else if (a == "--max-layers") max_layers = std::atoi(next().c_str()); else if (a == "--verbose") verbose = true;
+        else if (a == "--verify-layers") verify_layers = true;
+        else if (a == "--verify-layers") verify_layers = true;
         else { std::fprintf(stderr, "unknown option %s\n", a.c_str()); return 2; }
     }
     Program p; std::string err;
@@ -68,6 +71,7 @@ int main(int argc, char** argv) {
     else if (mode == "pool") ex = make_pool_executor(t, prefetch, warm);
     else { std::fprintf(stderr, "bad mode\n"); return 2; }
 
+    ex->set_debug(max_layers, verbose);
     auto tp = std::chrono::steady_clock::now();
     if (!ex->prepare(p, &err)) { std::fprintf(stderr, "prepare failed: %s\n", err.c_str()); return 1; }
     double prepare_ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - tp).count();
@@ -84,7 +88,7 @@ int main(int argc, char** argv) {
         ex->reset_between_iterations();
         if (!ex->run(p, in, out, m)) { std::fprintf(stderr, "run failed at iteration %d\n", it); return 1; }
         const int32_t* expect = (const int32_t*)(p.vecdata.data() + v.expect_off);
-        bool ok = (int)out.size() == v.expect_count && std::memcmp(out.data(), expect, out.size() * 4) == 0;
+        bool ok = max_layers >= 0 || ((int)out.size() == v.expect_count && std::memcmp(out.data(), expect, out.size() * 4) == 0);
         if (it >= warmup) {
             runs++; lat.push_back(m.total_ms); mets.push_back(m);
             if (!ok) { mismatches++; if (mismatches <= 3) { std::fprintf(stderr, "MISMATCH iter %d: got %d expect %d\n", it, out.empty() ? 0 : out[0], expect[0]); } }
@@ -92,6 +96,23 @@ int main(int argc, char** argv) {
                 double deq = out[k] * p.dequant_scale; max_abs_err_fp32 = std::max(max_abs_err_fp32, std::fabs(deq - v.fp32_ref[k]));
                 max_ref = std::max(max_ref, std::fabs(v.fp32_ref[k])); }
         }
+    }
+    if (verify_layers && mode == "nmc") {
+        /* run the host executor on the LAST input used, then compare every DDR2 region */
+        const Vector& v = p.vectors[(warmup + iterations - 1) % nvec];
+        auto host = make_host_executor(); std::string e2; host->prepare(p, &e2);
+        std::vector<int32_t> ho; RunMetrics hm; host->run(p, inputs_for(v), ho, hm);
+        std::fprintf(stderr, "verify-layers: comparing DDR2 against host arena for the last input\n");
+        int bad = ex->verify_layers(p, *host->arena());
+        std::fprintf(stderr, "verify-layers: %d region(s) differ\n", bad);
+    }
+    if (verify_layers && mode == "nmc") {
+        const Vector& v = p.vectors[(warmup + iterations - 1) % nvec];
+        auto host = make_host_executor(); std::string e2; host->prepare(p, &e2);
+        std::vector<int32_t> ho; RunMetrics hm; host->run(p, inputs_for(v), ho, hm);
+        std::fprintf(stderr, "verify-layers: comparing DDR2 against host arena for the last input\n");
+        int bad = ex->verify_layers(p, *host->arena());
+        std::fprintf(stderr, "verify-layers: %d region(s) differ\n", bad);
     }
     double mean = std::accumulate(lat.begin(), lat.end(), 0.0) / lat.size();
     double var = 0; for (double x : lat) var += (x - mean) * (x - mean); double sd = lat.size() > 1 ? std::sqrt(var / (lat.size() - 1)) : 0;

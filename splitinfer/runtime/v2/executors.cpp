@@ -18,6 +18,7 @@ static int pad16(int n) { return (n + 15) / 16 * 16; }
 class HostExecutor : public Executor {
     std::vector<uint8_t> mem;      /* DDR2-shaped host arena: weights + activations at their DDR2 addresses */
 public:
+    const std::vector<uint8_t>* arena() const override { return &mem; }
     const char* mode() const override { return "host"; }
     bool prepare(const Program& p, std::string* err) override {
         mem.assign(p.layout_end + 64, 0);
@@ -57,8 +58,16 @@ public:
 struct Link {
     edgecoh_transport* t; RunMetrics* m = nullptr;
     static constexpr int TO = 30000;
-    bool ack() { edgecoh_header_t h; if (edgecoh_recv_header(t, &h, TO) < 0) return false;
-                 if (m) m->link_bytes_in += sizeof(h); return h.msg_type == EDGECOH_MSG_ACK || h.msg_type == EDGECOH_MSG_NMC_DONE; }
+    const char* ctx = "";               /* what we are doing, for diagnostics */
+    bool fail(const char* what, int rc, int got = -1) {
+        std::fprintf(stderr, "Link: %s failed during %s (rc=%d%s%02X)\n", what, ctx, rc,
+                     got >= 0 ? ", got msg_type 0x" : "", got >= 0 ? got : 0);
+        return false;
+    }
+    bool ack() { edgecoh_header_t h; int rc = edgecoh_recv_header(t, &h, TO); if (rc < 0) return fail("recv ACK (timeout)", rc);
+                 if (m) m->link_bytes_in += sizeof(h);
+                 if (h.msg_type == EDGECOH_MSG_ACK || h.msg_type == EDGECOH_MSG_NMC_DONE) return true;
+                 return fail("ACK header", rc, h.msg_type); }
     bool write(uint32_t addr, const void* src, size_t len) {
         const uint8_t* p = (const uint8_t*)src;
         while (len) {
@@ -80,9 +89,12 @@ struct Link {
         uint8_t buf[32]; int n = edgecoh_serialize(&msg, buf, sizeof buf);
         if (edgecoh_transport_send(t, buf, n) != n) return false;
         if (m) { m->link_bytes_out += n; m->link_msgs++; }
-        edgecoh_header_t h; if (edgecoh_recv_header(t, &h, TO) < 0 || h.msg_type != EDGECOH_MSG_DATA_RESPONSE) return false;
+        edgecoh_header_t h; int rc = edgecoh_recv_header(t, &h, TO);
+        if (rc < 0) return fail("recv DATA_RESPONSE header (timeout)", rc);
+        if (h.msg_type != EDGECOH_MSG_DATA_RESPONSE) return fail("DATA_RESPONSE header", rc, h.msg_type);
         size_t got = 0; uint8_t* d = (uint8_t*)dst;
-        while (got < len) { int r = edgecoh_transport_recv(t, d + got, (int)std::min<size_t>(4096, len - got), TO); if (r <= 0) return false; got += r; }
+        while (got < len) { int r = edgecoh_transport_recv(t, d + got, (int)std::min<size_t>(4096, len - got), TO);
+            if (r <= 0) { std::fprintf(stderr, "Link: DATA_RESPONSE payload short: %zu/%zu bytes during %s\n", got, len, ctx); return false; } got += r; }
         if (m) m->link_bytes_in += sizeof(h) + len;
         return true;
     }
@@ -113,10 +125,31 @@ struct Link {
 class NmcExecutor : public Executor {
     Link link; std::vector<int32_t> bias_last;
 public:
+    int max_layers = -1; bool verbose = false;
     explicit NmcExecutor(edgecoh_transport* t) : link{t} {}
+    void set_debug(int ml, bool v) override { max_layers = ml; verbose = v; }
+    int verify_layers(const Program& p, const std::vector<uint8_t>& ref) override {
+        int bad = 0; std::vector<uint8_t> buf;
+        auto check = [&](const std::string& what, uint32_t addr, size_t len) {
+            buf.assign(len, 0); link.ctx = "verify readback";
+            if (!link.read(addr, buf.data(), len)) { std::fprintf(stderr, "  [verify] %-28s read FAILED\n", what.c_str()); bad++; return; }
+            size_t first = len, nbad = 0;
+            for (size_t i = 0; i < len; i++) if (buf[i] != ref[addr + i]) { nbad++; if (first == len) first = i; }
+            if (nbad) { bad++; std::fprintf(stderr, "  [verify] %-28s MISMATCH %zu/%zu bytes, first @%zu: got %02x want %02x\n", what.c_str(), nbad, len, first, buf[first], ref[addr + first]); }
+            else std::fprintf(stderr, "  [verify] %-28s ok (%zu B)\n", what.c_str(), len);
+        };
+        /* inputs and a weight/table sample first (DDR2 integrity), then every layer output */
+        for (auto& is : p.inputs) check("input " + is.name, is.ddr2_addr, is.count * (is.kind == "index" ? 4 : 1));
+        int shown = 0; for (auto& s : p.segments) { if (shown++ < 3) check("segment " + s.layer + "/" + s.kind, s.addr, std::min<size_t>(s.length, 4096)); }
+        for (auto& L : p.layers) {
+            if (L.kind == "gather") check("gather " + L.name, L.out_addr, L.dim_bytes);
+            else if (L.kind == "fc") { check("fc acc " + L.name, L.acc_addr, (size_t)L.M_pad * 4); if (!L.final_) check("fc out " + L.name, L.out_addr, L.M_pad); }
+        }
+        return bad;
+    }
     const char* mode() const override { return "nmc"; }
     bool prepare(const Program& p, std::string* err) override {
-        RunMetrics tmp; link.m = &tmp;
+        RunMetrics tmp; link.m = &tmp; link.ctx = "image load";
         if (!link.load_image(p)) { if (err) *err = "image load failed"; return false; }
         const LayerRec* last = nullptr; for (auto& L : p.layers) if (L.name == p.output_layer) last = &L;
         auto* bs = p.segment(last->name, "bias"); bias_last.resize(last->M_pad);
@@ -129,10 +162,14 @@ public:
         auto t0 = Clock::now();
         for (auto& is : p.inputs) { auto it = in.find(is.name); if (it == in.end()) return false;
             std::vector<uint8_t> padded(it->second); padded.resize(pad16((int)padded.size()), 0);
+            link.ctx = "input write";
             if (!link.write(is.ddr2_addr, padded.data(), padded.size())) return false; }
         m.input_ms = ms_since(t0);
+        int layer_idx = 0;
         for (auto& L : p.layers) {
+            if (max_layers >= 0 && layer_idx++ >= max_layers) break;
             auto tl = Clock::now();
+            std::string ctxs = L.kind + " '" + L.name + "'"; link.ctx = ctxs.c_str();
             if (L.stream) { auto ts = Clock::now(); if (!link.stream_layer(p, L)) return false; m.weight_stream_ms += ms_since(ts); }
             if (L.kind == "gather") {
                 if (!link.nmc(0x01, L.table_addr, L.rows, L.dim_bytes, L.idx_addr, L.n_idx, L.out_addr)) return false;
@@ -140,15 +177,18 @@ public:
                 if (!link.nmc(0x02, L.w_addr, L.M_pad, L.K_pad, L.in_addr, 0, L.acc_addr)) return false;
                 if (!L.final_) {
                     uint32_t tb = 4u | ((uint32_t)((L.relu ? 0x80 : 0) | (L.shift & 31)) << 8);
+                    link.ctx = "epilogue";
                     if (!link.nmc(0x03, tb, L.M_pad / 4, L.b_addr, L.acc_addr, (uint32_t)L.mult, L.out_addr)) return false;
                 }
             }
+            if (verbose) std::fprintf(stderr, "  [nmc] %-8s %-14s %.1f ms\n", L.kind.c_str(), L.name.c_str(), ms_since(tl));
             m.layers.push_back({L.name, L.kind, ms_since(tl)});
         }
         auto tf = Clock::now();
         const LayerRec* last = nullptr; for (auto& L : p.layers) if (L.name == p.output_layer) last = &L;
         out.resize(last->N);
         std::vector<int32_t> acc(last->N);
+        link.ctx = "final DATA_READ";
         if (!link.read(last->acc_addr, acc.data(), acc.size() * 4)) return false;
         for (int i = 0; i < last->N; i++) out[i] = acc[i] + bias_last[i];
         m.output_ms = ms_since(tf);

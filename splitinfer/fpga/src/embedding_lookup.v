@@ -20,9 +20,10 @@ module embedding_lookup (
 
     reg [2:0] state;
     reg [31:0] idx_counter, current_index, burst_counter, bursts_per_embed;
+    reg [127:0] row_buf;   // latched in the valid cycle: app_rd_data is not held afterwards
 
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin state <= S_IDLE; done <= 0; mem_rd_en <= 0; mem_wr_en <= 0; end
+        if (!rst_n) begin state <= S_IDLE; done <= 0; mem_rd_en <= 0; mem_wr_en <= 0; row_buf <= 0; end
         else begin
             mem_rd_en <= 0; mem_wr_en <= 0; done <= 0;
             case (state)
@@ -48,11 +49,11 @@ module embedding_lookup (
                     mem_rd_addr <= table_base_addr[26:0] + current_index * embed_dim + (burst_counter << 4);
                     state <= S_WAIT_EMBED;
                 end
-                S_WAIT_EMBED: if (mem_rd_valid) state <= S_WRITE_OUT;
+                S_WAIT_EMBED: if (mem_rd_valid) begin row_buf <= mem_rd_data; state <= S_WRITE_OUT; end
                 S_WRITE_OUT: begin
                     mem_wr_en <= 1;
                     mem_wr_addr <= output_addr[26:0] + idx_counter * embed_dim + (burst_counter << 4);
-                    mem_wr_data <= mem_rd_data;
+                    mem_wr_data <= row_buf;
                     burst_counter <= burst_counter + 1; state <= S_READ_EMBED;
                 end
                 S_DONE: begin done <= 1; state <= S_IDLE; end
