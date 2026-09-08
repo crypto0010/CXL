@@ -68,7 +68,12 @@ module edgecoh_controller (
     // DISPATCH state that hasn't made progress in this window is considered
     // hung and forces a return to S_IDLE.  The counter is 24 bits so
     // 2^24 = 16_777_216 covers up to ~168 ms of stall — comfortable margin.
-    localparam [23:0] WATCHDOG_LIMIT = 24'd10_000_000;
+    localparam [29:0] WATCHDOG_LIMIT     = 30'd10_000_000;    // 100 ms: host-facing waits
+    // An NMC engine legitimately runs for as long as its layer needs: the
+    // DLRM's 1792x1024 FC took ~40 ms on silicon and a 5000x5000 layer needs
+    // ~0.5 s.  While waiting on an engine, allow 8 s (hard hang detection
+    // only) instead of 100 ms.
+    localparam [29:0] WATCHDOG_LIMIT_NMC = 30'd800_000_000;
 
     reg [3:0]  state;
     reg [7:0]  header_buf [0:7];
@@ -96,7 +101,8 @@ module edgecoh_controller (
 
     // Watchdog counter — increments in any "waiting" state, resets on
     // progress or on transition to S_IDLE.  Protects against stuck FSM.
-    reg [23:0] stall_cnt;
+    reg [29:0] stall_cnt;
+    wire [29:0] watchdog_limit = (state == S_WAIT_NMC) ? WATCHDOG_LIMIT_NMC : WATCHDOG_LIMIT;
 
     // Progress signals — any of these being high this cycle means the
     // FSM is making forward progress and the watchdog should be reset.
@@ -132,7 +138,7 @@ module edgecoh_controller (
             // are in the safe states (S_IDLE/S_DISPATCH).  Otherwise count.
             if (progress || !in_wait_state) begin
                 stall_cnt <= 0;
-            end else if (stall_cnt < WATCHDOG_LIMIT) begin
+            end else if (stall_cnt < watchdog_limit) begin
                 stall_cnt <= stall_cnt + 1'b1;
             end
 
@@ -141,7 +147,7 @@ module edgecoh_controller (
             // guarantees multi-inference robustness — any partial-message
             // corruption recovers automatically within ~100 ms instead of
             // requiring a bitstream re-flash.
-            if (in_wait_state && stall_cnt >= WATCHDOG_LIMIT) begin
+            if (in_wait_state && stall_cnt >= watchdog_limit) begin
                 state <= S_IDLE;
                 rx_ready <= 1;
                 tx_valid <= 0;
@@ -343,8 +349,14 @@ module edgecoh_controller (
                 end
 
                 // ── Send DATA_RESPONSE header (8 bytes) ──────────────────
+                // tx_ready is REGISTERED in usb_interface: it stays high for one
+                // cycle after a byte is accepted.  Sending whenever tx_ready is
+                // high therefore loses every second byte (the v1 ACK bug, fixed
+                // there with S_ACK_WAIT but never here — the board returned 4 of
+                // 8 DATA_RESPONSE header bytes).  Guard on !tx_valid: never
+                // present a new byte on the cycle right after presenting one.
                 S_SEND_RESP_HDR: begin
-                    if (tx_ready) begin
+                    if (tx_ready && !tx_valid) begin
                         tx_valid <= 1;
                         case (resp_hdr_idx)
                             0: tx_data <= MSG_DATA_RESPONSE;
@@ -399,7 +411,7 @@ module edgecoh_controller (
                         dma_rd_latch <= dma_rd_data;
                         dma_rd_have  <= 1;
                     end
-                    if ((dma_rd_have || dma_rd_valid) && tx_ready) begin
+                    if ((dma_rd_have || dma_rd_valid) && tx_ready && !tx_valid) begin
                         tx_valid    <= 1;
                         tx_data     <= dma_rd_have ? dma_rd_latch : dma_rd_data;
                         dma_rd_have <= 0;
