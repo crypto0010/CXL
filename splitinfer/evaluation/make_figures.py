@@ -35,12 +35,26 @@ def fig_crossover():
     if host and host["cells"].get("SI_host", {}).get("status") == "ok":
         h = host["cells"]["SI_host"]["result"]["stats"]["median_ms"]
         ax.axhline(h, color=C["host"], ls="--", lw=1, label=f"Host-resident ({h:.1f} ms)")
+    # measured points from the board at the calibrated UART bandwidth
+    cal = load(os.path.join(ROOT, "evaluation", "calibration", "uart_measured.json")) or {}
+    bw_m = (cal.get("fit") or {}).get("link_bw_bytes_per_s")
+    usb = load(os.path.join(R, "e2", "e2_v2_dlrm_usb.json")) or {}
+    nmc_m = ((usb.get("cells", {}).get("SI_nmc") or {}).get("result") or {}).get("stats", {}).get("median_ms")
+    import glob, re
+    pool_m = None
+    logs = sorted(glob.glob(os.path.join(R, "board_session_*.log")))
+    if logs:
+        txt = open(logs[-1], errors="replace").read(); a = txt.find("===== pool_exact ====="); b = txt.find("===== calibrate =====")
+        mm = re.search(r"median ([\d.]+)", txt[a:b]) if a >= 0 and b > a else None
+        if mm and "exit 0" in txt[a:b]: pool_m = float(mm.group(1))
+    if bw_m and nmc_m: ax.plot([bw_m], [nmc_m], marker="*", ms=11, color=C["nmc"], mec="black", ls="none", label="NMC, measured on board")
+    if bw_m and pool_m: ax.plot([bw_m], [pool_m], marker="*", ms=11, color=C["pool64"], mec="black", ls="none", label="Pool (64-pg), measured on board")
     ax.set_xscale("log"); ax.set_yscale("log")
     ax.set_xlabel("Link bandwidth (bytes/s)"); ax.set_ylabel("Latency per inference (ms)")
     ax.set_xticks(bw); ax.set_xticklabels([p["link"].replace("-", "\n") for p in pts], fontsize=5.5)
     ax.minorticks_off()
-    ax.legend(fontsize=6, loc="upper right")
-    ax.set_title("DLRM, emulated link (E6)", fontsize=8)
+    ax.legend(fontsize=5.5, loc="upper right")
+    ax.set_title("DLRM: emulated-link sweep (E6) with board measurements", fontsize=8)
     fig.savefig(os.path.join(P, "fig_crossover.pdf")); plt.close(fig)
 
 

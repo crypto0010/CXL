@@ -69,6 +69,34 @@ for tag, fn in (("Emul", "e2_v2_dlrm_emul_uart.json"), ("Usb", "e2_v2_dlrm_usb.j
         macro(f"{pre}{tag}{short}NormErr", corr.get("max_norm_err_fp32", None), "{:.3f}")
         macro(f"{pre}{tag}{short}Status", c.get("status", "missing"), "{}")
 
+# ── Board session (measured; nmc_exact n=3, pool_exact n=1) ───────────────
+import glob
+logs = sorted(glob.glob(os.path.join(R, "board_session_*.log")))
+def _block(text, name, nxt):
+    a = text.find(f"===== {name} ====="); b = text.find(f"===== {nxt} =====", a + 1)
+    return text[a:b] if a >= 0 and b > a else ""
+for lg in logs[-1:]:
+    txt = open(lg, errors="replace").read()
+    for cell, nxt, tag in (("nmc_exact", "pool_exact", "SInmcexact"), ("pool_exact", "calibrate", "SIpoolcold")):
+        blk = _block(txt, cell, nxt)
+        m = re.search(r"median ([\d.]+)\s+mean ([\d.]+)\s+sd ([\d.]+).*?p99 ([\d.]+)", blk)
+        c = re.search(r"correctness: (\d+)/(\d+) bit-exact.*?normalised ([\d.]+)", blk)
+        lk = re.search(r"([\d.]+) msgs(?:, ([\d.]+) faults, ([\d.]+) pages, ([\d.]+) fetch RTTs)?", blk)
+        ok = "exit 0" in blk
+        macro(f"MUsb{tag}Median", num(float(m.group(1))) if (m and ok) else None, "{}")
+        macro(f"MUsb{tag}Pninenine", num(float(m.group(4))) if (m and ok) else None, "{}")
+        macro(f"MUsb{tag}BitExact", f"{c.group(1)}/{c.group(2)}" if c else None, "{}")
+        macro(f"MUsb{tag}NormErr", float(c.group(3)) if c else None, "{:.3f}")
+        macro(f"MUsb{tag}Msgs", float(lk.group(1)) if lk else None, "{:.0f}")
+        macro(f"MUsb{tag}Faults", float(lk.group(2)) if (lk and lk.group(2)) else None, "{:.0f}")
+        macro(f"MUsb{tag}Pages", float(lk.group(3)) if (lk and lk.group(3)) else None, "{:.0f}")
+    macro("MUsbSessionLog", os.path.basename(lg).replace("_", "\\_"), "{}")
+cal = load(os.path.join(ROOT, "evaluation", "calibration", "uart_measured.json")) or {}
+macro("MLinkRtt", (cal.get("barrier_rtt_ms") or {}).get("median"), "{:.1f}")
+macro("MLinkBw", (cal.get("fit") or {}).get("link_bw_bytes_per_s"), "{:,.0f}")
+cal16 = load(os.path.join(ROOT, "evaluation", "calibration", "uart_measured_v1bit.json")) or {}
+macro("MLinkRttDefaultTimer", (cal16.get("barrier_rtt_ms") or {}).get("median"), "{:.1f}")
+
 # ── E6 crossover ───────────────────────────────────────────────────────
 e6 = load(os.path.join(R, "e6", "dlrm_crossover_emul.json"))
 for pt in (e6 or {}).get("points", []):

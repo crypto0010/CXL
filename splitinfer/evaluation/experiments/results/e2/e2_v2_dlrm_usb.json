@@ -1,0 +1,168 @@
+{
+ "experiment": "E2_v2",
+ "model": "evaluation/models/out/dlrm_small.onnx",
+ "program": "evaluation/lowered/dlrm_small",
+ "runs": 30,
+ "warmup": 5,
+ "transport": "usb",
+ "cells": {
+  "SI_nmc": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode nmc --transport usb --iterations 30 --warmup 2 --json",
+   "duration_s": 351.2573823540006,
+   "process_runs": 1,
+   "power": {
+    "samples": 3127,
+    "duration_s": 351.2563251959946,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 5271.740645986569,
+      "median_mw": 5271,
+      "max_mw": 5870,
+      "min_mw": 5191,
+      "samples": 3127
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 660.5487687879757,
+      "median_mw": 638,
+      "max_mw": 1036,
+      "min_mw": 598,
+      "samples": 3127
+     },
+     "VDD_SOC": {
+      "mean_mw": 1477.1151263191557,
+      "median_mw": 1477,
+      "max_mw": 1517,
+      "min_mw": 1477,
+      "samples": 3127
+     }
+    },
+    "energy_J": 1647.942200000034
+   },
+   "result": {
+    "mode": "nmc",
+    "transport": "usb",
+    "iterations": 30,
+    "warmup": 2,
+    "prepare_ms": 333573.717,
+    "stats": {
+     "count": 30,
+     "mean_ms": 550.6284,
+     "std_ms": 19.6631,
+     "min_ms": 520.1566,
+     "p5_ms": 529.8002,
+     "median_ms": 545.9272,
+     "p95_ms": 588.8222,
+     "p99_ms": 610.1968,
+     "max_ms": 615.9775,
+     "cv_pct": 3.57
+    },
+    "link": {
+     "bytes_out": 1907.0,
+     "bytes_in": 476.0,
+     "msgs": 59.0,
+     "faults": 0.0,
+     "pages": 0.0,
+     "fetch_rtts": 0.0
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 3770432,
+    "correctness": {
+     "bit_exact": 30,
+     "total": 30,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0023,
+     "fc": 82.3747,
+     "gather": 221.2931
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 2.902770117114551,
+   "power_samples": 3127,
+   "emulated": false,
+   "measured": true
+  },
+  "SI_pool_warm": {
+   "cmd": "/home/csdf/cxl/splitinfer/build/runtime/v2/splitinfer_v2 evaluation/lowered/dlrm_small --mode pool --transport usb --iterations 30 --warmup 2 --json --prefetch-pages 64 --pool-warm",
+   "duration_s": 658.1319225040061,
+   "process_runs": 1,
+   "power": {
+    "samples": 5859,
+    "duration_s": 658.1307753110013,
+    "rails": {
+     "VDD_IN": {
+      "mean_mw": 5272.678955453149,
+      "median_mw": 5271,
+      "max_mw": 5750,
+      "min_mw": 5191,
+      "samples": 5859
+     },
+     "VDD_CPU_GPU_CV": {
+      "mean_mw": 663.1860385731353,
+      "median_mw": 638,
+      "max_mw": 956,
+      "min_mw": 599,
+      "samples": 5859
+     },
+     "VDD_SOC": {
+      "mean_mw": 1477.1092336576207,
+      "median_mw": 1477,
+      "max_mw": 1517,
+      "min_mw": 1477,
+      "samples": 5859
+     }
+    },
+    "energy_J": 3088.733499999935
+   },
+   "result": {
+    "mode": "pool",
+    "transport": "usb",
+    "iterations": 30,
+    "warmup": 2,
+    "prepare_ms": 333567.2,
+    "stats": {
+     "count": 30,
+     "mean_ms": 252.3966,
+     "std_ms": 842.8608,
+     "min_ms": 2.0847,
+     "p5_ms": 2.1833,
+     "median_ms": 2.9751,
+     "p95_ms": 1430.4878,
+     "p99_ms": 3451.687,
+     "max_ms": 4276.7061,
+     "cv_pct": 333.94
+    },
+    "link": {
+     "bytes_out": 0.0,
+     "bytes_in": 2867.2,
+     "msgs": 0.2,
+     "faults": 0.2,
+     "pages": 0.7,
+     "fetch_rtts": 0.2
+    },
+    "streaming": false,
+    "weight_stream_ms": 0.0,
+    "total_weight_bytes": 3770432,
+    "correctness": {
+     "bit_exact": 30,
+     "total": 30,
+     "max_abs_err_fp32": 0.016005,
+     "max_norm_err_fp32": 0.029317
+    },
+    "per_kind_ms": {
+     "concat": 0.0003,
+     "fc": 2.7981,
+     "gather": 249.5851
+    }
+   },
+   "status": "ok",
+   "energy_per_inf_J": 1.3308062412479262,
+   "power_samples": 5859,
+   "emulated": false,
+   "measured": true
+  }
+ }
+}

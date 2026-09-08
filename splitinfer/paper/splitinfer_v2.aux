@@ -32,22 +32,18 @@
 \citation{dlrm}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Methodology}{4}{}\protected@file@percent }
 \newlabel{sec:method}{{V}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces E2 latencies (log scale; bar = median, whisker to p99).}}{4}{}\protected@file@percent }
-\newlabel{fig:e2}{{4}{4}}
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{4}{}\protected@file@percent }
 \newlabel{sec:results}{{VI}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}E2: every path on one workload}{4}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces E2: DLRM, batch 1, 30 iterations. Latency per inference; link traffic per inference; bit-exact agreement with expected INT32 output. Provenance: \textsuperscript  {M}{} measured, \textsuperscript  {E}{} emulated link at UART parameters (11{,}520\nobreakspace  {}B/s, 5\nobreakspace  {}ms RTT).}}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces E2: DLRM, batch 1, 30 iterations. Latency per inference; link traffic per inference; bit-exact agreement with expected INT32 output. Provenance: \textsuperscript  {M}{} measured on the board, \textsuperscript  {E}{} virtual FPGA with the emulated link at UART parameters (11{,}520\nobreakspace  {}B/s, 5\nobreakspace  {}ms RTT; the board's calibrated round trip is 8.0\nobreakspace  {}ms). Power for the $n{=}1$ cold-pool run was not sampled.}}{5}{}\protected@file@percent }
 \newlabel{tab:e2}{{II}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces E6 (\textsuperscript  {E}): latency per inference versus link bandwidth for NMC and three pool configurations. The crossover between NMC and prefetching pool lies between USB\nobreakspace  {}2.0 and USB\nobreakspace  {}3.}}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces E2 latencies (log scale; bar = median, whisker to p99).}}{5}{}\protected@file@percent }
+\newlabel{fig:e2}{{4}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}E6: the crossover}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces E6: latency per inference versus link bandwidth for NMC and three pool configurations on the virtual FPGA (\textsuperscript  {E}), with the board measurements (\textsuperscript  {M}, stars) at the calibrated UART point. The crossover between NMC and prefetching pool lies between USB\nobreakspace  {}2.0 and USB\nobreakspace  {}3.}}{5}{}\protected@file@percent }
 \newlabel{fig:crossover}{{5}{5}}
 \@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces E6 (\textsuperscript  {E}): median latency per inference (ms) across link classes.}}{5}{}\protected@file@percent }
 \newlabel{tab:e6}{{III}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}E6: the crossover}{5}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces E7 (\textsuperscript  {E}): 8-layer MLP, 167.6\nobreakspace  {}MiB INT8 $>$ 128\nobreakspace  {}MB DDR2, streamed through 2$\times $23.9\nobreakspace  {}MiB slots.}}{5}{}\protected@file@percent }
-\newlabel{tab:e7}{{IV}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}E7: capacity, executed}{5}{}\protected@file@percent }
-\newlabel{sec:capacity}{{\mbox  {VI-C}}{5}}
 \citation{ivy}
 \citation{munin}
 \citation{treadmarks}
@@ -66,6 +62,16 @@
 \citation{neurosurgeon}
 \citation{dads}
 \citation{deepthings}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces E7 (\textsuperscript  {E}): 8-layer MLP, 167.6\nobreakspace  {}MiB INT8 $>$ 128\nobreakspace  {}MB DDR2, streamed through 2$\times $23.9\nobreakspace  {}MiB slots.}}{6}{}\protected@file@percent }
+\newlabel{tab:e7}{{IV}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}E7: capacity, executed}{6}{}\protected@file@percent }
+\newlabel{sec:capacity}{{\mbox  {VI-C}}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cost model against execution}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Accuracy}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{6}{}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Related Work}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion}{6}{}\protected@file@percent }
 \bibcite{ivy}{1}
 \bibcite{munin}{2}
 \bibcite{treadmarks}{3}
@@ -77,13 +83,6 @@
 \bibcite{powerinfer}{9}
 \bibcite{hbm_pim}{10}
 \bibcite{upmem}{11}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cost model against execution}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Accuracy}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{6}{}\protected@file@percent }
-\newlabel{sec:discussion}{{VII}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Related Work}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
 \bibcite{nmc_survey}{12}
 \bibcite{vitis_ai}{13}
 \bibcite{finn}{14}
@@ -92,6 +91,7 @@
 \bibcite{dads}{17}
 \bibcite{deepthings}{18}
 \bibcite{dlrm}{19}
+\@writefile{toc}{\contentsline {section}{References}{7}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{Biographies}{7}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{Hemraj Lamkuche}{7}{}\protected@file@percent }
 \gdef \@abspage@last{7}
