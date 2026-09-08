@@ -57,8 +57,6 @@ hub/
 #     splitinfer/evaluation/models/generated/dlrm_scaled.onnx --rows 200000
 splitinfer/evaluation/models/generated/dlrm_scaled.onnx
 
-# Claude settings
-.claude/
 
 # generated models and lowered artifacts
 splitinfer/evaluation/models/out/

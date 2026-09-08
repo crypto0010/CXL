@@ -373,9 +373,6 @@ Per-tensor symmetric INT8 with the fused fixed-point epilogue reproduces FP32 ou
 \section{Conclusion}
 For a model that does not fit an edge SoC, the choice between moving memory to compute and compute to memory is decided by the link. We built both over one commodity substrate---a page-granular load/store window with explicit ownership, and near-memory INT8 engines---made them execute the same program to the same integers, and measured the crossover by running it: below about $10^8$~bytes/s the engines next to the memory win, above it the link is fast enough to haul weights to the GPU, and a capacity-unlocking streaming design pays $W/B$ per inference in either case. The artifact reproduces every number here from its data files, and the board measurements agree with the virtual FPGA to within 1\%.
 
-\section*{Acknowledgments}
-The author used Claude Code (Anthropic) as a software-engineering assistant during the v2 rebuild. All design decisions, experiments and interpretations are the author's.
-
 \begin{thebibliography}{20}
 \bibitem{ivy} K.~Li and P.~Hudak, ``Memory coherence in shared virtual memory systems,'' \emph{ACM Trans. Comput. Syst.}, vol.~7, no.~4, pp.~321--359, 1989.
 \bibitem{munin} J.~B. Carter, J.~K. Bennett, and W.~Zwaenepoel, ``Implementation and performance of Munin,'' in \emph{Proc. SOSP}, 1991, pp.~152--164.
