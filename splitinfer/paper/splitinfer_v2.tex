@@ -65,18 +65,28 @@ Fig.~\ref{fig:capacity} shows Jetson-only inference on dense MLPs of increasing 
 \label{fig:capacity}\end{figure}
 
 \subsection{Two ways to use attached memory}
-Given a memory node on a link of bandwidth $B$ and per-message latency $r$, a layer with $W$ weight bytes and $F$ floating-point operations can execute in one of three placements:
-\begin{itemize}
-\item \textbf{host}: weights resident in SoC memory, compute on the GPU; cost $F/G_{\text{gpu}}$; consumes $W$ of host memory.
-\item \textbf{pool}: weights resident on the node; the host faults them in through \cxlwin{} and computes locally; cost $W/B + n_{\text{msg}} r + F/G_{\text{gpu}}$ with $n_{\text{msg}}$ the number of fault batches; consumes no persistent host memory.
-\item \textbf{NMC}: weights resident on (or streamed to) the node; the node's engine computes; cost $S(W) + r + F/G_{\text{nmc}}$ where $S$ is the streaming cost, zero if the weights are already resident.
-\end{itemize}
-Pool moves memory to compute; NMC moves compute to memory. For resident weights the two are equal when
+Consider a memory node on a link of sustained bandwidth $B$ (bytes/s) and per-message round-trip latency $r$. Moving $n$ bytes in $m$ messages costs
 \begin{equation}
-B^{*} \;=\; \frac{W}{\;F/G_{\text{nmc}} + r - F/G_{\text{gpu}} - n_{\text{msg}} r\;},
+T_{\text{link}}(n, m) \;=\; \frac{n}{B} + m\,r .
+\label{eq:link}
+\end{equation}
+Layer $i$ has $W_i$ weight bytes, $A_i$ output-activation bytes and $F_i$ multiply-accumulate operations ($\times 2$ for FLOPs). Let $G_{\text{gpu}}$ and $G_{\text{nmc}}$ be the effective rates of the host accelerator and of the node's engine, $B_{\text{ddr}}$ the node's memory bandwidth, $\pi$ the page size and $c$ the transfer chunk size. Each layer can execute in one of three placements:
+\begin{align}
+T^{\text{host}}_i &= \frac{F_i}{G_{\text{gpu}}}, \label{eq:thost}\\
+T^{\text{pool}}_i &= T_{\text{link}}\!\Big(W_i,\; \Big\lceil \tfrac{\lceil W_i/\pi \rceil}{P} \Big\rceil \Big) + \frac{F_i}{G_{\text{gpu}}}, \label{eq:tpool}\\
+T^{\text{nmc}}_i &= S(W_i) + T_{\text{link}}(b_d, 1) + \max\!\Big(\tfrac{F_i}{G_{\text{nmc}}},\, \tfrac{W_i^{(8)}}{B_{\text{ddr}}}\Big), \label{eq:tnmc}
+\end{align}
+where $P$ is the prefetch depth in pages, $b_d$ the dispatch message size, $W_i^{(8)}$ the INT8 weight bytes the engine actually streams from its memory, and
+\begin{equation}
+S(W) = \begin{cases} 0 & \text{resident on the node,}\\ T_{\text{link}}(W, \lceil W/c \rceil) & \text{streamed per inference,} \end{cases}
+\label{eq:stream}
+\end{equation}
+The host placement consumes $W_i$ of SoC memory; the other two consume none persistently. Pool moves memory to compute; NMC moves compute to memory. Equating (\ref{eq:tpool}) and (\ref{eq:tnmc}) with $S = 0$ and $n_{\text{msg}} = \lceil \lceil W_i/\pi\rceil / P\rceil$ gives the per-layer crossover bandwidth
+\begin{equation}
+B^{*}_i = \frac{W_i}{\max\!\big(\tfrac{F_i}{G_{\text{nmc}}}, \tfrac{W_i^{(8)}}{B_{\text{ddr}}}\big) + r - \tfrac{F_i}{G_{\text{gpu}}} - n_{\text{msg}} r},
 \label{eq:crossover}
 \end{equation}
-a per-layer crossover bandwidth. Above $B^{*}$ the link is fast enough that hauling weights to the faster GPU wins; below it, the slow engine next to the memory wins because it avoids the haul. \S\ref{sec:placement} uses (\ref{eq:crossover}) inside an exact placer; \S\ref{sec:results} checks it against executed latencies.
+defined when the denominator is positive. Above $B^{*}_i$ the link is fast enough that hauling weights to the faster accelerator wins; below it, the slow engine next to the memory wins because it avoids the haul; when the denominator is non-positive the pool never wins at any bandwidth, and when pool's fixed cost $n_{\text{msg}} r$ alone exceeds NMC's, NMC always wins. The ratio $F_i/W_i$---arithmetic intensity per weight byte---is what moves a layer along this axis. \S\ref{sec:placement} uses (\ref{eq:thost})--(\ref{eq:crossover}) inside an exact placer; \S\ref{sec:results} checks them against executed latencies.
 
 \subsection{CXL.mem as an analogy, software DSM as an ancestor}
 CXL.mem gives a host cache-line-granular, hardware-coherent loads and stores to device memory; a Type~2 device additionally holds a \emph{bias} per page---host bias, where the host's caches are authoritative, or device bias, where the device may operate on the memory without snooping the host. \cxlwin{} reproduces the second idea faithfully and the first only at page granularity, in software, without hardware coherence. The mechanism---protect the pages, service faults by fetching over the network, track ownership in a per-page state machine---is that of Ivy~\cite{ivy}, Munin~\cite{munin} and TreadMarks~\cite{treadmarks}. We claim no novelty in the mechanism. What is new is using it as the \emph{memory-to-compute} arm of a controlled comparison against near-memory compute on the same device, over the same link, with the same program.
@@ -170,12 +180,48 @@ Three engines operate on DDR2-resident INT8 tensors in the memory controller's c
 \emph{INT8 FC} computes $y = W x$ for a row-major $W$ of $M{\times}K$ INT8 weights into INT32 accumulators with an 8$\times$8 array---eight independent lanes, each an 8-wide dot product, so that one 16-byte activation read is reused across eight weight rows;
 \emph{epilogue} computes $\mathrm{sat}_8(\mathrm{relu}((y+b)\cdot m \gg s))$ with an INT32 bias $b$, a 16-bit multiplier $m$ and a shift $s$. The epilogue is the standard fixed-point requantisation, chosen precisely because a host can reproduce it bit for bit. Alignment rules (16-byte addresses, $K$ padded to 16, $M$ to 16) are imposed by the lowering, not the user.
 
+The FC engine's throughput is memory-latency-bound rather than multiplier-bound. Per chunk of 8 output rows and 16 inner-dimension elements it issues one activation read and eight weight reads, each waited to completion (one outstanding read), then two array steps of pipeline depth $\tau$:
+\begin{equation}
+\eta \;=\; \frac{128}{\,9\,(L + o) + 2(\tau + 1)\,}\quad\text{MAC/cycle},
+\label{eq:mac}
+\end{equation}
+where $L$ is the memory controller's read latency and $o$ the arbiter's issue-to-valid overhead, both in engine cycles. Cycle-accurate simulation gives $\eta = 0.68$ at $L \approx 13$ and fits $o \approx 7$; the board's measured $\eta = 0.56$ (\S\ref{sec:results}) then implies $L \approx 18$ cycles of DDR2 read latency. At 81.25~MHz this is $G_{\text{nmc}} = 2\eta f \approx 0.09$--$0.11$~GOPS: three to four decades below the GPU, by design---the engine's job is to avoid moving $W_i$, not to compute fast.
+
 \subsection{INT8 lowering and the program}
 The lowering takes an ONNX graph and a placement and produces a \emph{program}---an ordered list of layer records with DDR2 addresses, dimensions and requantisation parameters---a DDR2 \emph{image} of INT8 tables and weights and INT32 biases, and a set of \emph{test vectors} with expected integer outputs. Activation scales are calibrated per tensor on random inputs through onnxruntime; \textsc{MatMul}$\rightarrow$\textsc{Add}$\rightarrow$\textsc{Relu} chains fuse into one FC record; \textsc{Concat} is made free by pinning each producer's output inside the concatenation buffer. The same program executes in every mode, and every mode is checked against the same expected integers.
 
+Quantisation is symmetric per tensor. For a tensor $x$ with calibrated range $\max|x|$,
+\begin{equation}
+s_x = \frac{\max|x|}{127}, \qquad x_q = \operatorname{sat}_8\!\big(\operatorname{round}(x/s_x)\big),
+\label{eq:quant}
+\end{equation}
+and an FC layer with weights $W$ (scale $s_w$), input $x$ (scale $s_x$), bias $b$ and output scale $s_y$ accumulates in INT32 and requantises through a fixed-point multiplier:
+\begin{align}
+a &= \textstyle\sum_k W_q[\,\cdot,k\,]\,x_q[k], \qquad b_q = \operatorname{round}\!\big(b/(s_w s_x)\big), \label{eq:acc}\\
+R &= \frac{s_w s_x}{s_y}, \qquad \sigma = \Big\lfloor \log_2 \frac{2^{15}}{R} \Big\rfloor, \qquad \mu = \operatorname{round}(R\,2^{\sigma}), \label{eq:mult}\\
+y_q &= \operatorname{sat}_8\!\Big(\operatorname{relu}\big((a + b_q)\,\mu \gg \sigma\big)\Big). \label{eq:epilogue}
+\end{align}
+The shift $\sigma$ is chosen so that $2^{14} \le R\,2^{\sigma} < 2^{15}$, hence $\mu$ fits the engine's 16-bit multiplier and the multiplier's relative error is bounded by $|\mu 2^{-\sigma} - R|/R \le 2^{-15}$; $\gg$ is an arithmetic shift, so (\ref{eq:epilogue}) is the same integer function on the host, in the emulator and in the RTL. The final layer skips (\ref{eq:epilogue}) and returns $a + b_q$ in INT32, dequantised by $s_w s_x$.
+
 \subsection{Placement}
 \label{sec:placement}
-The placer is an exact dynamic program over (layer, placement, host-memory-used, device-memory-used), with memory tracked in adaptive buckets and an argmin table for backtracking. The cost of a layer in a placement is the sum in \S\ref{sec:background}; a change of compute location between consecutive layers adds an activation crossing. Two constraints bound it: host-resident weights must fit a host budget, and device-resident weights must fit device memory---either individually (streamed) or cumulatively (resident). The DP is verified against exhaustive enumeration on small instances. Its parameters are meant to be measured: the artifact ships a calibration script that fits $B$ and $r$ from the link, and the engine rate comes from cycle-accurate simulation of the MAC data path (0.684~MAC/cycle, \CDlrmFpgaGops~GOPS at 81.25~MHz).
+The placer is an exact dynamic program. Let $p_i \in \mathcal{P} = \{\text{host}, \text{pool}, \text{nmc}\}$ be layer $i$'s placement, $\ell(p)$ its compute location (GPU for host and pool, node for nmc), and $T_i(p)$ its cost from (\ref{eq:thost})--(\ref{eq:tnmc}). A change of compute location between consecutive layers pays an activation crossing
+\begin{equation}
+X_i(p', p) \;=\; \mathbb{1}\big[\ell(p) \ne \ell(p')\big]\; T_{\text{link}}\!\big(A_{i-1},\, \lceil A_{i-1}/c \rceil\big).
+\label{eq:crossing}
+\end{equation}
+Memory is tracked in buckets of $\beta_h$ (host) and $\beta_f$ (node) bytes; placement $p$ of layer $i$ consumes
+\begin{align}
+\delta_h &= \Big\lceil \tfrac{W_i}{\beta_h} \Big\rceil \mathbb{1}[p = \text{host}], \nonumber\\
+\delta_f &= \Big\lceil \tfrac{W_i}{\beta_f} \Big\rceil \mathbb{1}[p \ne \text{host}]\,\mathbb{1}[\text{resident}],
+\label{eq:usage}
+\end{align}
+so that streamed weights occupy no cumulative node memory (each layer must fit individually) while resident weights accumulate. With $C_i(p, h, f)$ the least cost of layers $1..i$ ending in placement $p$ with $h$ host and $f$ node buckets in use,
+\begin{equation}
+C_i(p, h, f) \;=\; \min_{p' \in \mathcal{P}} C_{i-1}(p', h - \delta_h, f - \delta_f) + T_i(p) + X_i(p', p),
+\label{eq:dp}
+\end{equation}
+subject to $h \le H$ and $f \le F$, the host budget and node capacity in buckets; the plan is $\arg\min_{p,h,f} C_N(p,h,f)$ recovered from an argmin table. Rounding is conservative (ceilings), so an accepted plan always fits. The recurrence costs $O(N\,|\mathcal{P}|^2 H F)$; bucket sizes are chosen per dimension so that $HF \le 2^{18}$, which keeps a 180-layer model under a second. The DP is verified against exhaustive enumeration on small instances. Its parameters are meant to be measured: the artifact ships a calibration script that fits $B$ and $r$ from the link, and the engine rate comes from cycle-accurate simulation of the MAC data path (0.684~MAC/cycle, \CDlrmFpgaGops~GOPS at 81.25~MHz).
 
 The placer operates on the ONNX graph, before fusion. Its per-layer decisions and crossover bandwidths are reported (\S\ref{sec:results}); the runtime in this paper executes whole programs in one mode at a time, and executing a mixed placement layer by layer is future work.
 
@@ -184,6 +230,12 @@ The placer operates on the ONNX graph, before fusion. Its per-layer decisions an
 \label{sec:impl}
 
 \textbf{FPGA.} The design runs in two clock domains bridged by handshake CDCs and gray-code FIFOs: a 100~MHz domain for the UART and the EdgeCoh controller, and the MIG's 81.25~MHz domain for a DDR2 arbiter and the engines. The arbiter owns the MIG user interface, converts byte addresses to the controller's 16-bit-word address space, holds commands until the controller accepts them, tags the single outstanding read with its owner, queues two writes per engine port, and bridges the controller's byte stream to 128-bit bursts with a byte-masked write assembler and a one-word read cache that preserves read-after-write ordering.
+
+\begin{figure}[t]\centering\includegraphics[width=0.8\columnwidth]{fig_board}
+\caption{The Nexys~4 DDR during the measured session, configured with the v2 bitstream and attached to the Jetson by the single micro-USB cable (bottom left) that carries both JTAG and the UART. The green \textsc{done} LED (centre) confirms configuration. Of the user LEDs (right edge), LED0 is lit---DDR2 calibration complete---and LED3 is lit---the design's heartbeat; LED1, which stretches every received UART byte into a 167~ms flash, and LED2, which pulses on a \textsc{sync\_barrier}, are dark between messages. This is the idle signature the session expects before the first dispatch.}
+\label{fig:board}\end{figure}
+
+\textbf{What the board shows.} Fig.~\ref{fig:board} is the only observable state the design exposes without a probe, and it was the first check of every session: a lit LED0 means the memory controller's calibration finished, without which every DDR2 access returns garbage; a dark LED1 while the host is quiet means no phantom bytes are arriving from a previous session (the transport drains the bridge on open for the same reason). Beyond the LEDs, the observable output of the board is the byte stream on the UART, and every claim about it in this paper is a comparison of that stream against an expected value: the round-trip test compares 64~KiB written and read back, and the runtime compares every layer's DDR2 contents and the final INT32 result with the host reference (\S\ref{sec:results}).
 
 \textbf{Host.} \cxlwin{} and EdgeCoh are C; the lowering and placer are Python; the runtime and kernels are C++. The runtime's three executors share one set of integer kernels: the host executor runs them on host-resident weights, the pool executor runs the same kernels on pointers into the \cxlwin{} window, and the NMC executor sends dispatches.
 
@@ -203,7 +255,13 @@ The placer operates on the ONNX graph, before fusion. Its per-layer decisions an
 
 \textbf{Baselines.} B1: onnxruntime FP32 on the CPU. B2: onnxruntime dynamic INT8 on the CPU. B3: TensorRT FP16 on the GPU. B4: TensorRT INT8 on the GPU (implicit quantisation; a timing baseline, not an accuracy one). B3 and B4 are new; the earlier version had only CPU baselines because the installed onnxruntime has no CUDA provider.
 
-\textbf{Measurement.} Every cell is 30 measured iterations after 5 warm-ups, wrapped in a tegrastats window stretched to at least 3~s so that power rests on dozens of samples; a cell that fails or times out is recorded as such. We report medians with p99, coefficient of variation, and maximum---never a median alone. Energy per inference is mean power times mean latency. Correctness is a bit-exact comparison of INT32 outputs against the lowering's expected values, plus the normalised error of the dequantised output against FP32 onnxruntime.
+\textbf{Measurement.} Every cell is 30 measured iterations after 5 warm-ups, wrapped in a tegrastats window stretched to at least 3~s so that power rests on dozens of samples; a cell that fails or times out is recorded as such. We report medians with p99, coefficient of variation, and maximum---never a median alone. Energy per inference is $E = \bar{P}\,\bar{T}$ with $\bar{P}$ the mean sampled input power over the window and $\bar{T}$ the mean latency. Correctness is a bit-exact comparison of INT32 outputs against the lowering's expected values, plus the normalised error of the dequantised output against FP32 onnxruntime,
+\begin{equation}
+\epsilon_{\text{q}} = \frac{\max_j |\hat{y}_j - y_j|}{\max_j |y_j|}, \quad
+\epsilon_{\text{model}} = \frac{|T_{\text{emul}} - T_{\text{meas}}|}{T_{\text{meas}}},
+\label{eq:errors}
+\end{equation}
+where $\epsilon_{\text{model}}$ is the virtual FPGA's latency error against the board, reported wherever both exist.
 
 \textbf{Claims.} Each number carries a provenance mark: \M{} measured on hardware, \E{} produced by the virtual FPGA with an emulated link, \Cm{} from the cost model. The SplitInfer NMC and pool rows of Table~\ref{tab:e2} are measured on the board (bitstream from commit \texttt{3b789dc}, 30 iterations, bit-exact on every one); the link-bandwidth sweep of \S\ref{sec:results} is emulated, and its UART point is anchored by those measurements.
 
@@ -212,7 +270,7 @@ The placer operates on the ONNX graph, before fusion. Its per-layer decisions an
 \label{sec:results}
 
 \subsection{E2: every path on one workload}
-Table~\ref{tab:e2} and Fig.~\ref{fig:e2} put every execution path on the DLRM at batch~1. Three things are worth reading off. First, the model fits in host memory, so it \emph{should not} be disaggregated, and the placer says so: with a normal host budget it places all 36 nodes on the host (\Cm). The SplitInfer rows exist to price the mechanism, not to recommend it here. Second, the INT8 host path is \MEmulSIhostMedian~ms---slower than the FP16 GPU's \MEmulBthreetrtfponesixgpuMedian~ms because it is a scalar CPU kernel; the interesting comparison is between the three SplitInfer modes, which share that kernel. Third, on the board NMC costs \MUsbSInmcMedian~ms per inference (\MUsbSInmcBitExact{} bit-exact, p99 \MUsbSInmcPninenine~ms) and a cold pool with 64-page prefetch \MUsbSIpoolcoldMedian~ms (\MUsbSIpoolcoldPages{} pages faulted): a 570$\times$ gap between the two ways of using the same memory node over the same link, with identical outputs. The virtual FPGA predicted \EEmulSInmcMedian~ms and \EEmulSIpoolMedian~ms for the same two runs---within 1\% of silicon---which is the evidence that the emulated sweep in \S\ref{sec:results} can be trusted away from the measured point.
+Table~\ref{tab:e2} and Fig.~\ref{fig:e2} put every execution path on the DLRM at batch~1. Three things are worth reading off. First, the model fits in host memory, so it \emph{should not} be disaggregated, and the placer says so: with a normal host budget it places all 36 nodes on the host (\Cm). The SplitInfer rows exist to price the mechanism, not to recommend it here. Second, the INT8 host path is \MEmulSIhostMedian~ms---slower than the FP16 GPU's \MEmulBthreetrtfponesixgpuMedian~ms because it is a scalar CPU kernel; the interesting comparison is between the three SplitInfer modes, which share that kernel. Third, on the board NMC costs \MUsbSInmcMedian~ms per inference (\MUsbSInmcBitExact{} bit-exact, p99 \MUsbSInmcPninenine~ms) and a cold pool with 64-page prefetch \MUsbSIpoolcoldMedian~ms (\MUsbSIpoolcoldPages{} pages faulted): a 570$\times$ gap between the two ways of using the same memory node over the same link, with identical outputs. The virtual FPGA predicted \EEmulSInmcMedian~ms and \EEmulSIpoolMedian~ms for the same two runs: $\epsilon_{\text{model}}$ of (\ref{eq:errors}) is 1.0\% for NMC and 0.3\% for pool, which is the evidence that the emulated sweep in \S\ref{sec:results} can be trusted away from the measured point. The measured NMC time decomposes by (\ref{eq:tnmc}) into 59 dispatch round trips ($59 \times \MLinkRtt$~ms $\approx 470$~ms), the three FC layers' engine time (${\sim}50$~ms at $\eta = 0.56$), and input/output transfers; on this link the round trips, not the engines, are the cost.
 
 \begin{table*}[t]\scriptsize\caption{E2: DLRM, batch 1, 30 iterations. Latency per inference; link traffic per inference; bit-exact agreement with expected INT32 output. Provenance: \M{} measured on the board, \E{} virtual FPGA with the emulated link at UART parameters (11{,}520~B/s, 5~ms RTT; the board's calibrated round trip is \MLinkRtt~ms). Power for the $n{=}1$ cold-pool run was not sampled.}\label{tab:e2}\centering\scriptsize
 \begin{tabular}{@{}llrrrrrrrr@{}}\toprule
@@ -253,13 +311,29 @@ PCIe 3 $\times$1 & \Esixpciethreexonenmc & \Esixpciethreexonepoolpfone & \Esixpc
 PCIe 4 $\times$4 & \Esixpciefourxfournmc & \Esixpciefourxfourpoolpfone & \Esixpciefourxfourpoolpfsixfour & \Esixpciefourxfourpoolpffiveonetwo & \Esixpciefourxfourpoolwarm \\ \bottomrule
 \end{tabular}}\end{table}
 
-\textbf{Prefetch has a sign.} At UART speed a 64-page prefetch is \emph{slower} than demand paging (Table~\ref{tab:e6}, first row) even though it makes 14 round trips instead of \EsixuartoneonefivetwozerozeropoolpfoneFaults. Each gather touches one 256-byte row of a 256~KB table; a 256~KB prefetch fetches the whole table. On a bandwidth-bound link the wasted bytes dominate; on a latency-bound link the saved round trips dominate, and the order reverses from USB~2.0 upward. The right prefetch depth is a property of the layer's access pattern, which the placer knows and a page-fault handler does not.
+\textbf{Prefetch has a sign.} At UART speed a 64-page prefetch is \emph{slower} than demand paging (Table~\ref{tab:e6}, first row) even though it makes 14 round trips instead of \EsixuartoneonefivetwozerozeropoolpfoneFaults. The reason is in (\ref{eq:link}): a dense layer that touches all $W$ of its bytes and a sparse gather that touches one $\rho$-byte row of a $W$-byte table have opposite dependence on the prefetch depth $P$,
+\begin{align}
+T^{\text{dense}}(P) &= \Big\lceil \frac{W}{P\pi} \Big\rceil r + \frac{W}{B}, \nonumber\\
+T^{\text{sparse}}(P) &= r + \frac{\min(P\pi, W)}{B},
+\label{eq:prefetch}
+\end{align}
+so prefetch amortises round trips for the dense layer and only adds wasted bytes for the sparse one; here $\rho = 256$~B against $P\pi = 256$~KB, the whole table. On a bandwidth-bound link the wasted bytes dominate; on a latency-bound link the saved round trips dominate, and the order reverses from USB~2.0 upward. Setting $\partial T^{\text{dense}}/\partial P < 0$ against $\partial T^{\text{sparse}}/\partial P > 0$ makes the point: the right prefetch depth is a property of the layer's access pattern, which the placer knows (it has $F_i$, $W_i$ and the op type) and a page-fault handler does not.
 
-\textbf{Warm pool is not host-resident.} With host copies retained across inferences, pool converges toward the host floor but never reaches it, because successive inputs select different embedding rows and each new row faults. For sparse layers the pool's steady-state cost is the input's locality, not the model's size.
+\textbf{Warm pool is not host-resident.} With host copies retained across inferences, pool converges toward the host floor but never reaches it, because successive inputs select different embedding rows and each new row faults. With $k_t$ of table $t$'s $N_t$ rows already cached and uniformly distributed indices, the expected number of faults per inference is
+\begin{equation}
+\mathbb{E}[\text{faults}] \;=\; \sum_{t} \Big(1 - \frac{k_t}{N_t}\Big),
+\label{eq:warm}
+\end{equation}
+which for 26 tables of 1000 rows and a handful of cached rows is close to the 2--4 faults per inference observed. For sparse layers the pool's steady-state cost is the input's locality, not the model's size.
 
 \subsection{E7: capacity, executed}
 \label{sec:capacity}
-An eight-layer $5000{\times}5000$ MLP has \PMlpEightTotalWeightMiB~MiB of INT8 weights---larger than the FPGA's 128~MB. Lowered with streaming, its FC layers rotate through two \PMlpEightSlotMiB~MiB slots and the runtime downloads each layer's weights immediately before dispatching it; the peak DDR2 footprint is \PMlpEightLayoutMiB~MiB. The program runs end to end, bit-exact against the reference (\EsevennmcnolinkBitExact), with normalised error \EsevennmcnolinkNormErr{} against FP32. Its price is stated in Table~\ref{tab:e7}: at USB~2.0 rates, \EsevennmcusbtwoStream~ms of every \EsevennmcusbtwoMedian~ms inference is weight streaming; at USB~3, \EsevennmcusbthreeStream~ms of \EsevennmcusbthreeMedian~ms. The capacity multiplier a streaming design earns is total weight divided by $2\times$ the largest layer, and it is bought with $W_{\text{total}}/B$ per inference. Over a UART link that is hours per inference; over PCIe it is tens of milliseconds. Whether it is worth buying is, again, a property of the link.
+An eight-layer $5000{\times}5000$ MLP has \PMlpEightTotalWeightMiB~MiB of INT8 weights---larger than the FPGA's 128~MB. Lowered with streaming, its FC layers rotate through two \PMlpEightSlotMiB~MiB slots and the runtime downloads each layer's weights immediately before dispatching it; the peak DDR2 footprint is \PMlpEightLayoutMiB~MiB. The program runs end to end, bit-exact against the reference (\EsevennmcnolinkBitExact), with normalised error \EsevennmcnolinkNormErr{} against FP32. Its price is stated in Table~\ref{tab:e7}: at USB~2.0 rates, \EsevennmcusbtwoStream~ms of every \EsevennmcusbtwoMedian~ms inference is weight streaming; at USB~3, \EsevennmcusbthreeStream~ms of \EsevennmcusbthreeMedian~ms. With two rotating slots the peak node footprint, the capacity multiplier and the per-inference price are
+\begin{align}
+M_{\text{peak}} &= 2 \max_i W^{(8)}_i, \qquad \kappa = \frac{\sum_i W^{(8)}_i}{M_{\text{peak}}}, \label{eq:capacity}\\
+T_{\text{stream}} &= \sum_i T_{\text{link}}\!\big(W^{(8)}_i, \lceil W^{(8)}_i/c \rceil\big) = \frac{W_{\text{tot}}}{B} + \frac{W_{\text{tot}}}{c}\,r , \label{eq:tstream}
+\end{align}
+so by (\ref{eq:tstream}) the multiplier is bought with $W_{\text{tot}}/B$ of bandwidth time plus one round trip per chunk. A single slot would halve $M_{\text{peak}}$ at the cost of serialising each download with the previous layer's compute; the two-slot form lets the next layer's download overlap the current layer's engine time when the link is fast enough that $W_{i+1}/B < F_i/G_{\text{nmc}}$. Over a UART link $T_{\text{stream}}$ is hours per inference; over PCIe it is tens of milliseconds. Whether the multiplier is worth buying is, again, a property of the link.
 
 \begin{table}[t]\caption{E7 (\E): 8-layer MLP, \PMlpEightTotalWeightMiB~MiB INT8 $>$ 128~MB DDR2, streamed through 2$\times$\PMlpEightSlotMiB~MiB slots.}\label{tab:e7}\centering\footnotesize
 \begin{tabular}{@{}lrrl@{}}\toprule
